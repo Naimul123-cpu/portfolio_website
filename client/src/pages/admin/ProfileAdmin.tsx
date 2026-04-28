@@ -14,7 +14,7 @@ const ProfileAdmin: React.FC = () => {
     email: '',
     phone: '',
     location: '',
-    socialLinks: { github: '', linkedin: '', twitter: '', website: '' },
+    socialLinks: { github: '', linkedin: '', twitter: '', facebook: '', instagram: '', youtube: '', discord: '', website: '' },
     skills: []
   });
   const [newSkill, setNewSkill] = useState('');
@@ -26,7 +26,7 @@ const ProfileAdmin: React.FC = () => {
     if (profile) {
       setFormData({
         ...profile,
-        socialLinks: profile.socialLinks || { github: '', linkedin: '', twitter: '', website: '' },
+        socialLinks: profile.socialLinks || { github: '', linkedin: '', twitter: '', facebook: '', instagram: '', youtube: '', discord: '', website: '' },
         skills: profile.skills || []
       });
     }
@@ -141,7 +141,7 @@ const ProfileAdmin: React.FC = () => {
           <div className="glass-card p-8">
             <h2 className="text-xl font-bold mb-6">Social Links</h2>
             <div className="grid grid-cols-2 gap-4">
-              {['github', 'linkedin', 'twitter', 'website'].map(platform => (
+              {['github', 'linkedin', 'twitter', 'facebook', 'instagram', 'youtube', 'discord', 'website'].map(platform => (
                 <div key={platform}>
                   <label className="block text-sm font-bold text-text-secondary uppercase mb-2 capitalize">{platform}</label>
                   <input 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaTwitter, FaFacebook, FaInstagram, FaYoutube, FaDiscord } from 'react-icons/fa';
 import { ArrowRight } from 'lucide-react';
 import type { IProfile } from '../../types';
 
@@ -69,6 +69,26 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
             {profile?.socialLinks.twitter && (
               <a href={profile.socialLinks.twitter} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-accent-primary transition-colors">
                 <FaTwitter size={20} />
+              </a>
+            )}
+            {profile?.socialLinks.facebook && (
+              <a href={profile.socialLinks.facebook} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-accent-primary transition-colors">
+                <FaFacebook size={20} />
+              </a>
+            )}
+            {profile?.socialLinks.instagram && (
+              <a href={profile.socialLinks.instagram} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-accent-primary transition-colors">
+                <FaInstagram size={20} />
+              </a>
+            )}
+            {profile?.socialLinks.youtube && (
+              <a href={profile.socialLinks.youtube} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-accent-primary transition-colors">
+                <FaYoutube size={20} />
+              </a>
+            )}
+            {profile?.socialLinks.discord && (
+              <a href={profile.socialLinks.discord} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-accent-primary transition-colors">
+                <FaDiscord size={20} />
               </a>
             )}
           </motion.div>

@@ -8,7 +8,16 @@ export interface IProfile {
   location?: string;
   avatar?: string;
   resumeUrl?: string;
-  socialLinks: { github?: string; linkedin?: string; twitter?: string; website?: string };
+  socialLinks: { 
+    github?: string; 
+    linkedin?: string; 
+    twitter?: string; 
+    facebook?: string;
+    instagram?: string;
+    youtube?: string;
+    discord?: string;
+    website?: string;
+  };
   skills: string[];
 }
 

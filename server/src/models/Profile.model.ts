@@ -13,6 +13,10 @@ export interface IProfile extends Document {
     github?: string;
     linkedin?: string;
     twitter?: string;
+    facebook?: string;
+    instagram?: string;
+    youtube?: string;
+    discord?: string;
     website?: string;
   };
   skills: string[];
@@ -33,6 +37,10 @@ const profileSchema = new Schema<IProfile>(
       github: { type: String },
       linkedin: { type: String },
       twitter: { type: String },
+      facebook: { type: String },
+      instagram: { type: String },
+      youtube: { type: String },
+      discord: { type: String },
       website: { type: String },
     },
     skills: [{ type: String }],

@@ -11,33 +11,45 @@ const generateTokens = (id: string) => {
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  console.log('Login attempt for:', email);
   try {
     const user = await User.findOne({ email });
-    if (user && (await user.comparePassword(password))) {
-      const { accessToken, refreshToken } = generateTokens(user._id.toString());
-
-      res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
-
-      res.json({
-        accessToken,
-        user: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          avatar: user.avatar,
-        },
-      });
-    } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
     }
-  } catch (error) {
-    res.status(500).json({ message: (error as Error).message });
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
+      console.error('JWT Secrets are missing in environment variables!');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+
+    const { accessToken, refreshToken } = generateTokens(user._id.toString());
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.json({
+      accessToken,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+      },
+    });
+  } catch (error: any) {
+    console.error('LOGIN ERROR:', error);
+    res.status(500).json({ message: error.message || 'Internal Server Error' });
   }
 };
 
