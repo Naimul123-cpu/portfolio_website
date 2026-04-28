@@ -14,14 +14,14 @@ const seedAdmin = async () => {
     if (!adminExists) {
       const admin = await User.create({
         name: 'Super Admin',
-        email: 'admin@portfolio.com',
-        password: 'Admin@123456',
+        email: process.env.ADMIN_EMAIL ,
+        password: process.env.ADMIN_PASSWORD ,
         role: 'superadmin',
       });
 
       console.log('--- DEFAULT ADMIN CREATED ---');
-      console.log('Email: admin@portfolio.com');
-      console.log('Password: Admin@123456');
+      console.log(`Email: ${process.env.ADMIN_EMAIL}`);
+      console.log('Password: [HIDDEN IN ENV]');
       console.log('-----------------------------');
     } else {
       console.log('Super Admin already exists.');
