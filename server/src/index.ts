@@ -18,15 +18,17 @@ dotenv.config();
 connectDB();
 
 const app = express();
+app.set('trust proxy', 1);
 
 app.use(helmet({
   crossOriginResourcePolicy: false,
 }));
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:3000';
-    // Allow any localhost in development or the exact CLIENT_URL
-    if (!origin || origin.startsWith('http://localhost:') || origin === allowedOrigin) {
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    const allowedOrigin = process.env.CLIENT_URL;
+    
+    if (isDevelopment || !origin || origin === allowedOrigin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -37,7 +39,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(morgan('dev'));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'tiny' : 'dev'));
 
 // API Routes
 app.use('/api/auth', authRoutes);
