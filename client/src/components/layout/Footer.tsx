@@ -1,6 +1,6 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import { FaGithub, FaLinkedin, FaTwitter, FaFacebook, FaInstagram, FaYoutube, FaDiscord } from 'react-icons/fa';
-import { Heart } from 'lucide-react';
+import { Heart, Lock } from 'lucide-react';
 import { IProfile } from '../../types';
 
 interface FooterProps {
@@ -28,6 +28,9 @@ const Footer: React.FC<FooterProps> = ({ profile }) => {
             <a href="#about" className="text-text-secondary hover:text-accent-primary transition-colors text-sm font-light">About</a>
             <a href="#projects" className="text-text-secondary hover:text-accent-primary transition-colors text-sm font-light">Work</a>
             <a href="#experience" className="text-text-secondary hover:text-accent-primary transition-colors text-sm font-light">Experience</a>
+            <Link to="/login" className="text-text-secondary hover:text-accent-primary transition-colors text-sm font-light flex items-center gap-1.5 mt-2 opacity-50 hover:opacity-100">
+              <Lock size={12} /> Admin Login
+            </Link>
           </div>
 
           <div>
