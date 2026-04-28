@@ -8,16 +8,15 @@ import {
   ExternalLink,
   Settings,
 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePortfolioData } from '../../hooks/usePortfolioData';
 import GlowButton from '../../components/ui/GlowButton';
 import AdminSidebar from '../../components/layout/AdminSidebar';
 
 const Dashboard: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { studies, experiences, projects } = usePortfolioData();
-  const navigate = useNavigate();
 
   const stats = [
     { label: 'Projects', value: projects.length, icon: <FolderGit2 size={24} />, color: 'bg-accent-primary' },
