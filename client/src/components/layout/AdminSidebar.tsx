@@ -4,7 +4,6 @@ import {
   Briefcase, 
   GraduationCap, 
   FolderGit2, 
-  Settings,
   LogOut,
   LayoutDashboard
 } from 'lucide-react';

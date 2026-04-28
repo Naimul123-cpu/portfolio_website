@@ -19,11 +19,6 @@ const Dashboard: React.FC = () => {
   const { studies, experiences, projects } = usePortfolioData();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
   const stats = [
     { label: 'Projects', value: projects.length, icon: <FolderGit2 size={24} />, color: 'bg-accent-primary' },
     { label: 'Experience', value: experiences.length, icon: <Briefcase size={24} />, color: 'bg-accent-secondary' },
