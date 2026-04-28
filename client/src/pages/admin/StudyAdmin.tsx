@@ -4,6 +4,7 @@ import { usePortfolioData } from '../../hooks/usePortfolioData';
 import GlowButton from '../../components/ui/GlowButton';
 import api from '../../services/api';
 import { toast } from 'react-hot-toast';
+import AdminSidebar from '../../components/layout/AdminSidebar';
 
 const StudyAdmin: React.FC = () => {
   const { studies, refresh } = usePortfolioData();
@@ -97,7 +98,9 @@ const StudyAdmin: React.FC = () => {
   };
 
   return (
-    <div className="ml-64 p-10 bg-bg-primary min-h-screen">
+    <div className="flex bg-bg-primary min-h-screen">
+      <AdminSidebar />
+      <div className="flex-grow ml-64 p-10">
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-display font-bold text-gradient">Education Management</h1>
         <GlowButton onClick={openAddModal} className="flex items-center gap-2">
@@ -202,6 +205,7 @@ const StudyAdmin: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

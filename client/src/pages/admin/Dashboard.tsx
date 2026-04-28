@@ -1,19 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Users, 
   Briefcase, 
   GraduationCap, 
   FolderGit2, 
   Plus, 
   ExternalLink,
   Settings,
-  LogOut
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { usePortfolioData } from '../../hooks/usePortfolioData';
 import GlowButton from '../../components/ui/GlowButton';
+import AdminSidebar from '../../components/layout/AdminSidebar';
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
@@ -34,44 +33,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-bg-primary flex">
       {/* Sidebar */}
-      <aside className="w-64 glass border-r border-white/5 p-6 flex flex-col fixed h-full">
-        <div className="mb-10 text-xl font-display font-black text-gradient">ADMIN PANEL</div>
-        
-        <div className="flex items-center gap-4 p-4 glass rounded-xl mb-10">
-          <div className="w-10 h-10 rounded-full bg-accent-primary flex items-center justify-center font-bold">
-            {user?.name?.charAt(0)}
-          </div>
-          <div className="overflow-hidden">
-            <p className="font-bold truncate">{user?.name}</p>
-            <p className="text-xs text-text-secondary uppercase">{user?.role}</p>
-          </div>
-        </div>
-
-        <nav className="flex-grow space-y-2">
-          <Link to="/admin" className="flex items-center gap-3 p-3 rounded-lg bg-white/5 text-accent-primary border border-accent-primary/20">
-            <Settings size={20} /> Dashboard
-          </Link>
-          <Link to="/admin/profile" className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 text-text-secondary transition-colors">
-            <Users size={20} /> Profile
-          </Link>
-          <Link to="/admin/projects" className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 text-text-secondary transition-colors">
-            <FolderGit2 size={20} /> Projects
-          </Link>
-          <Link to="/admin/experience" className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 text-text-secondary transition-colors">
-            <Briefcase size={20} /> Experience
-          </Link>
-          <Link to="/admin/study" className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 text-text-secondary transition-colors">
-            <GraduationCap size={20} /> Study
-          </Link>
-        </nav>
-
-        <button 
-          onClick={handleLogout}
-          className="mt-auto flex items-center gap-3 p-3 rounded-lg hover:bg-accent-tertiary/20 text-accent-tertiary transition-colors"
-        >
-          <LogOut size={20} /> Logout
-        </button>
-      </aside>
+      <AdminSidebar />
 
       {/* Main Content */}
       <main className="flex-grow ml-64 p-10">

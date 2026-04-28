@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { usePortfolioData } from '../../hooks/usePortfolioData';
 import api from '../../services/api';
 import GlowButton from '../../components/ui/GlowButton';
+import AdminSidebar from '../../components/layout/AdminSidebar';
 
 const ProfileAdmin: React.FC = () => {
   const { profile, loading, refresh } = usePortfolioData();
@@ -91,7 +92,9 @@ const ProfileAdmin: React.FC = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="ml-64 p-10 bg-bg-primary min-h-screen">
+    <div className="flex bg-bg-primary min-h-screen">
+      <AdminSidebar />
+      <div className="flex-grow ml-64 p-10">
       <div className="flex justify-between items-center mb-10">
         <h1 className="text-3xl font-display font-bold">Profile Settings</h1>
         <GlowButton onClick={handleSubmit} disabled={isSaving} className="flex items-center gap-2">
@@ -224,6 +227,7 @@ const ProfileAdmin: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
