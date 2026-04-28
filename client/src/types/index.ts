@@ -1,0 +1,69 @@
+export interface IProfile {
+  _id: string;
+  name: string;
+  tagline: string;
+  bio: string;
+  email: string;
+  phone?: string;
+  location?: string;
+  avatar?: string;
+  resumeUrl?: string;
+  socialLinks: { github?: string; linkedin?: string; twitter?: string; website?: string };
+  skills: string[];
+}
+
+export interface IStudy {
+  _id: string;
+  institution: string;
+  degree: string;
+  field: string;
+  startYear: string;
+  endYear?: string;
+  grade?: string;
+  description?: string;
+  logo?: string;
+  order: number;
+}
+
+export interface IExperience {
+  _id: string;
+  company: string;
+  role: string;
+  type: string;
+  startDate: string;
+  endDate?: string;
+  isCurrent: boolean;
+  description: string;
+  technologies: string[];
+  logo?: string;
+  order: number;
+}
+
+export interface IProject {
+  _id: string;
+  title: string;
+  description: string;
+  longDescription?: string;
+  thumbnail?: string;
+  images: string[];
+  technologies: string[];
+  category: string;
+  liveUrl?: string;
+  githubUrl?: string;
+  featured: boolean;
+  order: number;
+  status: string;
+}
+
+export interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar?: string;
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  user: IUser;
+}

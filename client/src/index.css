@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #FCFBF7;
+  --bg-secondary: #F4F2EE;
+  --bg-card: #FFFFFF;
+  --accent-primary: #7C9082; /* Muted Sage */
+  --accent-secondary: #5D6D7E; /* Soft Slate */
+  --accent-tertiary: #D4A373; /* Warm Sand */
+  --text-primary: #1A1A1A;
+  --text-secondary: #666666;
+  --border: #E5E5E5;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-primary text-text-primary font-sans overflow-x-hidden;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(124, 144, 130, 0.05), transparent 50%),
+      radial-gradient(circle at 100% 100%, rgba(212, 163, 115, 0.03), transparent 40%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/80 backdrop-blur-sm border border-border shadow-sm;
+  }
+  
+  .glass-card {
+    @apply bg-white border border-border rounded-2xl transition-all duration-500 shadow-sm hover:shadow-md hover:-translate-y-1;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent;
+  }
+
+  .btn-glow {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .btn-glow::after {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300 bg-black/5;
+  }
+
+  .btn-glow:hover::after {
+    @apply opacity-100;
+  }
+
+  .timeline-line {
+    @apply absolute left-0 top-0 bottom-0 w-px bg-border;
+  }
+}
+
+/* Syne font is already loaded via Google Fonts import at the top */
+.font-display {
+  font-family: 'Syne', sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-bg-primary;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full hover:bg-text-secondary transition-colors;
+}
