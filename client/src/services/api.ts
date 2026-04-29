@@ -26,7 +26,10 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         localStorage.removeItem('accessToken');
-        window.location.href = '/login';
+        // Only redirect if we're on an admin path
+        if (window.location.pathname.startsWith('/system-control')) {
+          window.location.href = '/naim-engine-room';
+        }
         return Promise.reject(refreshError);
       }
     }
