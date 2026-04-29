@@ -14,7 +14,7 @@ import {
   Play,
   ArrowRight
 } from 'lucide-react';
-import api from '../../utils/api';
+import api from '../../services/api';
 import { toast } from 'react-hot-toast';
 import AdminSidebar from '../../components/layout/AdminSidebar';
 import GlowButton from '../../components/ui/GlowButton';
