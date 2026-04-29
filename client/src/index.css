@@ -85,9 +85,11 @@
   }
 
   .text-gradient-aurora {
-    @apply text-transparent bg-gradient-aurora;
+    background: var(--gradient-aurora);
     -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: transparent;
   }
 
   .bg-gradient-primary {
