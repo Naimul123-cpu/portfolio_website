@@ -89,16 +89,26 @@ const StudySection: React.FC<StudySectionProps> = ({ studies }) => {
                     </p>
 
                     {study.subjects && study.subjects.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-8">
-                        {study.subjects.map((sub, idx) => {
-                          const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
-                          if (!cleanSub) return null;
-                          return (
-                            <span key={idx} className="px-3 py-1 rounded-lg glass border border-white/5 text-[10px] font-bold text-text-secondary uppercase tracking-wider hover:border-accent-violet/30 hover:text-accent-violet transition-colors">
-                              {cleanSub}
-                            </span>
-                          );
-                        })}
+                      <div className="space-y-4 mb-10">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-[2px] bg-accent-violet rounded-full" />
+                          <span className="text-[10px] font-black text-accent-violet uppercase tracking-[0.3em]">Curriculum Pillars</span>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                          {study.subjects.map((sub, idx) => {
+                            const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
+                            if (!cleanSub) return null;
+                            return (
+                              <div key={idx} className="group/pill relative">
+                                <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-violet/50 to-accent-blue/50 rounded-xl opacity-0 group-hover/pill:opacity-100 blur transition-all duration-300" />
+                                <span className="relative px-4 py-2 rounded-xl glass border border-white/10 text-xs font-black text-text-primary uppercase tracking-widest flex items-center gap-3 bg-white/[0.03] group-hover/pill:border-white/30 transition-all shadow-xl">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-accent-violet group-hover/pill:animate-pulse" />
+                                  {cleanSub}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                     
