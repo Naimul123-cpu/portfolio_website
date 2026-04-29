@@ -27,7 +27,7 @@ const Login: React.FC = () => {
       }
 
       toast.success('Access granted. Welcome back.');
-      navigate('/admin');
+      navigate('/system-control');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Authentication failed');
     } finally {

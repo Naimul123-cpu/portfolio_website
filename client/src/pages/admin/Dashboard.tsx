@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="flex justify-between items-center mb-10">
               <h2 className="text-2xl font-black text-text-primary tracking-tight">Recent Projects</h2>
-              <Link to="/admin/projects" className="text-accent-violet text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2">
+              <Link to="/system-control/projects" className="text-accent-violet text-[10px] font-black uppercase tracking-widest hover:underline flex items-center gap-2">
                 Manage All <ArrowRight size={14} />
               </Link>
             </div>
@@ -125,10 +125,10 @@ const Dashboard: React.FC = () => {
             <h2 className="text-2xl font-black text-text-primary tracking-tight mb-10">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-6">
               {[
-                { label: 'Project', path: '/admin/projects', icon: <FolderGit2 />, color: 'text-accent-violet bg-accent-violet/10 border-accent-violet/20 hover:bg-accent-violet/20 hover:shadow-glow-violet' },
-                { label: 'Experience', path: '/admin/experience', icon: <Briefcase />, color: 'text-accent-blue bg-accent-blue/10 border-accent-blue/20 hover:bg-accent-blue/20 hover:shadow-glow-blue' },
-                { label: 'Study Log', path: '/admin/study', icon: <GraduationCap />, color: 'text-accent-cyan bg-accent-cyan/10 border-accent-cyan/20 hover:bg-accent-cyan/20 hover:shadow-glow-cyan' },
-                { label: 'Profile Settings', path: '/admin/profile', icon: <Settings />, color: 'text-text-primary bg-white/5 border-white/10 hover:bg-white/10' },
+                { label: 'Project', path: '/system-control/projects', icon: <FolderGit2 />, color: 'text-accent-violet bg-accent-violet/10 border-accent-violet/20 hover:bg-accent-violet/20 hover:shadow-glow-violet' },
+                { label: 'Experience', path: '/system-control/experience', icon: <Briefcase />, color: 'text-accent-blue bg-accent-blue/10 border-accent-blue/20 hover:bg-accent-blue/20 hover:shadow-glow-blue' },
+                { label: 'Study Log', path: '/system-control/study', icon: <GraduationCap />, color: 'text-accent-cyan bg-accent-cyan/10 border-accent-cyan/20 hover:bg-accent-cyan/20 hover:shadow-glow-cyan' },
+                { label: 'Profile Settings', path: '/system-control/profile', icon: <Settings />, color: 'text-text-primary bg-white/5 border-white/10 hover:bg-white/10' },
               ].map((action, i) => (
                 <Link 
                   key={i}

@@ -21,17 +21,17 @@ const AdminSidebar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/naim-engine-room');
   };
 
   const isActive = (path: string) => location.pathname === path;
 
   const navItems = [
-    { label: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={18} /> },
-    { label: 'Profile', path: '/admin/profile', icon: <Users size={18} /> },
-    { label: 'Projects', path: '/admin/projects', icon: <FolderGit2 size={18} /> },
-    { label: 'Experience', path: '/admin/experience', icon: <Briefcase size={18} /> },
-    { label: 'Study', path: '/admin/study', icon: <GraduationCap size={18} /> },
+    { label: 'Dashboard', path: '/system-control', icon: <LayoutDashboard size={18} /> },
+    { label: 'Profile', path: '/system-control/profile', icon: <Users size={18} /> },
+    { label: 'Projects', path: '/system-control/projects', icon: <FolderGit2 size={18} /> },
+    { label: 'Experience', path: '/system-control/experience', icon: <Briefcase size={18} /> },
+    { label: 'Study', path: '/system-control/study', icon: <GraduationCap size={18} /> },
   ];
 
   return (

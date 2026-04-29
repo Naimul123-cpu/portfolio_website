@@ -15,7 +15,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   const { user, loading } = useAuth();
 
   if (loading) return null;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/naim-engine-room" replace />;
 
   return <>{children}</>;
 };
@@ -24,30 +24,30 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Portfolio />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/naim-engine-room" element={<Login />} />
       
       {/* Admin Routes */}
-      <Route path="/admin" element={
+      <Route path="/system-control" element={
         <ProtectedRoute>
           <Dashboard />
         </ProtectedRoute>
       } />
-      <Route path="/admin/profile" element={
+      <Route path="/system-control/profile" element={
         <ProtectedRoute>
           <ProfileAdmin />
         </ProtectedRoute>
       } />
-      <Route path="/admin/projects" element={
+      <Route path="/system-control/projects" element={
         <ProtectedRoute>
           <ProjectsAdmin />
         </ProtectedRoute>
       } />
-      <Route path="/admin/experience" element={
+      <Route path="/system-control/experience" element={
         <ProtectedRoute>
           <ExperienceAdmin />
         </ProtectedRoute>
       } />
-      <Route path="/admin/study" element={
+      <Route path="/system-control/study" element={
         <ProtectedRoute>
           <StudyAdmin />
         </ProtectedRoute>

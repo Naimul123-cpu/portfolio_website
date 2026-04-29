@@ -67,18 +67,7 @@ const Footer: React.FC<FooterProps> = ({ profile }) => {
               <span className="w-8 h-[2px] bg-gradient-secondary rounded-full" />
               Identity
             </h4>
-            <Link 
-              to="/login" 
-              className="group glass p-4 rounded-2xl border border-white/5 flex items-center gap-4 hover:border-accent-violet/30 transition-all duration-500"
-            >
-              <div className="w-10 h-10 rounded-xl bg-accent-violet/10 flex items-center justify-center text-accent-violet group-hover:bg-accent-violet group-hover:text-white transition-all">
-                <Lock size={18} />
-              </div>
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-primary">Admin Access</p>
-                <p className="text-[9px] font-bold text-text-muted uppercase">Secure Vault</p>
-              </div>
-            </Link>
+            {/* Admin access hidden for security */}
             
             <div className="p-4 glass rounded-2xl border border-white/5 flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 flex items-center justify-center text-accent-emerald animate-pulse">

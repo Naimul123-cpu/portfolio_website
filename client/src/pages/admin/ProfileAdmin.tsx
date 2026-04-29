@@ -221,7 +221,7 @@ const ProfileAdmin: React.FC = () => {
 
             {/* Skills */}
             <div className="glass p-10 rounded-[40px] border border-white/10">
-              <h2 className="text-2xl font-black mb-10 text-text-primary tracking-tight">Technical Arsenal</h2>
+              <h2 className="text-2xl font-black mb-10 text-text-primary tracking-tight">Engineering Expertise</h2>
               <div className="flex gap-4 mb-8">
                 <input 
                   value={newSkill}
