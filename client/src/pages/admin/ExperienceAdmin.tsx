@@ -11,8 +11,7 @@ import {
   Loader2, 
   Upload, 
   Eye, 
-  Play,
-  ArrowRight
+  Play
 } from 'lucide-react';
 import api from '../../services/api';
 import { toast } from 'react-hot-toast';

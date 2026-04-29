@@ -2,13 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
-  Search, 
-  Filter, 
-  MoreVertical, 
   Edit2, 
   Trash2, 
-  ExternalLink, 
-  Github, 
   Star,
   Upload,
   X,

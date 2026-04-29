@@ -8,9 +8,7 @@ import {
   Edit2, 
   Save, 
   X, 
-  Loader2, 
-  Upload,
-  ArrowRight
+  Loader2
 } from 'lucide-react';
 import api from '../../services/api';
 import { toast } from 'react-hot-toast';
