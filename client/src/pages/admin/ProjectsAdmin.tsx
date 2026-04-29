@@ -206,53 +206,83 @@ const ProjectsAdmin: React.FC = () => {
             <Loader2 className="animate-spin text-accent-violet" size={48} />
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-12">
             {projects.sort((a, b) => b.order - a.order).map((project, i) => (
               <motion.div 
                 key={project._id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ y: -8 }}
-                className="glass rounded-[32px] overflow-hidden group border border-white/10 hover:border-accent-violet/30 transition-all duration-500 shadow-2xl"
+                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -12 }}
+                className="group relative"
               >
-                <div className="relative aspect-video overflow-hidden">
-                  <img src={project.thumbnail} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-bg-base/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center gap-6">
-                    <motion.button 
-                      whileHover={{ scale: 1.1, rotate: -5 }}
-                      onClick={() => openEditModal(project)}
-                      className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-accent-violet hover:bg-accent-violet hover:text-white transition-all shadow-2xl border-white/20"
-                    >
-                      <Edit2 size={24} />
-                    </motion.button>
-                    <motion.button 
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      onClick={() => handleDelete(project._id)}
-                      className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-2xl border-white/20"
-                    >
-                      <Trash2 size={24} />
-                    </motion.button>
-                  </div>
-                  {project.featured && (
-                    <div className="absolute top-4 left-4 px-4 py-1.5 bg-gradient-primary text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-glow-violet flex items-center gap-2 border border-white/20">
-                      <Star size={12} fill="white" /> Featured
+                <div className="absolute -inset-1 bg-gradient-to-br from-accent-violet to-accent-blue rounded-[40px] opacity-0 group-hover:opacity-30 blur-2xl transition-all duration-700" />
+                
+                <div className="relative glass rounded-[40px] overflow-hidden group border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl h-full flex flex-col bg-bg-surface/30">
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <img src={project.thumbnail} alt={project.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    
+                    {/* Glass Overlay on Hover */}
+                    <div className="absolute inset-0 bg-bg-base/60 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center gap-6">
+                      <motion.button 
+                        whileHover={{ scale: 1.1, rotate: -5 }}
+                        onClick={() => openEditModal(project)}
+                        className="w-16 h-16 glass rounded-2xl flex items-center justify-center text-accent-violet hover:bg-accent-violet hover:text-white transition-all shadow-glow-violet border border-white/20"
+                      >
+                        <Edit2 size={28} />
+                      </motion.button>
+                      <motion.button 
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        onClick={() => handleDelete(project._id)}
+                        className="w-16 h-16 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-glow-pink border border-white/20"
+                      >
+                        <Trash2 size={28} />
+                      </motion.button>
                     </div>
-                  )}
-                  <div className="absolute top-4 right-4 px-3 py-1 glass rounded-lg text-[9px] font-black uppercase tracking-widest text-text-primary border border-white/10">
-                    {project.status}
-                  </div>
-                </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-black text-text-primary truncate mb-3 tracking-tight group-hover:text-gradient transition-all duration-500">{project.title}</h3>
-                  <div className="flex justify-between items-center pt-6 border-t border-white/5">
-                    <p className="text-[10px] text-text-muted uppercase tracking-[0.2em] font-black">{project.category}</p>
-                    <div className="flex -space-x-2">
-                      {project.technologies.slice(0, 3).map((tech: string, i: number) => (
-                        <div key={i} className="w-8 h-8 glass rounded-lg border border-white/10 flex items-center justify-center text-[8px] font-black text-text-primary shadow-lg bg-bg-surface">
-                          {tech.charAt(0)}
+
+                    {/* Top Badges */}
+                    <div className="absolute top-6 left-6 flex flex-col gap-2">
+                      {project.featured && (
+                        <div className="px-4 py-2 bg-gradient-primary text-white text-[9px] font-black uppercase tracking-widest rounded-xl shadow-glow-violet flex items-center gap-2 border border-white/20">
+                          <Star size={12} fill="white" /> FEATURED ASSET
                         </div>
-                      ))}
+                      )}
+                      <div className="px-3 py-1.5 glass rounded-lg text-[8px] font-black uppercase tracking-widest text-text-primary border border-white/10 w-fit backdrop-blur-xl">
+                        {project.status.replace('-', ' ')}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-8 flex-grow flex flex-col">
+                    <div className="mb-6">
+                      <p className="text-[10px] font-black text-accent-violet uppercase tracking-[0.3em] mb-2">{project.category}</p>
+                      <h3 className="text-2xl md:text-3xl font-display font-black text-text-primary tracking-tight group-hover:text-gradient transition-all duration-500 leading-tight">
+                        {project.title}
+                      </h3>
+                    </div>
+
+                    <p className="text-text-secondary text-sm font-medium line-clamp-2 mb-8 opacity-70 leading-relaxed">
+                      {project.description}
+                    </p>
+
+                    <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
+                      <div className="flex -space-x-3">
+                        {project.technologies.slice(0, 4).map((tech: string, i: number) => (
+                          <div key={i} className="w-10 h-10 glass rounded-xl border border-white/10 flex items-center justify-center text-[9px] font-black text-text-primary shadow-2xl bg-bg-surface group-hover:border-accent-violet/30 transition-colors">
+                            {tech.charAt(0).toUpperCase()}
+                          </div>
+                        ))}
+                        {project.technologies.length > 4 && (
+                          <div className="w-10 h-10 glass rounded-xl border border-white/10 flex items-center justify-center text-[9px] font-black text-text-muted">
+                            +{project.technologies.length - 4}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center gap-2 text-accent-violet">
+                        <div className="w-2 h-2 rounded-full bg-accent-violet shadow-glow-violet animate-pulse" />
+                        <span className="text-[9px] font-black uppercase tracking-widest">System Ready</span>
+                      </div>
                     </div>
                   </div>
                 </div>

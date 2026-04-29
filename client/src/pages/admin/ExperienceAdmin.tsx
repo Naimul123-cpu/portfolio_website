@@ -273,47 +273,77 @@ const ExperienceAdmin: React.FC = () => {
             <Loader2 className="animate-spin text-accent-violet" size={48} />
           </div>
         ) : (
-          <div className="max-w-5xl mx-auto space-y-6">
+          <div className="max-w-5xl mx-auto space-y-10">
             {experiences.sort((a, b) => b.order - a.order).map((exp, i) => (
               <motion.div 
                 key={exp._id}
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
+                transition={{ delay: i * 0.1 }}
                 whileHover={{ x: 10 }}
-                className="glass p-8 rounded-[32px] flex items-center justify-between group border border-white/5 hover:border-accent-violet/30 transition-all duration-500 shadow-2xl relative overflow-hidden"
+                className="group relative"
               >
-                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-primary opacity-30" />
-                <div className="flex items-center gap-8">
-                  <div className="w-20 h-20 glass rounded-2xl flex items-center justify-center text-accent-violet border border-white/10 overflow-hidden shadow-lg relative bg-white/[0.03]">
-                    {exp.logo ? (
-                      <img src={exp.logo} alt="" className="w-full h-full object-contain p-2" />
-                    ) : (
-                      <Briefcase size={36} />
-                    )}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-violet via-accent-blue to-accent-pink rounded-[40px] opacity-0 group-hover:opacity-10 blur-2xl transition-all duration-1000" />
+                
+                <div className="relative glass p-10 rounded-[40px] flex flex-col xl:flex-row items-start xl:items-center justify-between gap-10 group border border-white/5 hover:border-white/20 transition-all duration-700 shadow-2xl overflow-hidden">
+                  <div className="absolute inset-0 bg-grid-white/[0.02] opacity-20" />
+                  
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-10 relative z-10">
+                    <div className="relative group/logo">
+                      <div className="w-28 h-28 glass rounded-[32px] flex items-center justify-center text-accent-violet border border-white/10 overflow-hidden shadow-2xl relative bg-bg-surface/50 transition-all duration-500 group-hover/logo:scale-105 group-hover/logo:border-accent-violet/50">
+                        {exp.logo ? (
+                          <img src={exp.logo} alt="" className="w-full h-full object-contain p-4 transition-transform duration-700 group-hover/logo:scale-110" />
+                        ) : (
+                          <Briefcase size={48} className="transition-transform duration-700 group-hover/logo:scale-110" />
+                        )}
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-gradient-primary flex items-center justify-center text-white shadow-glow-violet border border-white/20">
+                        <Star size={14} fill="white" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap items-center gap-4">
+                        <h3 className="font-display font-black text-3xl md:text-4xl text-text-primary tracking-tight group-hover:text-gradient transition-all duration-500">{exp.role}</h3>
+                        <span className="px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] bg-accent-violet/10 text-accent-violet border border-accent-violet/20">
+                          {exp.workplaceType}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <p className="text-2xl font-bold text-gradient bg-gradient-aurora tracking-tight">{exp.company}</p>
+                        <div className="h-4 w-[1px] bg-white/10" />
+                        <span className="text-[11px] font-black uppercase tracking-widest text-text-muted">{exp.type}</span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-8">
+                        <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-text-muted glass border-white/5 px-4 py-2 rounded-2xl">
+                          <Calendar size={18} className="text-accent-violet" />
+                          <span>
+                            {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} 
+                            <ArrowRight size={12} className="inline mx-2 opacity-50" /> 
+                            {exp.isCurrent ? <span className="text-accent-blue">PRESENT OPERATIONAL</span> : exp.endDate ? new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}
+                          </span>
+                        </div>
+                        
+                        {exp.workSamples?.length > 0 && (
+                          <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-accent-blue glass border-white/5 px-4 py-2 rounded-2xl">
+                            <Eye size={18} />
+                            <span>{exp.workSamples.length} Evidence Protocols</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="flex items-center gap-4 mb-2">
-                      <h3 className="font-black text-2xl text-text-primary tracking-tight">{exp.role}</h3>
-                      <span className="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-accent-violet/10 text-accent-violet border border-accent-violet/20">{exp.workplaceType}</span>
-                    </div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <p className="text-gradient font-bold text-lg">{exp.company}</p>
-                      <span className="text-[10px] px-2 py-0.5 rounded-lg glass border border-white/10 font-black uppercase tracking-widest text-text-muted">{exp.type}</span>
-                    </div>
-                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-text-muted">
-                      <span className="flex items-center gap-2"><Calendar size={14} className="text-accent-violet" /> {new Date(exp.startDate).getFullYear()} — {exp.isCurrent ? 'Present' : exp.endDate ? new Date(exp.endDate).getFullYear() : ''}</span>
-                      {exp.workSamples?.length > 0 && <span className="flex items-center gap-2"><Eye size={14} className="text-accent-blue" /> {exp.workSamples.length} Evidence Protocols</span>}
-                    </div>
+
+                  <div className="flex gap-4 relative z-10 w-full xl:w-auto">
+                    <button onClick={() => openEditModal(exp)} className="flex-grow xl:flex-grow-0 w-16 h-16 glass rounded-[24px] flex items-center justify-center text-text-primary hover:bg-accent-violet hover:text-white transition-all shadow-2xl border border-white/10 hover:scale-110 active:scale-95 group/btn">
+                      <Edit2 size={24} className="group-hover/btn:rotate-12 transition-transform" />
+                    </button>
+                    <button onClick={() => handleDelete(exp._id)} className="flex-grow xl:flex-grow-0 w-16 h-16 glass rounded-[24px] flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-2xl border border-white/10 hover:scale-110 active:scale-95 group/btn">
+                      <Trash2 size={24} className="group-hover/btn:rotate-12 transition-transform" />
+                    </button>
                   </div>
-                </div>
-                <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
-                  <button onClick={() => openEditModal(exp)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-primary hover:bg-accent-violet hover:text-white transition-all shadow-xl border-white/10">
-                    <Edit2 size={20} />
-                  </button>
-                  <button onClick={() => handleDelete(exp._id)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-xl border-white/10">
-                    <Trash2 size={20} />
-                  </button>
                 </div>
               </motion.div>
             ))}

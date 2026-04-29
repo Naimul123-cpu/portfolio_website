@@ -203,48 +203,91 @@ const StudyAdmin: React.FC = () => {
             <Loader2 className="animate-spin text-accent-violet" size={48} />
           </div>
         ) : (
-          <div className="max-w-4xl mx-auto space-y-6">
-            {studies.sort((a, b) => b.order - a.order).map((study, i) => (
-              <motion.div 
-                key={study._id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ x: 10 }}
-                className="glass p-8 rounded-[32px] flex items-center justify-between group border border-white/5 hover:border-accent-violet/30 transition-all duration-500 shadow-2xl relative overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-primary opacity-30" />
-                <div className="flex items-center gap-8">
-                  <div className="w-20 h-20 glass rounded-2xl flex items-center justify-center text-accent-violet border border-white/10 overflow-hidden shadow-lg relative bg-white/[0.03]">
-                    {study.logo ? (
-                      <img src={study.logo} alt="" className="w-full h-full object-contain p-2" />
-                    ) : (
-                      <GraduationCap size={36} />
-                    )}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-4 mb-2">
-                      <h3 className="font-black text-2xl text-text-primary tracking-tight">{study.degree}</h3>
-                      <span className="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-accent-violet/10 text-accent-violet border border-accent-violet/20">{study.institutionType}</span>
+          <div className="max-w-4xl mx-auto space-y-8">
+          {studies.sort((a, b) => b.order - a.order).map((study, i) => (
+            <motion.div 
+              key={study._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              whileHover={{ y: -5, scale: 1.01 }}
+              className="group relative"
+            >
+              {/* Card Glow Effect */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-violet to-accent-blue rounded-[32px] opacity-0 group-hover:opacity-20 blur-xl transition-all duration-700" />
+              
+              <div className="relative glass p-8 rounded-[32px] flex flex-col md:flex-row items-start md:items-center justify-between gap-8 border border-white/5 bg-white/[0.02] shadow-2xl overflow-hidden group-hover:border-white/20 transition-all duration-500">
+                {/* Tech Grid Background */}
+                <div className="absolute inset-0 bg-grid-white/[0.02] opacity-20 pointer-events-none" />
+                
+                <div className="flex items-center gap-8 relative z-10">
+                  <div className="relative">
+                    <div className="w-24 h-24 glass rounded-2xl flex items-center justify-center text-accent-violet border border-white/10 overflow-hidden shadow-[0_0_40px_rgba(139,92,246,0.1)] group-hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] transition-all duration-500 bg-bg-surface/50">
+                      {study.logo ? (
+                        <img src={study.logo} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
+                      ) : (
+                        <GraduationCap size={40} className="group-hover:scale-110 transition-transform duration-500" />
+                      )}
                     </div>
-                    <p className="text-gradient font-bold text-lg mb-3">{study.institution}</p>
-                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-text-muted">
-                      <span className="flex items-center gap-2"><Calendar size={14} className="text-accent-violet" /> {study.startYear} — {study.endYear || 'Present'}</span>
-                      {study.grade && <span className="px-3 py-1 glass rounded-lg border border-white/10">PERFORMANCE: {study.grade}</span>}
+                    {/* Floating Level Indicator */}
+                    <div className="absolute -top-3 -left-3 px-3 py-1 glass rounded-lg border border-white/10 text-[8px] font-black text-accent-blue uppercase tracking-widest shadow-xl">
+                      LVL. {study.startYear.toString().slice(-2)}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-4">
+                      <h3 className="font-display font-black text-3xl text-text-primary tracking-tight group-hover:text-gradient transition-all duration-500">
+                        {study.degree}
+                      </h3>
+                      <span className="px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-accent-violet/10 text-accent-violet border border-accent-violet/20 shadow-inner">
+                        {study.institutionType}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center gap-3">
+                      <p className="text-xl font-bold text-text-secondary opacity-80">{study.institution}</p>
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent-violet animate-pulse" />
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-6">
+                      <div className="flex items-center gap-3 glass border-white/5 px-4 py-2 rounded-xl">
+                        <Calendar size={16} className="text-accent-violet" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">
+                          {study.startYear} <ArrowRight size={10} className="inline mx-1 opacity-50" /> {study.endYear || 'PRESENT'}
+                        </span>
+                      </div>
+                      
+                      {study.grade && (
+                        <div className="flex items-center gap-3 glass border-white/5 px-4 py-2 rounded-xl">
+                          <div className="w-2 h-2 rounded-full bg-accent-blue shadow-glow-blue" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-text-primary">
+                            PERFORMANCE: <span className="text-accent-blue">{study.grade}</span>
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
-                  <button onClick={() => openEditModal(study)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-primary hover:bg-accent-violet hover:text-white transition-all shadow-xl border-white/10">
-                    <Edit2 size={20} />
+
+                <div className="flex gap-4 relative z-10 w-full md:w-auto">
+                  <button 
+                    onClick={() => openEditModal(study)} 
+                    className="flex-grow md:flex-grow-0 w-14 h-14 glass rounded-2xl flex items-center justify-center text-text-primary hover:bg-accent-violet hover:text-white transition-all shadow-xl border border-white/10 hover:scale-110 active:scale-95 group/btn"
+                  >
+                    <Edit2 size={22} className="group-hover/btn:rotate-12 transition-transform" />
                   </button>
-                  <button onClick={() => handleDelete(study._id)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-xl border-white/10">
-                    <Trash2 size={20} />
+                  <button 
+                    onClick={() => handleDelete(study._id)} 
+                    className="flex-grow md:flex-grow-0 w-14 h-14 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-xl border border-white/10 hover:scale-110 active:scale-95 group/btn"
+                  >
+                    <Trash2 size={22} className="group-hover/btn:rotate-12 transition-transform" />
                   </button>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
         )}
       </main>
 
