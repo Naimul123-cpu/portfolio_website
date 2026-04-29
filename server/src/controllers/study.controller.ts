@@ -15,6 +15,13 @@ export const createStudy = async (req: Request, res: Response) => {
   let uploadedPublicId: string | null = null;
   try {
     const data = { ...req.body };
+    if (typeof data.subjects === 'string') {
+      try {
+        data.subjects = JSON.parse(data.subjects);
+      } catch (e) {
+        data.subjects = [];
+      }
+    }
     if (req.file) {
       const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
@@ -47,6 +54,13 @@ export const updateStudy = async (req: Request, res: Response) => {
     if (!existingStudy) return res.status(404).json({ message: 'Study not found' });
 
     const data = { ...req.body };
+    if (typeof data.subjects === 'string') {
+      try {
+        data.subjects = JSON.parse(data.subjects);
+      } catch (e) {
+        data.subjects = [];
+      }
+    }
     if (req.file) {
       const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
