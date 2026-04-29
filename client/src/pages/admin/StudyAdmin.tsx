@@ -9,6 +9,7 @@ import AdminSidebar from '../../components/layout/AdminSidebar';
 
 const StudyAdmin: React.FC = () => {
   const { studies, refresh } = usePortfolioData();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editingStudy, setEditingStudy] = useState<any>(null);
@@ -131,20 +132,28 @@ const StudyAdmin: React.FC = () => {
       </div>
       <div className="bg-texture opacity-[0.02]" />
 
-      <AdminSidebar />
+      <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="flex-grow ml-72 p-12 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+      <main className="flex-grow lg:ml-72 p-6 md:p-12 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
-          <div>
-            <div className="flex items-center gap-4 mb-4">
-              <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
-                Academic Ledger
-              </span>
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <button 
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-3 glass rounded-2xl text-accent-violet shadow-glow-violet"
+            >
+              <GraduationCap size={24} />
+            </button>
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
+                  Academic Ledger
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-display font-black text-text-primary tracking-tight">
+                Educational <span className="text-gradient bg-gradient-aurora">Timeline</span>
+              </h1>
+              <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Document your intellectual growth and certifications.</p>
             </div>
-            <h1 className="text-5xl font-display font-black text-text-primary tracking-tight">
-              Educational <span className="text-gradient bg-gradient-aurora">Timeline</span>
-            </h1>
-            <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Document your intellectual growth and certifications.</p>
           </div>
           <GlowButton onClick={openAddModal} className="flex items-center gap-3 px-10 py-4 shadow-glow-violet">
             <Plus size={20} />

@@ -17,6 +17,7 @@ import AdminSidebar from '../../components/layout/AdminSidebar';
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const { studies, experiences, projects } = usePortfolioData();
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const stats = [
     { label: 'Projects', value: projects.length, icon: <FolderGit2 size={24} />, color: 'bg-accent-violet' },
@@ -34,21 +35,29 @@ const Dashboard: React.FC = () => {
       <div className="bg-texture opacity-[0.02]" />
 
       {/* Sidebar */}
-      <AdminSidebar />
+      <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Content */}
-      <main className="flex-grow ml-72 p-12 relative z-10 overflow-y-auto max-h-screen">
+      <main className="flex-grow lg:ml-72 p-6 md:p-12 relative z-10 overflow-y-auto max-h-screen">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
-          <div>
-            <div className="flex items-center gap-4 mb-4">
-              <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
-                Control Center
-              </span>
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <button 
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-3 glass rounded-2xl text-accent-violet shadow-glow-violet"
+            >
+              <Settings size={24} className="animate-spin-slow" />
+            </button>
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
+                  Control Center
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-display font-black text-text-primary tracking-tight">
+                Welcome back, <span className="text-gradient bg-gradient-aurora">{user?.name}</span>
+              </h1>
+              <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Manage your engineering universe with precision.</p>
             </div>
-            <h1 className="text-5xl font-display font-black text-text-primary tracking-tight">
-              Welcome back, <span className="text-gradient bg-gradient-aurora">{user?.name}</span>
-            </h1>
-            <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Manage your digital universe with precision.</p>
           </div>
           <div className="flex gap-4">
             <GlowButton onClick={() => window.open('/', '_blank')} variant="outline" className="flex items-center gap-3">
