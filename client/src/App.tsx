@@ -62,17 +62,40 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="selection:bg-accent-primary/30 selection:text-accent-primary">
+        <div className="min-h-screen bg-bg-base relative selection:bg-accent-violet/30">
+          {/* Global Background Elements */}
+          <div className="aurora-container">
+            <div className="aurora-orb orb-1" />
+            <div className="aurora-orb orb-2" />
+            <div className="aurora-orb orb-3" />
+          </div>
+          <div className="bg-texture" />
+          <div className="bg-grid" />
+          
           <AppRoutes />
           <Toaster 
             position="bottom-right"
             toastOptions={{
+              className: 'glass-toast',
               style: {
-                background: '#13131F',
-                color: '#F0F0FF',
-                border: '1px solid rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(10px)',
+                background: 'rgba(5, 5, 8, 0.8)',
+                color: '#FFFFFF',
+                border: '1px solid rgba(255,255,255,0.08)',
+                backdropFilter: 'blur(20px)',
+                borderRadius: '20px',
+                padding: '16px 24px',
+                fontSize: '11px',
+                fontWeight: '900',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
               },
+              success: {
+                iconTheme: { primary: '#7C3AED', secondary: '#FFFFFF' },
+              },
+              error: {
+                iconTheme: { primary: '#EC4899', secondary: '#FFFFFF' },
+              }
             }}
           />
         </div>

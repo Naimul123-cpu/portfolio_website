@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
 import { 
   Users, 
   Briefcase, 
@@ -10,9 +9,8 @@ import {
   FolderGit2, 
   LogOut,
   LayoutDashboard,
-  Sun,
-  Moon,
-  X
+  X,
+  Cpu
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -22,7 +20,6 @@ interface AdminSidebarProps {
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -35,10 +32,10 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
 
   const navItems = [
     { label: 'Dashboard', path: '/system-control', icon: <LayoutDashboard size={18} /> },
-    { label: 'Profile', path: '/system-control/profile', icon: <Users size={18} /> },
-    { label: 'Projects', path: '/system-control/projects', icon: <FolderGit2 size={18} /> },
-    { label: 'Experience', path: '/system-control/experience', icon: <Briefcase size={18} /> },
-    { label: 'Study', path: '/system-control/study', icon: <GraduationCap size={18} /> },
+    { label: 'Profile Settings', path: '/system-control/profile', icon: <Users size={18} /> },
+    { label: 'Project Assets', path: '/system-control/projects', icon: <FolderGit2 size={18} /> },
+    { label: 'Experience Cycle', path: '/system-control/experience', icon: <Briefcase size={18} /> },
+    { label: 'Academic Blueprint', path: '/system-control/study', icon: <GraduationCap size={18} /> },
   ];
 
   return (
@@ -51,84 +48,94 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-bg-base/80 backdrop-blur-sm z-[60] lg:hidden"
+            className="fixed inset-0 bg-bg-base/90 backdrop-blur-md z-[60] lg:hidden"
           />
         )}
       </AnimatePresence>
 
       <aside className={`
-        fixed top-0 left-0 bottom-0 w-72 glass border-r border-white/10 p-8 flex flex-col z-[70] 
-        transition-transform duration-500 lg:translate-x-0 backdrop-blur-3xl shadow-[4px_0_32px_rgba(0,0,0,0.2)]
+        fixed top-0 left-0 bottom-0 w-80 bg-[#050508] border-r border-white/5 flex flex-col z-[70] 
+        transition-transform duration-700 lg:translate-x-0 shadow-[10px_0_40px_rgba(0,0,0,0.4)]
         overflow-y-auto scrollbar-hide
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="mb-12 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center text-white shadow-glow-violet">
-              <LayoutDashboard size={20} />
+        {/* Sidebar Header */}
+        <div className="p-10 mb-6 flex items-center justify-between border-b border-white/5">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center text-white shadow-glow-violet">
+              <Cpu size={24} />
             </div>
-            <div className="text-xl font-display font-black text-gradient bg-gradient-aurora tracking-tighter">AURORA.CMS</div>
+            <div className="text-2xl font-display font-black tracking-tighter">
+              <span className="text-gradient">AURORA</span>
+              <span className="text-text-primary">.CMS</span>
+            </div>
           </div>
-          <button onClick={onClose} className="lg:hidden p-2 glass rounded-lg text-text-muted hover:text-text-primary">
+          <button onClick={onClose} className="lg:hidden p-2 glass rounded-xl text-text-muted hover:text-text-primary">
             <X size={20} />
           </button>
         </div>
         
-        <div className="flex flex-col gap-4 mb-10">
-          <div className="p-5 glass rounded-3xl border border-white/10 bg-white/[0.03]">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center font-black text-white shadow-lg text-lg">
+        {/* User Module */}
+        <div className="px-10 mb-10">
+          <div className="p-6 glass rounded-3xl border border-white/5 bg-white/[0.02]">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-bg-surface border border-white/10 flex items-center justify-center font-black text-text-primary text-xl shadow-2xl">
                 {user?.name?.charAt(0)}
               </div>
               <div className="overflow-hidden">
-                <p className="font-black truncate text-sm text-text-primary tracking-tight">{user?.name}</p>
-                <span className="px-2 py-0.5 rounded-lg bg-accent-violet/10 border border-accent-violet/20 text-[8px] font-black text-accent-violet uppercase tracking-widest inline-block">
-                  {user?.role}
-                </span>
+                <p className="font-black truncate text-[13px] text-text-primary tracking-tight">{user?.name}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="w-2 h-2 rounded-full bg-accent-violet animate-pulse shadow-glow-violet" />
+                  <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">
+                    {user?.role} Mode
+                  </span>
+                </div>
               </div>
             </div>
-            
-            <button 
-              onClick={toggleTheme}
-              className="w-full flex items-center justify-between gap-3 p-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-all group"
-            >
-              <span className="text-[9px] font-black uppercase tracking-widest text-text-muted group-hover:text-text-primary">
-                {theme === 'light' ? 'NIGHT MODE' : 'DAY MODE'}
-              </span>
-              <div className="p-1.5 rounded-lg bg-bg-surface text-text-primary">
-                {theme === 'light' ? <Moon size={12} /> : <Sun size={12} />}
-              </div>
-            </button>
           </div>
         </div>
 
-        <nav className="flex-grow space-y-3">
-          <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-4 pl-2">System Core</p>
+        {/* Navigation Core */}
+        <nav className="flex-grow px-6 space-y-2">
+          <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mb-6 pl-4">System Protocols</p>
           {navItems.map((item) => (
             <Link 
               key={item.path}
               to={item.path} 
               onClick={onClose}
-              className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 group ${
+              className={`relative flex items-center gap-4 p-5 rounded-2xl transition-all duration-500 group ${
                 isActive(item.path) 
-                  ? 'bg-gradient-primary text-white shadow-glow-violet translate-x-2' 
-                  : 'text-text-secondary hover:bg-white/5 hover:text-text-primary border border-transparent hover:border-white/5'
+                  ? 'bg-accent-violet/10 text-text-primary' 
+                  : 'text-text-muted hover:bg-white/[0.03] hover:text-text-secondary'
               }`}
             >
-              <div className={`${isActive(item.path) ? 'text-white' : 'text-accent-violet group-hover:scale-110'} transition-transform duration-300`}>
+              {/* Active Indicator Bar */}
+              {isActive(item.path) && (
+                <motion.div 
+                  layoutId="adminNavActive"
+                  className="absolute left-0 w-1 h-8 bg-gradient-primary rounded-full" 
+                />
+              )}
+              
+              <div className={`${isActive(item.path) ? 'text-accent-violet' : 'group-hover:text-text-primary transition-colors'}`}>
                 {item.icon}
               </div>
               <span className="text-[11px] uppercase tracking-[0.2em] font-black">{item.label}</span>
+              
+              {isActive(item.path) && (
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-accent-violet shadow-glow-violet" />
+              )}
             </Link>
           ))}
         </nav>
 
-        <div className="pt-8 mt-auto border-t border-white/10">
+        {/* Sidebar Footer */}
+        <div className="p-8 mt-auto border-t border-white/5 bg-black/40">
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-accent-pink/5 hover:bg-accent-pink/10 text-accent-pink border border-accent-pink/10 transition-all font-black text-[10px] uppercase tracking-widest hover:shadow-glow-pink"
+            className="w-full flex items-center justify-center gap-4 p-5 rounded-2xl bg-accent-pink/5 hover:bg-accent-pink/10 text-accent-pink border border-accent-pink/10 transition-all font-black text-[10px] uppercase tracking-[0.4em] hover:shadow-glow-pink"
           >
-            <LogOut size={18} /> Terminate Session
+            <LogOut size={18} /> Exit System
           </button>
         </div>
       </aside>

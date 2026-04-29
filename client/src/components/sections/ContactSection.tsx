@@ -1,10 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MessageSquare, MapPin, Home, Send, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, MessageCircle, ChevronRight, Globe } from 'lucide-react';
 import SectionTitle from '../ui/SectionTitle';
-import SectionIllustration from '../ui/SectionIllustration';
-import AnimatedCard from '../ui/AnimatedCard';
-import GlowButton from '../ui/GlowButton';
 import type { IProfile } from '../../types';
 
 interface ContactSectionProps {
@@ -17,104 +14,119 @@ const ContactSection: React.FC<ContactSectionProps> = ({ profile }) => {
   const contactItems = [
     { 
       icon: <Mail size={24} />, 
-      label: 'Direct Email', 
+      label: 'Direct Protocol', 
       value: profile.email, 
       link: `mailto:${profile.email}`,
-      color: 'text-accent-violet',
-      glow: 'shadow-glow-violet'
+      color: 'accent-violet'
     },
     { 
       icon: <Phone size={24} />, 
-      label: 'Phone Call', 
+      label: 'Voice Uplink', 
       value: profile.phone, 
       link: `tel:${profile.phone}`,
-      color: 'text-accent-blue',
-      glow: 'shadow-glow-blue'
+      color: 'accent-cyan'
     },
     { 
       icon: <MessageCircle size={24} />, 
-      label: 'WhatsApp Me', 
+      label: 'Secure WhatsApp', 
       value: profile.whatsapp, 
       link: `https://wa.me/${profile.whatsapp?.replace(/\D/g, '')}`,
-      color: 'text-accent-emerald',
-      glow: 'shadow-glow-emerald'
+      color: 'accent-pink'
     },
     { 
       icon: <MapPin size={24} />, 
-      label: 'Current Base', 
+      label: 'Base Station', 
       value: profile.presentAddress, 
-      color: 'text-accent-cyan',
-      glow: 'shadow-glow-cyan'
-    },
-    { 
-      icon: <Home size={24} />, 
-      label: 'Permanent Hub', 
-      value: profile.permanentAddress, 
-      color: 'text-accent-pink',
-      glow: 'shadow-glow-pink'
-    },
-    { 
-      icon: <Send size={24} />, 
-      label: 'Service Zone', 
-      value: profile.location, 
-      color: 'text-accent-amber',
-      glow: ''
+      color: 'accent-blue'
     },
   ].filter(item => item.value);
 
   return (
     <section id="contact" className="py-32 relative overflow-hidden">
-      <SectionIllustration icon={<MessageSquare />} className="opacity-10" />
-      
+      {/* Background Decorative Illustrations */}
+      <div className="absolute top-1/4 right-0 p-20 opacity-[0.03] pointer-events-none rotate-45">
+        <Send size={300} />
+      </div>
+      <div className="absolute bottom-1/4 left-0 p-20 opacity-[0.03] pointer-events-none -rotate-12">
+        <Globe size={300} />
+      </div>
+
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <SectionTitle 
-          eyebrow="CONTACT"
-          title="Let's Start A <Conversation>" 
-          subtitle="Whether you have a project in mind or just want to connect, I'm always open to new opportunities."
+          eyebrow="COMMUNICATION"
+          title="Initialize <Integration>" 
+          subtitle="Ready to discuss large-scale infrastructure or specialized engineering consultancy? Let's connect."
         />
         
-        <div className="max-w-6xl mx-auto">
-          <AnimatedCard gradient className="p-0 mb-16 overflow-hidden">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x border-white/5">
-              {contactItems.map((item) => (
-                <div key={item.label} className="group p-10 hover:bg-white/[0.02] transition-colors duration-500">
-                  <div className={`w-14 h-14 glass rounded-2xl flex items-center justify-center ${item.color} mb-8 group-hover:scale-110 group-hover:${item.glow} transition-all duration-500`}>
+        <div className="grid lg:grid-cols-12 gap-16 max-w-7xl mx-auto items-center">
+          {/* Left Side: Call to Action */}
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="lg:col-span-5"
+          >
+            <h3 className="text-5xl md:text-6xl font-display font-black text-text-primary leading-[1.1] mb-8">
+              Let's build something <span className="text-gradient bg-gradient-aurora">Enduring</span>.
+            </h3>
+            <p className="text-text-secondary text-lg font-medium leading-relaxed mb-10 opacity-70">
+              I'm always looking for ambitious projects and technical challenges. Whether it's a structural audit or a full-scale development, I'm ready to contribute my expertise.
+            </p>
+            
+            <div className="flex gap-4">
+              <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-accent-violet">
+                <Send size={24} />
+              </div>
+              <div className="text-text-primary">
+                <p className="text-[10px] font-black uppercase tracking-widest text-accent-violet">Response Time</p>
+                <p className="text-lg font-black tracking-tight">Within 24 Hours</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Side: Contact Cards */}
+          <div className="lg:col-span-7 grid sm:grid-cols-2 gap-6">
+            {contactItems.map((item, i) => (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="group relative"
+              >
+                {/* Glow Effect */}
+                <div className={`absolute -inset-1 bg-${item.color} rounded-[32px] blur-xl opacity-0 group-hover:opacity-20 transition-opacity`} />
+                
+                <div className="relative glass p-8 rounded-[32px] border border-white/5 bg-white/[0.02] hover:border-white/20 transition-all duration-500 h-full flex flex-col">
+                  <div className={`w-14 h-14 glass rounded-2xl flex items-center justify-center text-${item.color} mb-8 shadow-2xl border-white/5`}>
                     {item.icon}
                   </div>
-                  <p className="text-[10px] font-mono font-black text-text-muted uppercase tracking-[0.2em] mb-3">{item.label}</p>
-                  {item.link ? (
-                    <a 
-                      href={item.link} 
-                      target="_blank" 
-                      rel="noreferrer"
-                      className="text-xl font-black text-text-primary hover:text-gradient transition-all break-all"
-                    >
-                      {item.value}
-                    </a>
-                  ) : (
-                    <p className="text-xl font-black text-text-primary">{item.value}</p>
-                  )}
+                  
+                  <div className="flex-grow">
+                    <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-3">{item.label}</p>
+                    {item.link ? (
+                      <a 
+                        href={item.link} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="text-xl font-black text-text-primary group-hover:text-gradient transition-all break-all tracking-tighter"
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      <p className="text-xl font-black text-text-primary tracking-tighter">{item.value}</p>
+                    )}
+                  </div>
+                  
+                  <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-text-muted">Protocol Active</span>
+                    <ChevronRight size={16} className={`text-${item.color} opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all`} />
+                  </div>
                 </div>
-              ))}
-            </div>
-          </AnimatedCard>
-
-          <div className="text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="glass p-12 rounded-[40px] border border-white/10 inline-block relative group"
-            >
-              <div className="absolute inset-0 bg-gradient-primary blur-[100px] opacity-10 group-hover:opacity-20 transition-opacity" />
-              <h4 className="text-4xl font-black mb-8 text-text-primary">Ready to <span className="text-gradient">Innovate?</span></h4>
-              <p className="text-text-secondary text-lg mb-10 max-w-md mx-auto font-medium tracking-wide">
-                Drop me a message and let's discuss how we can build something exceptional together.
-              </p>
-              <GlowButton size="lg" className="px-12" onClick={() => window.open(`mailto:${profile.email}`, '_blank')}>
-                Send A Message
-              </GlowButton>
-            </motion.div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

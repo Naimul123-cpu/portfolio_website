@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../context/ThemeContext';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Rocket } from 'lucide-react';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -26,27 +24,39 @@ const Header: React.FC = () => {
 
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${
         isScrolled 
-          ? 'py-4 glass border-b border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)]' 
+          ? 'py-4 bg-bg-base/80 backdrop-blur-2xl border-b border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)]' 
           : 'py-8 bg-transparent'
       }`}
     >
+      {/* Scroll Progress Bar */}
+      <motion.div 
+        className="absolute top-0 left-0 h-[2px] bg-gradient-primary z-[110]"
+        style={{ width: '100%', scaleX: 0, transformOrigin: '0%' }}
+        animate={{ scaleX: 1 }}
+      />
+
       <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="relative group"
+          className="relative group cursor-pointer"
         >
-          <a href="#" className="text-2xl font-display font-extrabold tracking-tight text-gradient bg-gradient-aurora animate-gradient-shift bg-[length:400%_400%]">
-            NAIM.DEV
+          <a href="#" className="text-2xl font-display font-black tracking-tighter flex items-center gap-1">
+            <span className="text-gradient-aurora">NAIM</span>
+            <span className="text-text-primary">.DEV</span>
+            <motion.span 
+              animate={{ opacity: [1, 0, 1] }} 
+              transition={{ duration: 1, repeat: Infinity }}
+              className="w-[8px] h-[24px] bg-accent-violet ml-1"
+            />
           </a>
-          <div className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-primary group-hover:w-full transition-all duration-500" />
         </motion.div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-10">
-          <nav className="flex gap-10">
+        <nav className="hidden lg:flex items-center gap-10">
+          <div className="flex gap-10">
             {navLinks.map((link, i) => (
               <motion.a
                 key={link.name}
@@ -54,67 +64,73 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="relative group text-text-secondary hover:text-text-primary transition-colors font-semibold text-[13px] uppercase tracking-[0.2em]"
+                className="relative group text-[11px] font-black uppercase tracking-[0.3em] text-text-muted hover:text-text-primary transition-colors"
               >
                 {link.name}
-                <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-gradient-primary group-hover:w-full transition-all duration-300 rounded-full" />
+                <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-primary group-hover:w-full transition-all duration-500 rounded-full" />
               </motion.a>
             ))}
-          </nav>
+          </div>
           
           <div className="h-6 w-px bg-white/10 mx-2" />
 
           <button 
-            onClick={toggleTheme}
-            className="relative w-14 h-7 rounded-full glass p-1 flex items-center transition-all duration-500 group"
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            className="group relative px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest overflow-hidden border border-white/10 hover:border-accent-violet/50 transition-all"
           >
-            <motion.div 
-              animate={{ x: theme === 'light' ? 0 : 28 }}
-              className="w-5 h-5 rounded-full bg-gradient-primary flex items-center justify-center shadow-lg shadow-accent-violet/30"
-            >
-              {theme === 'light' ? <Sun size={12} className="text-white" /> : <Moon size={12} className="text-white" />}
-            </motion.div>
+            <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 transition-opacity" />
+            <span className="relative flex items-center gap-2">
+              Consult Expert <Rocket size={14} className="text-accent-violet group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            </span>
           </button>
-        </div>
+        </nav>
 
         {/* Mobile Toggle */}
-        <div className="flex md:hidden items-center gap-6">
-          <button 
-            onClick={toggleTheme}
-            className="p-2 rounded-xl glass text-accent-violet"
-          >
-            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-          </button>
-          <button 
-            className="w-10 h-10 flex items-center justify-center rounded-xl glass text-text-primary"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
+        <button 
+          className="lg:hidden w-12 h-12 flex items-center justify-center rounded-2xl glass border border-white/10 text-text-primary"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: 'auto' }}
-            exit={{ opacity: 0, y: -20, height: 0 }}
-            className="md:hidden glass border-b border-white/10 backdrop-blur-2xl overflow-hidden"
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-[200] bg-bg-base/95 backdrop-blur-3xl lg:hidden flex flex-col"
           >
-            <div className="flex flex-col p-8 gap-6">
-              {navLinks.map((link) => (
-                <a
+            <div className="flex justify-between items-center p-8 border-b border-white/5">
+              <span className="text-2xl font-display font-black text-gradient-aurora">NAIM.DEV</span>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-primary">
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="flex-grow flex flex-col justify-center p-12 gap-10">
+              {navLinks.map((link, i) => (
+                <motion.a
                   key={link.name}
                   href={link.href}
-                  className="text-text-secondary hover:text-accent-violet transition-all text-xl font-bold tracking-tight flex items-center justify-between group"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="text-4xl font-black text-text-primary hover:text-accent-violet transition-all tracking-tighter"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}
-                  <div className="w-0 h-[2px] bg-gradient-primary group-hover:w-12 transition-all duration-300" />
-                </a>
+                </motion.a>
               ))}
+            </div>
+
+            <div className="p-12 border-t border-white/5">
+              <button className="w-full py-5 bg-gradient-primary rounded-[32px] font-black text-xs uppercase tracking-[0.3em] shadow-glow-violet">
+                Initialize Consultation
+              </button>
             </div>
           </motion.div>
         )}

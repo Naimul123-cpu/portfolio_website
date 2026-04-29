@@ -12,13 +12,11 @@ import {
   Upload, 
   Eye, 
   Play,
-  ArrowRight,
   Star
 } from 'lucide-react';
 import api from '../../services/api';
 import { toast } from 'react-hot-toast';
 import AdminSidebar from '../../components/layout/AdminSidebar';
-import GlowButton from '../../components/ui/GlowButton';
 
 const ExperienceAdmin: React.FC = () => {
   const [experiences, setExperiences] = useState<any[]>([]);
@@ -60,8 +58,6 @@ const ExperienceAdmin: React.FC = () => {
       setLoading(false);
     }
   };
-
-  const refresh = fetchExperiences;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -126,7 +122,7 @@ const ExperienceAdmin: React.FC = () => {
 
   const handleSampleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!editingExp?._id && !formData._id) {
-      toast.error('Please save experience details first');
+      toast.error('Protocol Error: Save experience parameters first');
       return;
     }
 
@@ -155,10 +151,10 @@ const ExperienceAdmin: React.FC = () => {
         ...prev,
         workSamples: response.data.workSamples
       }));
-      toast.success('Samples uploaded successfully');
-      refresh();
+      toast.success('Evidence Assets Synced');
+      fetchExperiences();
     } catch (error) {
-      toast.error('Failed to upload samples');
+      toast.error('Upload Interrupted');
     } finally {
       setUploadingSamples(false);
       setUploadProgress(0);
@@ -173,10 +169,10 @@ const ExperienceAdmin: React.FC = () => {
         ...prev,
         workSamples: prev.workSamples.filter((s: any) => s._id !== sampleId)
       }));
-      toast.success('Sample removed');
-      refresh();
+      toast.success('Asset Purged');
+      fetchExperiences();
     } catch (error) {
-      toast.error('Failed to delete sample');
+      toast.error('Deactivation Failed');
     }
   };
 
@@ -202,39 +198,38 @@ const ExperienceAdmin: React.FC = () => {
         await api.put(`/experience/${editingExp._id}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Experience node updated');
+        toast.success('Experience Node Optimized');
       } else {
         const response = await api.post('/experience', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Experience added! You can now add work samples.');
+        toast.success('Node Initialized. Sync Evidence Now.');
         setEditingExp(response.data);
         setFormData((prev: any) => ({...prev, _id: response.data._id}));
       }
       
-      refresh();
+      fetchExperiences();
     } catch (error: any) {
-      toast.error('Failed to save experience');
+      toast.error('Sync Error: Node Modification Failed');
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this experience?')) {
+    if (window.confirm('Deactivate this career node permanently?')) {
       try {
         await api.delete(`/experience/${id}`);
-        toast.success('Experience deleted');
-        refresh();
+        toast.success('Node Deactivated');
+        fetchExperiences();
       } catch (error) {
-        toast.error('Failed to delete experience');
+        toast.error('Termination Failed');
       }
     }
   };
 
   return (
-    <div className="min-h-screen bg-bg-base flex overflow-hidden">
-      {/* Aurora Orbs for Admin */}
+    <div className="min-h-screen bg-[#050508] flex overflow-hidden">
       <div className="aurora-container opacity-20">
         <div className="aurora-orb orb-1 scale-75" />
         <div className="aurora-orb orb-2 scale-75" />
@@ -243,31 +238,27 @@ const ExperienceAdmin: React.FC = () => {
 
       <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="flex-grow lg:ml-72 p-6 md:p-12 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <button 
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-3 glass rounded-2xl text-accent-violet shadow-glow-violet"
-            >
-              <Briefcase size={24} />
-            </button>
-            <div>
-              <div className="flex items-center gap-4 mb-4">
-                <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
-                  Career Ledger
-                </span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-display font-black text-text-primary tracking-tight">
-                Manage <span className="text-gradient bg-gradient-aurora">Experience</span>
-              </h1>
-              <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Document your professional trajectory and milestones.</p>
+      <main className="flex-grow lg:ml-80 p-8 md:p-14 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-20">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <Briefcase size={16} className="text-accent-cyan" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-cyan">Career Ledger</span>
             </div>
+            <h1 className="text-4xl md:text-6xl font-display font-black text-text-primary tracking-tighter">
+              Manage <span className="text-gradient">Experience</span>
+            </h1>
+            <p className="mt-4 text-text-muted font-medium tracking-wide text-lg opacity-80 uppercase text-[11px] tracking-[0.2em]">Document your professional trajectory and milestones.</p>
           </div>
-          <GlowButton onClick={openAddModal} className="flex items-center gap-3 px-10 py-4 shadow-glow-violet">
-            <Plus size={20} />
-            <span className="font-black">ADD EXPERIENCE NODE</span>
-          </GlowButton>
+          <button 
+            onClick={openAddModal} 
+            className="group relative px-10 py-5 bg-gradient-primary rounded-[32px] font-black text-[11px] uppercase tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-glow-violet"
+          >
+            <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+            <span className="relative flex items-center gap-3">
+              <Plus size={20} /> Initialize Career Node
+            </span>
+          </button>
         </header>
 
         {loading ? (
@@ -275,75 +266,58 @@ const ExperienceAdmin: React.FC = () => {
             <Loader2 className="animate-spin text-accent-violet" size={48} />
           </div>
         ) : (
-          <div className="max-w-5xl mx-auto space-y-10">
+          <div className="max-w-6xl mx-auto space-y-10">
             {experiences.sort((a, b) => b.order - a.order).map((exp, i) => (
               <motion.div 
                 key={exp._id}
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
-                whileHover={{ x: 10 }}
+                whileHover={{ x: 15 }}
                 className="group relative"
               >
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-violet via-accent-blue to-accent-pink rounded-[40px] opacity-0 group-hover:opacity-10 blur-2xl transition-all duration-1000" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-accent-cyan/20 to-accent-violet/20 rounded-[40px] opacity-0 group-hover:opacity-100 blur-2xl transition-all duration-700" />
                 
-                <div className="relative glass p-10 rounded-[40px] flex flex-col xl:flex-row items-start xl:items-center justify-between gap-10 group border border-white/5 hover:border-white/20 transition-all duration-700 shadow-2xl overflow-hidden">
-                  <div className="absolute inset-0 bg-grid-white/[0.02] opacity-20" />
-                  
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-10 relative z-10">
-                    <div className="relative group/logo">
-                      <div className="w-28 h-28 glass rounded-[32px] flex items-center justify-center text-accent-violet border border-white/10 overflow-hidden shadow-2xl relative bg-bg-surface/50 transition-all duration-500 group-hover/logo:scale-105 group-hover/logo:border-accent-violet/50">
+                <div className="relative glass p-10 md:p-12 rounded-[40px] flex flex-col xl:flex-row items-center justify-between gap-10 group border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl bg-[#0A0A12]/60">
+                  <div className="flex flex-col md:flex-row items-center gap-10">
+                    <div className="relative">
+                      <div className="w-24 h-24 glass rounded-[32px] flex items-center justify-center text-accent-cyan border border-white/5 overflow-hidden bg-bg-surface/50 transition-all duration-500 group-hover:scale-105 group-hover:border-accent-cyan/30">
                         {exp.logo ? (
-                          <img src={exp.logo} alt="" className="w-full h-full object-contain p-4 transition-transform duration-700 group-hover/logo:scale-110" />
+                          <img src={exp.logo} alt="" className="w-full h-full object-contain p-4" />
                         ) : (
-                          <Briefcase size={48} className="transition-transform duration-700 group-hover/logo:scale-110" />
+                          <Briefcase size={40} />
                         )}
                       </div>
-                      <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-gradient-primary flex items-center justify-center text-white shadow-glow-violet border border-white/20">
-                        <Star size={14} fill="white" />
+                      <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-gradient-primary flex items-center justify-center text-white shadow-glow-violet border border-white/10">
+                        <Star size={12} fill="white" />
                       </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <div className="flex flex-wrap items-center gap-4">
-                        <h3 className="font-display font-black text-3xl md:text-4xl text-text-primary tracking-tight group-hover:text-gradient transition-all duration-500">{exp.role}</h3>
-                        <span className="px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] bg-accent-violet/10 text-accent-violet border border-accent-violet/20">
+                    <div className="space-y-4 text-center md:text-left">
+                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                        <h3 className="font-display font-black text-3xl text-text-primary tracking-tighter">{exp.role}</h3>
+                        <span className="px-4 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20">
                           {exp.workplaceType}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-4">
-                        <p className="text-2xl font-bold text-gradient bg-gradient-aurora tracking-tight">{exp.company}</p>
-                        <div className="h-4 w-[1px] bg-white/10" />
-                        <span className="text-[11px] font-black uppercase tracking-widest text-text-muted">{exp.type}</span>
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-8">
-                        <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-text-muted glass border-white/5 px-4 py-2 rounded-2xl">
-                          <Calendar size={18} className="text-accent-violet" />
-                          <span>
-                            {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} 
-                            <ArrowRight size={12} className="inline mx-2 opacity-50" /> 
-                            {exp.isCurrent ? <span className="text-accent-blue">PRESENT OPERATIONAL</span> : exp.endDate ? new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}
-                          </span>
+                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-6">
+                        <p className="text-xl font-bold text-gradient bg-gradient-aurora tracking-tight">{exp.company}</p>
+                        <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-white/10" />
+                        <div className="flex items-center gap-2 text-text-muted font-black uppercase tracking-[0.2em] text-[10px]">
+                          <Calendar size={14} className="text-accent-violet" />
+                          {new Date(exp.startDate).getFullYear()} — {exp.isCurrent ? 'Present' : new Date(exp.endDate!).getFullYear()}
                         </div>
-                        
-                        {exp.workSamples?.length > 0 && (
-                          <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-accent-blue glass border-white/5 px-4 py-2 rounded-2xl">
-                            <Eye size={18} />
-                            <span>{exp.workSamples.length} Evidence Protocols</span>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex gap-4 relative z-10 w-full xl:w-auto">
-                    <button onClick={() => openEditModal(exp)} className="flex-grow xl:flex-grow-0 w-16 h-16 glass rounded-[24px] flex items-center justify-center text-text-primary hover:bg-accent-violet hover:text-white transition-all shadow-2xl border border-white/10 hover:scale-110 active:scale-95 group/btn">
-                      <Edit2 size={24} className="group-hover/btn:rotate-12 transition-transform" />
+                  <div className="flex gap-4 w-full xl:w-auto">
+                    <button onClick={() => openEditModal(exp)} className="flex-grow xl:flex-grow-0 w-16 h-16 glass rounded-2xl flex items-center justify-center text-text-primary hover:bg-white hover:text-bg-base transition-all shadow-2xl border border-white/10 hover:scale-110 active:scale-95 group/btn">
+                      <Edit2 size={24} />
                     </button>
-                    <button onClick={() => handleDelete(exp._id)} className="flex-grow xl:flex-grow-0 w-16 h-16 glass rounded-[24px] flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-2xl border border-white/10 hover:scale-110 active:scale-95 group/btn">
-                      <Trash2 size={24} className="group-hover/btn:rotate-12 transition-transform" />
+                    <button onClick={() => handleDelete(exp._id)} className="flex-grow xl:flex-grow-0 w-16 h-16 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-2xl border border-white/10 hover:scale-110 active:scale-95 group/btn">
+                      <Trash2 size={24} />
                     </button>
                   </div>
                 </div>
@@ -353,158 +327,166 @@ const ExperienceAdmin: React.FC = () => {
         )}
       </main>
 
-      {/* Modal - Moved outside main for perfect centering */}
+      {/* Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-12">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-bg-base/90 backdrop-blur-md" 
+              className="absolute inset-0 bg-bg-base/95 backdrop-blur-2xl" 
               onClick={() => setIsModalOpen(false)} 
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative glass rounded-[32px] md:rounded-[48px] w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-glow-violet border border-white/10 flex flex-col"
+              className="relative glass rounded-[48px] w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl border border-white/10 flex flex-col"
             >
-              <div className="p-6 md:p-10 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+              <div className="p-10 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-violet mb-2">Career Protocol</p>
-                  <h2 className="text-3xl md:text-4xl font-display font-black text-text-primary tracking-tight">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-2 h-2 rounded-full bg-accent-cyan shadow-glow-cyan animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-cyan">Career Integration</span>
+                  </div>
+                  <h2 className="text-4xl font-display font-black text-text-primary tracking-tighter">
                     {editingExp ? 'Modify' : 'Initialize'} <span className="text-gradient">Experience</span>
                   </h2>
                 </div>
-                <button onClick={() => setIsModalOpen(false)} className="w-10 h-10 md:w-12 md:h-12 glass rounded-2xl flex items-center justify-center text-text-muted hover:text-text-primary transition-colors">
-                  <X size={24} />
+                <button onClick={() => setIsModalOpen(false)} className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-text-muted hover:text-text-primary transition-all">
+                  <X size={28} />
                 </button>
               </div>
 
-              <div className="p-6 md:p-10 overflow-y-auto scrollbar-hide">
-                <form onSubmit={handleSubmit} className="space-y-10">
-                  <div className="grid md:grid-cols-2 gap-8 md:gap-10">
-                    <div className="space-y-8">
-                      <div className="grid grid-cols-2 gap-6">
-                        <div className="space-y-3">
-                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Organization</label>
-                          <input name="company" value={formData.company} onChange={handleInputChange} required className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
+              <div className="p-10 md:p-14 overflow-y-auto scrollbar-hide">
+                <form onSubmit={handleSubmit} className="space-y-12">
+                  <div className="grid md:grid-cols-2 gap-12">
+                    <div className="space-y-10">
+                      <div className="grid grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Organization</label>
+                          <input name="company" value={formData.company} onChange={handleInputChange} required className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 focus:bg-white/[0.05] transition-all font-medium" />
                         </div>
-                        <div className="space-y-3">
-                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Emblem</label>
-                          <div className="relative group glass bg-white/5 border border-dashed border-white/20 rounded-2xl h-[58px] flex items-center justify-center hover:border-accent-violet/50 transition-all">
-                            <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">{logo ? logo.name : 'Upload Brand'}</span>
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Emblem</label>
+                          <div className="relative group glass bg-white/[0.03] border border-dashed border-white/10 rounded-2xl h-[66px] flex items-center justify-center hover:border-accent-cyan/40 transition-all">
+                            <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">{logo ? logo.name : 'Log Brand Asset'}</span>
                             <input type="file" onChange={(e) => setLogo(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" />
                           </div>
                         </div>
                       </div>
 
-                      <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Position Title</label>
-                        <input name="role" value={formData.role} onChange={handleInputChange} required className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Position Title</label>
+                        <input name="role" value={formData.role} onChange={handleInputChange} required className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-medium" />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-6">
-                        <div className="space-y-3">
-                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Job Architecture</label>
-                          <select name="type" value={formData.type} onChange={handleInputChange} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-bold appearance-none cursor-pointer">
-                            <option value="Full-time">Full-time Flow</option>
-                            <option value="Part-time">Part-time Flow</option>
-                            <option value="Freelance">Freelance Contract</option>
-                            <option value="Internship">Learning Node</option>
-                          </select>
-                        </div>
-                        <div className="space-y-3">
-                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Environment</label>
-                          <select name="workplaceType" value={formData.workplaceType} onChange={handleInputChange} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-bold appearance-none cursor-pointer">
+                      <div className="grid grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Environment</label>
+                          <select name="workplaceType" value={formData.workplaceType} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-black appearance-none cursor-pointer uppercase text-[10px] tracking-widest">
                             {['Company', 'Business', 'Freelance', 'Remote', 'Own Business', 'NGO', 'Government', 'Other'].map(type => (
                               <option key={type} value={type}>{type}</option>
                             ))}
                           </select>
                         </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-6">
-                        <div className="space-y-3">
-                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Initiation Date</label>
-                          <input type="date" name="startDate" value={formData.startDate} onChange={handleInputChange} required className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
-                        </div>
-                        <div className="space-y-3">
-                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Termination Date</label>
-                          <input type="date" name="endDate" value={formData.endDate} onChange={handleInputChange} disabled={formData.isCurrent} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium disabled:opacity-30" />
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Structural Type</label>
+                          <select name="type" value={formData.type} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-black appearance-none cursor-pointer uppercase text-[10px] tracking-widest">
+                            <option value="Full-time">Full-time Node</option>
+                            <option value="Part-time">Part-time Node</option>
+                            <option value="Freelance">Contract Flow</option>
+                            <option value="Internship">Learning Core</option>
+                          </select>
                         </div>
                       </div>
 
-                      <div className="p-6 glass bg-accent-violet/5 border border-white/10 rounded-2xl flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <input type="checkbox" name="isCurrent" checked={formData.isCurrent} onChange={handleInputChange} className="w-5 h-5 rounded border-white/10 bg-white/5 text-accent-violet focus:ring-accent-violet" />
-                          <label className="text-[10px] font-black text-text-primary uppercase tracking-widest">Active Engagement</label>
+                      <div className="grid grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Initiation</label>
+                          <input type="date" name="startDate" value={formData.startDate} onChange={handleInputChange} required className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-medium" />
                         </div>
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Termination</label>
+                          <input type="date" name="endDate" value={formData.endDate} onChange={handleInputChange} disabled={formData.isCurrent} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-medium disabled:opacity-20" />
+                        </div>
+                      </div>
+
+                      <div className="p-8 glass bg-accent-cyan/[0.03] border border-white/5 rounded-[32px] flex items-center justify-between">
+                        <div>
+                          <p className="text-[12px] font-black text-text-primary uppercase tracking-widest mb-1">Active Deployment</p>
+                          <p className="text-[9px] font-bold text-text-muted uppercase tracking-widest">Presently operational at this node</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" name="isCurrent" checked={formData.isCurrent} onChange={handleInputChange} className="sr-only peer" />
+                          <div className="w-16 h-9 bg-white/5 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[6px] after:left-[6px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-gradient-primary shadow-2xl"></div>
+                        </label>
                       </div>
                     </div>
 
-                    <div className="space-y-8">
-                      <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Mission Parameters</label>
-                        <textarea name="description" value={formData.description} onChange={handleInputChange} rows={5} className="w-full glass bg-white/5 border border-white/10 rounded-[24px] md:rounded-[32px] p-6 text-text-primary outline-none focus:border-accent-violet transition-all font-medium leading-relaxed" />
+                    <div className="space-y-10">
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Mission Parameters</label>
+                        <textarea name="description" value={formData.description} onChange={handleInputChange} rows={5} className="w-full glass bg-white/[0.03] border border-white/5 rounded-[32px] p-8 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-medium leading-relaxed" />
                       </div>
 
-                      <div className="space-y-4">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Capability Stack</label>
-                        <div className="flex gap-4 mb-4">
-                          <input value={techInput} onChange={(e) => setTechInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTech())} className="flex-grow glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" placeholder="Add tech..." />
-                          <button type="button" onClick={addTech} className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center text-white shadow-glow-violet hover:scale-110 transition-all"><Plus size={24} /></button>
+                      <div className="space-y-6">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Capability Stack</label>
+                        <div className="flex gap-4">
+                          <input value={techInput} onChange={(e) => setTechInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTech())} className="flex-grow glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-medium" placeholder="Add Tech..." />
+                          <button type="button" onClick={addTech} className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center text-white shadow-glow-violet hover:scale-105 active:scale-95 transition-all"><Plus size={28} /></button>
                         </div>
                         <div className="flex flex-wrap gap-3">
                           {formData.technologies.map((tech: string) => (
-                            <span key={tech} className="flex items-center gap-3 px-5 py-2.5 glass rounded-2xl border-white/5 text-[11px] font-black text-text-primary uppercase tracking-widest group">
+                            <span key={tech} className="flex items-center gap-4 px-6 py-3 glass rounded-2xl border border-white/5 text-[11px] font-black text-text-primary uppercase tracking-widest bg-white/[0.02]">
+                              <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan shadow-glow-cyan" />
                               {tech}
-                              <X size={14} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors" onClick={() => removeTech(tech)} />
+                              <X size={16} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors ml-2" onClick={() => removeTech(tech)} />
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <div className="pt-8 border-t border-white/10">
-                        <h3 className="text-xl font-black text-text-primary tracking-tight mb-6 flex items-center gap-3">
-                          <Eye size={20} className="text-accent-blue" />
-                          Evidence Repository
-                        </h3>
+                      <div className="pt-10 border-t border-white/5">
+                        <div className="flex items-center gap-4 mb-8">
+                          <Eye size={24} className="text-accent-violet" />
+                          <h3 className="text-2xl font-black text-text-primary tracking-tighter">Evidence Repository</h3>
+                        </div>
                         {!editingExp && !formData._id ? (
-                          <div className="p-8 glass rounded-3xl border border-white/5 text-center">
-                            <p className="text-[10px] font-black text-text-muted uppercase tracking-widest">Initialize experience protocol first to upload evidence.</p>
+                          <div className="p-10 glass rounded-[32px] border border-white/5 text-center bg-white/[0.01]">
+                            <p className="text-[10px] font-black text-text-muted uppercase tracking-widest leading-relaxed">Initialize experience protocol first to upload cinematic evidence.</p>
                           </div>
                         ) : (
-                          <div className="space-y-8">
-                            <div className="relative group aspect-video glass bg-white/5 border border-dashed border-white/20 rounded-[24px] md:rounded-[32px] flex flex-col items-center justify-center overflow-hidden hover:border-accent-blue/50 transition-all duration-500">
+                          <div className="space-y-10">
+                            <div className="relative group aspect-video glass bg-white/[0.03] border border-dashed border-white/10 rounded-[40px] flex flex-col items-center justify-center overflow-hidden hover:border-accent-violet/40 transition-all duration-700">
                               <div className="absolute inset-0 bg-gradient-secondary opacity-0 group-hover:opacity-10 transition-opacity" />
                               {uploadingSamples ? (
                                 <div className="text-center">
-                                  <Loader2 className="animate-spin text-accent-blue mb-4 mx-auto" size={32} />
-                                  <p className="text-[10px] font-black text-text-primary uppercase tracking-[0.2em]">Uploading Evidence... {uploadProgress}%</p>
+                                  <Loader2 className="animate-spin text-accent-violet mb-4 mx-auto" size={40} />
+                                  <p className="text-[10px] font-black text-text-primary uppercase tracking-[0.3em]">Syncing Evidence... {uploadProgress}%</p>
                                 </div>
                               ) : (
                                 <div className="text-center group-hover:scale-110 transition-transform duration-500">
-                                  <Upload className="text-accent-blue mb-4 mx-auto" size={32} />
-                                  <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">Inject Images/Videos</span>
+                                  <Upload className="text-accent-violet mb-4 mx-auto" size={40} />
+                                  <span className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em]">Upload Field Evidence</span>
                                 </div>
                               )}
                               <input type="file" multiple accept="image/*,video/*" onChange={handleSampleUpload} disabled={uploadingSamples} className="absolute inset-0 opacity-0 cursor-pointer" />
                             </div>
 
-                            <div className="grid grid-cols-3 gap-4">
+                            <div className="grid grid-cols-4 gap-4">
                               {formData.workSamples.map((sample: any) => (
-                                <div key={sample._id} className="relative aspect-square rounded-2xl overflow-hidden glass border border-white/10 group/sample">
+                                <div key={sample._id} className="relative aspect-square rounded-2xl overflow-hidden glass border border-white/5 group/sample">
                                   {sample.type === 'image' ? (
-                                    <img src={sample.url} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover/sample:scale-110" />
+                                    <img src={sample.url} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover/sample:scale-110" />
                                   ) : (
-                                    <div className="w-full h-full bg-bg-surface flex items-center justify-center text-accent-blue">
+                                    <div className="w-full h-full bg-bg-surface flex items-center justify-center text-accent-violet">
                                       <Play size={24} />
                                     </div>
                                   )}
-                                  <div className="absolute inset-0 bg-bg-base/80 opacity-0 group-hover/sample:opacity-100 transition-all duration-300 flex items-center justify-center">
-                                    <button type="button" onClick={() => deleteSample(sample._id)} className="w-10 h-10 glass rounded-xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all">
+                                  <div className="absolute inset-0 bg-bg-base/80 opacity-0 group-hover/sample:opacity-100 transition-all duration-500 flex items-center justify-center">
+                                    <button type="button" onClick={() => deleteSample(sample._id)} className="w-10 h-10 glass rounded-xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-2xl">
                                       <Trash2 size={16} />
                                     </button>
                                   </div>
@@ -517,10 +499,14 @@ const ExperienceAdmin: React.FC = () => {
                     </div>
                   </div>
 
-                  <GlowButton type="submit" disabled={isSaving} size="lg" className="w-full py-5 shadow-glow-violet">
-                    {isSaving ? <Loader2 className="animate-spin mr-2" size={24} /> : <Save className="mr-2" size={24} />}
-                    <span className="font-black text-base">{editingExp ? 'SYNC CAREER NODE' : 'LAUNCH CAREER NODE'}</span>
-                  </GlowButton>
+                  <button 
+                    type="submit" 
+                    disabled={isSaving}
+                    className="w-full py-6 bg-gradient-primary rounded-[32px] font-black text-base uppercase tracking-widest shadow-glow-violet hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4"
+                  >
+                    {isSaving ? <Loader2 className="animate-spin" size={28} /> : <Save size={28} />}
+                    {editingExp ? 'Update Career Node' : 'Initialize Career Node'}
+                  </button>
                 </form>
               </div>
             </motion.div>

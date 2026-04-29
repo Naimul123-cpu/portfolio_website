@@ -9,12 +9,12 @@ import {
   Save, 
   X, 
   Loader2,
-  ArrowRight
+  BookOpen,
+  Zap
 } from 'lucide-react';
 import api from '../../services/api';
 import { toast } from 'react-hot-toast';
 import AdminSidebar from '../../components/layout/AdminSidebar';
-import GlowButton from '../../components/ui/GlowButton';
 
 const StudyAdmin: React.FC = () => {
   const [studies, setStudies] = useState<any[]>([]);
@@ -132,71 +132,66 @@ const StudyAdmin: React.FC = () => {
         await api.put(`/study/${editingStudy._id}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Academic node updated');
+        toast.success('Academic Node Synchronized');
       } else {
         await api.post('/study', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Academic node created');
+        toast.success('Academic Node Initialized');
       }
       
       setIsModalOpen(false);
       fetchStudies();
     } catch (error) {
-      toast.error('Failed to save study');
+      toast.error('Sync Protocol Failure');
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this record?')) {
+    if (window.confirm('Terminate this academic record permanently?')) {
       try {
         await api.delete(`/study/${id}`);
-        toast.success('Record deleted');
+        toast.success('Record Deactivated');
         fetchStudies();
       } catch (error) {
-        toast.error('Failed to delete record');
+        toast.error('Termination Failed');
       }
     }
   };
 
   return (
-    <div className="min-h-screen bg-bg-base flex overflow-hidden">
-      {/* Aurora Orbs for Admin */}
+    <div className="min-h-screen bg-[#050508] flex overflow-hidden">
       <div className="aurora-container opacity-20">
         <div className="aurora-orb orb-1 scale-75" />
-        <div className="aurora-orb orb-3 scale-75" />
+        <div className="aurora-orb orb-2 scale-75" />
       </div>
       <div className="bg-texture opacity-[0.02]" />
 
       <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="flex-grow lg:ml-72 p-6 md:p-12 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <button 
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-3 glass rounded-2xl text-accent-violet shadow-glow-violet"
-            >
-              <GraduationCap size={24} />
-            </button>
-            <div>
-              <div className="flex items-center gap-4 mb-4">
-                <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
-                  Academic Ledger
-                </span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-display font-black text-text-primary tracking-tight">
-                Educational <span className="text-gradient bg-gradient-aurora">Timeline</span>
-              </h1>
-              <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Document your intellectual growth and certifications.</p>
+      <main className="flex-grow lg:ml-80 p-8 md:p-14 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-20">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <GraduationCap size={16} className="text-accent-pink" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-pink">Academic Ledger</span>
             </div>
+            <h1 className="text-4xl md:text-6xl font-display font-black text-text-primary tracking-tighter">
+              Educational <span className="text-gradient">Timeline</span>
+            </h1>
+            <p className="mt-4 text-text-muted font-medium tracking-wide text-lg opacity-80 uppercase text-[11px] tracking-[0.2em]">Document your intellectual growth and certifications.</p>
           </div>
-          <GlowButton onClick={openAddModal} className="flex items-center gap-3 px-10 py-4 shadow-glow-violet">
-            <Plus size={20} />
-            <span className="font-black">ADD ACADEMIC NODE</span>
-          </GlowButton>
+          <button 
+            onClick={openAddModal} 
+            className="group relative px-10 py-5 bg-gradient-primary rounded-[32px] font-black text-[11px] uppercase tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-glow-violet"
+          >
+            <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+            <span className="relative flex items-center gap-3">
+              <Plus size={20} /> Initialize Academic Node
+            </span>
+          </button>
         </header>
 
         {loading ? (
@@ -204,198 +199,181 @@ const StudyAdmin: React.FC = () => {
             <Loader2 className="animate-spin text-accent-violet" size={48} />
           </div>
         ) : (
-          <div className="max-w-4xl mx-auto space-y-8">
-          {studies.sort((a, b) => b.order - a.order).map((study, i) => (
-            <motion.div 
-              key={study._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -5, scale: 1.01 }}
-              className="group relative"
-            >
-              {/* Card Glow Effect */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-violet to-accent-blue rounded-[32px] opacity-0 group-hover:opacity-20 blur-xl transition-all duration-700" />
-              
-              <div className="relative glass p-8 rounded-[32px] flex flex-col md:flex-row items-start md:items-center justify-between gap-8 border border-white/5 bg-white/[0.02] shadow-2xl overflow-hidden group-hover:border-white/20 transition-all duration-500">
-                {/* Tech Grid Background */}
-                <div className="absolute inset-0 bg-grid-white/[0.02] opacity-20 pointer-events-none" />
+          <div className="max-w-6xl mx-auto space-y-10">
+            {studies.sort((a, b) => b.order - a.order).map((study, i) => (
+              <motion.div 
+                key={study._id}
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ x: 15 }}
+                className="group relative"
+              >
+                <div className="absolute -inset-1 bg-gradient-to-r from-accent-pink/20 to-accent-violet/20 rounded-[40px] opacity-0 group-hover:opacity-100 blur-2xl transition-all duration-700" />
                 
-                <div className="flex items-center gap-8 relative z-10">
-                  <div className="relative">
-                    <div className="w-24 h-24 glass rounded-2xl flex items-center justify-center text-accent-violet border border-white/10 overflow-hidden shadow-[0_0_40px_rgba(139,92,246,0.1)] group-hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] transition-all duration-500 bg-bg-surface/50">
-                      {study.logo ? (
-                        <img src={study.logo} alt="" className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-110" />
-                      ) : (
-                        <GraduationCap size={40} className="group-hover:scale-110 transition-transform duration-500" />
-                      )}
-                    </div>
-                    {/* Floating Level Indicator */}
-                    <div className="absolute -top-3 -left-3 px-3 py-1 glass rounded-lg border border-white/10 text-[8px] font-black text-accent-blue uppercase tracking-widest shadow-xl">
-                      LVL. {study.startYear.toString().slice(-2)}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap items-center gap-4">
-                      <h3 className="font-display font-black text-3xl text-text-primary tracking-tight group-hover:text-gradient transition-all duration-500">
-                        {study.degree}
-                      </h3>
-                      <span className="px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em] bg-accent-violet/10 text-accent-violet border border-accent-violet/20 shadow-inner">
-                        {study.institutionType}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center gap-3">
-                      <p className="text-xl font-bold text-text-secondary opacity-80">{study.institution}</p>
-                      <div className="w-1.5 h-1.5 rounded-full bg-accent-violet animate-pulse" />
+                <div className="relative glass p-10 md:p-12 rounded-[40px] flex flex-col xl:flex-row items-center justify-between gap-10 group border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl bg-[#0A0A12]/60">
+                  <div className="flex flex-col md:flex-row items-center gap-10">
+                    <div className="relative">
+                      <div className="w-24 h-24 glass rounded-[32px] flex items-center justify-center text-accent-pink border border-white/5 overflow-hidden bg-bg-surface/50 transition-all duration-500 group-hover:scale-105 group-hover:border-accent-pink/30">
+                        {study.logo ? (
+                          <img src={study.logo} alt="" className="w-full h-full object-contain p-4" />
+                        ) : (
+                          <BookOpen size={40} />
+                        )}
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-gradient-primary flex items-center justify-center text-white shadow-glow-violet border border-white/10">
+                        <Zap size={12} fill="white" />
+                      </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-6">
-                      <div className="flex items-center gap-3 glass border-white/5 px-4 py-2 rounded-xl">
-                        <Calendar size={16} className="text-accent-violet" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">
-                          {study.startYear} <ArrowRight size={10} className="inline mx-1 opacity-50" /> {study.endYear || 'PRESENT'}
+                    <div className="space-y-4 text-center md:text-left">
+                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                        <h3 className="font-display font-black text-3xl text-text-primary tracking-tighter">{study.degree}</h3>
+                        <span className="px-4 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-accent-pink/10 text-accent-pink border border-accent-pink/20">
+                          {study.institutionType}
                         </span>
                       </div>
-                      
-                      {study.grade && (
-                        <div className="flex items-center gap-3 glass border-white/5 px-4 py-2 rounded-xl">
-                          <div className="w-2 h-2 rounded-full bg-accent-blue shadow-glow-blue" />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-text-primary">
-                            PERFORMANCE: <span className="text-accent-blue">{study.grade}</span>
-                          </span>
+
+                      <div className="flex flex-wrap items-center justify-center md:justify-start gap-6">
+                        <p className="text-xl font-bold text-gradient bg-gradient-aurora tracking-tight">{study.institution}</p>
+                        <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-white/10" />
+                        <div className="flex items-center gap-2 text-text-muted font-black uppercase tracking-[0.2em] text-[10px]">
+                          <Calendar size={14} className="text-accent-violet" />
+                          {study.startYear} — {study.endYear || 'PRESENT'}
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex gap-4 relative z-10 w-full md:w-auto">
-                  <button 
-                    onClick={() => openEditModal(study)} 
-                    className="flex-grow md:flex-grow-0 w-14 h-14 glass rounded-2xl flex items-center justify-center text-text-primary hover:bg-accent-violet hover:text-white transition-all shadow-xl border border-white/10 hover:scale-110 active:scale-95 group/btn"
-                  >
-                    <Edit2 size={22} className="group-hover/btn:rotate-12 transition-transform" />
-                  </button>
-                  <button 
-                    onClick={() => handleDelete(study._id)} 
-                    className="flex-grow md:flex-grow-0 w-14 h-14 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-xl border border-white/10 hover:scale-110 active:scale-95 group/btn"
-                  >
-                    <Trash2 size={22} className="group-hover/btn:rotate-12 transition-transform" />
-                  </button>
+                  <div className="flex gap-4 w-full xl:w-auto">
+                    <button onClick={() => openEditModal(study)} className="flex-grow xl:flex-grow-0 w-16 h-16 glass rounded-2xl flex items-center justify-center text-text-primary hover:bg-white hover:text-bg-base transition-all shadow-2xl border border-white/10 hover:scale-110 active:scale-95 group/btn">
+                      <Edit2 size={24} />
+                    </button>
+                    <button onClick={() => handleDelete(study._id)} className="flex-grow xl:flex-grow-0 w-16 h-16 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-2xl border border-white/10 hover:scale-110 active:scale-95 group/btn">
+                      <Trash2 size={24} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
         )}
       </main>
 
-      {/* Modal - Moved outside main for perfect centering */}
+      {/* Modal */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-12">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-bg-base/90 backdrop-blur-md" 
+              className="absolute inset-0 bg-bg-base/95 backdrop-blur-2xl" 
               onClick={() => setIsModalOpen(false)} 
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative glass rounded-[32px] md:rounded-[48px] w-full max-w-3xl max-h-[90vh] overflow-hidden shadow-glow-violet border border-white/10 flex flex-col"
+              className="relative glass rounded-[48px] w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl border border-white/10 flex flex-col"
             >
-              <div className="p-6 md:p-10 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+              <div className="p-10 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-violet mb-2">Academic Protocol</p>
-                  <h2 className="text-3xl md:text-4xl font-display font-black text-text-primary tracking-tight">
-                    {editingStudy ? 'Update' : 'Register'} <span className="text-gradient">Knowledge</span>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-2 h-2 rounded-full bg-accent-pink shadow-glow-pink animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-pink">Knowledge Integration</span>
+                  </div>
+                  <h2 className="text-4xl font-display font-black text-text-primary tracking-tighter">
+                    {editingStudy ? 'Update' : 'Initialize'} <span className="text-gradient">Knowledge</span>
                   </h2>
                 </div>
-                <button onClick={() => setIsModalOpen(false)} className="w-10 h-10 md:w-12 md:h-12 glass rounded-2xl flex items-center justify-center text-text-muted hover:text-text-primary transition-colors">
-                  <X size={24} />
+                <button onClick={() => setIsModalOpen(false)} className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-text-muted hover:text-text-primary transition-all">
+                  <X size={28} />
                 </button>
               </div>
 
-              <div className="p-6 md:p-10 overflow-y-auto scrollbar-hide">
-                <form onSubmit={handleSubmit} className="space-y-8">
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Institution Name</label>
-                      <input name="institution" value={formData.institution} onChange={handleInputChange} required className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
+              <div className="p-10 md:p-14 overflow-y-auto scrollbar-hide">
+                <form onSubmit={handleSubmit} className="space-y-12">
+                  <div className="grid md:grid-cols-2 gap-12">
+                    <div className="space-y-10">
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Institution Name</label>
+                        <input name="institution" value={formData.institution} onChange={handleInputChange} required className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-pink/50 focus:bg-white/[0.05] transition-all font-medium" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Entity Type</label>
+                          <select name="institutionType" value={formData.institutionType} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-black appearance-none cursor-pointer uppercase text-[10px] tracking-widest">
+                            {['School', 'College', 'University', 'Online Course', 'Training Institute', 'Certification', 'Other'].map(type => (
+                              <option key={type} value={type}>{type}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Symbol Asset</label>
+                          <div className="relative group glass bg-white/[0.03] border border-dashed border-white/10 rounded-2xl h-[66px] flex items-center justify-center hover:border-accent-pink/40 transition-all">
+                            <span className="text-[9px] font-black text-text-muted uppercase tracking-widest">{logo ? logo.name : 'Upload Symbol'}</span>
+                            <input type="file" onChange={(e) => setLogo(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Degree / Qualification</label>
+                        <input name="degree" value={formData.degree} onChange={handleInputChange} required className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-medium" />
+                      </div>
                     </div>
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Entity Type</label>
-                      <select name="institutionType" value={formData.institutionType} onChange={handleInputChange} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-bold appearance-none cursor-pointer">
-                        {['School', 'College', 'University', 'Online Course', 'Training Institute', 'Certification', 'Other'].map(type => (
-                          <option key={type} value={type}>{type}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
 
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Degree / Qualification</label>
-                      <input name="degree" value={formData.degree} onChange={handleInputChange} required className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Institution Emblem</label>
-                      <div className="relative group glass bg-white/5 border border-dashed border-white/20 rounded-2xl h-[58px] flex items-center justify-center hover:border-accent-violet/50 transition-all">
-                        <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">{logo ? logo.name : 'Upload Symbol'}</span>
-                        <input type="file" onChange={(e) => setLogo(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" />
+                    <div className="space-y-10">
+                      <div className="space-y-6">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Curriculum Pillars</label>
+                        <div className="flex gap-4">
+                          <input value={subjectInput} onChange={(e) => setSubjectInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addSubject())} className="flex-grow glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-medium" placeholder="Add Major Subject..." />
+                          <button type="button" onClick={addSubject} className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center text-white shadow-glow-violet hover:scale-105 active:scale-95 transition-all"><Plus size={28} /></button>
+                        </div>
+                        <div className="flex flex-wrap gap-3">
+                          {formData.subjects.map((sub: string) => {
+                            const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
+                            return (
+                              <span key={sub} className="flex items-center gap-4 px-6 py-3 glass rounded-2xl border border-white/5 text-[11px] font-black text-text-primary uppercase tracking-widest bg-white/[0.02]">
+                                <div className="w-1.5 h-1.5 rounded-full bg-accent-pink shadow-glow-pink" />
+                                {cleanSub}
+                                <X size={16} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors ml-2" onClick={() => removeSubject(sub)} />
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-6">
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Initiation</label>
+                          <input type="number" name="startYear" value={formData.startYear} onChange={handleInputChange} required className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-4 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-medium" />
+                        </div>
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Completion</label>
+                          <input type="number" name="endYear" value={formData.endYear} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-4 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-medium" />
+                        </div>
+                        <div className="space-y-4">
+                          <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">GPA</label>
+                          <input name="grade" value={formData.grade} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-4 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-medium" />
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Contextual Notes</label>
+                        <textarea name="description" value={formData.description} onChange={handleInputChange} rows={3} className="w-full glass bg-white/[0.03] border border-white/5 rounded-[32px] p-8 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-medium leading-relaxed" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Curriculum Pillars</label>
-                    <div className="flex gap-4 mb-4">
-                      <input value={subjectInput} onChange={(e) => setSubjectInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addSubject())} className="flex-grow glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" placeholder="Add major subject..." />
-                      <button type="button" onClick={addSubject} className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center text-white shadow-glow-violet hover:scale-110 transition-all"><Plus size={24} /></button>
-                    </div>
-                    <div className="flex flex-wrap gap-3">
-                      {formData.subjects.map((sub: string) => {
-                        const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
-                        if (!cleanSub) return null;
-                        return (
-                          <span key={sub} className="flex items-center gap-3 px-5 py-2.5 glass rounded-2xl border-white/5 text-[11px] font-black text-text-primary uppercase tracking-widest group">
-                            {cleanSub}
-                            <X size={14} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors" onClick={() => removeSubject(sub)} />
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Start Cycle</label>
-                      <input type="number" name="startYear" value={formData.startYear} onChange={handleInputChange} required className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">End Cycle</label>
-                      <input type="number" name="endYear" value={formData.endYear} onChange={handleInputChange} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Performance</label>
-                      <input name="grade" value={formData.grade} onChange={handleInputChange} placeholder="GPA / Grade" className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Contextual Notes</label>
-                    <textarea name="description" value={formData.description} onChange={handleInputChange} rows={3} className="w-full glass bg-white/5 border border-white/10 rounded-[24px] md:rounded-[32px] p-6 text-text-primary outline-none focus:border-accent-violet transition-all font-medium" />
-                  </div>
-
-                  <GlowButton type="submit" disabled={isSaving} size="lg" className="w-full py-5 shadow-glow-violet">
-                    {isSaving ? <Loader2 className="animate-spin mr-2" size={24} /> : <Save className="mr-2" size={24} />}
-                    <span className="font-black text-base">{editingStudy ? 'SYNC NODE' : 'INITIALIZE NODE'}</span>
-                  </GlowButton>
+                  <button 
+                    type="submit" 
+                    disabled={isSaving}
+                    className="w-full py-6 bg-gradient-primary rounded-[32px] font-black text-base uppercase tracking-widest shadow-glow-violet hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4"
+                  >
+                    {isSaving ? <Loader2 className="animate-spin" size={28} /> : <Save size={28} />}
+                    {editingStudy ? 'Sync Academic Node' : 'Initialize Academic Node'}
+                  </button>
                 </form>
               </div>
             </motion.div>

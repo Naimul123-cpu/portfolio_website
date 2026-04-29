@@ -1,109 +1,124 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import SectionTitle from '../ui/SectionTitle';
-import SectionIllustration from '../ui/SectionIllustration';
 import type { IProfile } from '../../types';
+import { HardHat, Building, Settings, Rocket, Zap } from 'lucide-react';
 
 interface AboutSectionProps {
   profile: IProfile | null;
 }
 
-import { User, HardHat, Ruler, DraftingCompass, Building } from 'lucide-react';
-import AnimatedCard from '../ui/AnimatedCard';
-
 const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
   const stats = [
-    { label: 'Experience', value: '3+', icon: <HardHat className="text-accent-blue" /> },
-    { label: 'Projects', value: '50+', icon: <Building className="text-accent-violet" /> },
-    { label: 'Software', value: '15+', icon: <DraftingCompass className="text-accent-cyan" /> },
+    { label: 'Project Cycles', value: '50+', icon: <Rocket size={20} />, color: 'accent-violet' },
+    { label: 'Engineering Years', value: '03+', icon: <Zap size={20} />, color: 'accent-cyan' },
+    { label: 'Tech Stack', value: '15+', icon: <Settings size={20} />, color: 'accent-pink' },
   ];
-
-  const getSkillCategory = (skill: string) => {
-    const structural = ['SAP2000', 'ETABS', 'STAAD.Pro', 'Structural', 'RCC', 'Steel'];
-    const management = ['Project', 'Site', 'Costing', 'Management', 'Estimation'];
-    if (structural.some(s => skill.includes(s))) return 'structural';
-    if (management.some(s => skill.includes(s))) return 'management';
-    return 'tools';
-  };
-
-  const skillColors = {
-    structural: 'text-accent-blue border-accent-blue/20 bg-accent-blue/5 hover:bg-accent-blue/10 shadow-glow-blue',
-    management: 'text-accent-violet border-accent-violet/20 bg-accent-violet/5 hover:bg-accent-violet/10 shadow-glow-violet',
-    tools: 'text-accent-emerald border-accent-emerald/20 bg-accent-emerald/5 hover:bg-accent-emerald/10 shadow-glow-emerald'
-  };
 
   return (
     <section id="about" className="py-32 relative overflow-hidden">
-      <SectionIllustration icon={<User />} className="opacity-10" />
+      {/* Background Decorative Element */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-accent-violet/5 blur-[120px] rounded-full pointer-events-none" />
       
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <SectionTitle 
-          eyebrow="ABOUT ME"
-          title="Architecting The <Future>" 
-          subtitle="Combining mathematical precision with practical site management to build resilient infrastructure."
+          eyebrow="SYSTEM CORE"
+          title="Architecting Digital & <Physical> Landscapes" 
+          subtitle="Merging mathematical precision with creative engineering to build the next generation of infrastructure."
         />
         
-        <div className="grid lg:grid-cols-2 gap-20 items-start">
+        <div className="grid lg:grid-cols-12 gap-12 items-start">
+          {/* Left Side: Bio Card */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
+            className="lg:col-span-7"
           >
-            <AnimatedCard gradient className="p-10 mb-10">
-              <h3 className="text-3xl font-display font-black mb-8 text-text-primary leading-tight">
-                Crafting physical landscapes through <span className="text-gradient">precise engineering</span> and durable design.
-              </h3>
-              <p className="text-text-secondary text-lg leading-relaxed mb-10 whitespace-pre-wrap font-medium">
-                {profile?.bio || 'Professional Civil Engineer dedicated to creating safe, efficient, and sustainable infrastructure solutions for modern urban development.'}
-              </p>
-              
-              <div className="grid grid-cols-3 gap-6">
-                {stats.map((stat, i) => (
-                  <div key={i} className="text-center group">
-                    <div className="w-12 h-12 flex items-center justify-center glass rounded-2xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-500">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-accent-violet/20 to-accent-cyan/20 rounded-[32px] blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
+              <div className="relative glass p-10 md:p-14 rounded-[32px] border border-white/10 shadow-2xl overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+                  <HardHat size={200} />
+                </div>
+                
+                <h3 className="text-3xl md:text-4xl font-display font-black mb-8 text-text-primary leading-tight">
+                  Crafting resilient solutions through <span className="text-gradient">precision engineering</span>.
+                </h3>
+                
+                <div className="space-y-6 text-text-secondary text-lg leading-relaxed font-medium opacity-80">
+                  <p>
+                    {profile?.bio || 'Professional Civil Engineer dedicated to creating safe, efficient, and sustainable infrastructure solutions for modern urban development.'}
+                  </p>
+                  <p>
+                    Focused on the intersection of structural integrity and technical innovation, I ensure every project is built to endure the challenges of the future.
+                  </p>
+                </div>
+
+                <div className="mt-12 flex flex-wrap gap-4">
+                  {profile?.skills.map((skill, i) => (
+                    <motion.span
+                      key={skill}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.05 }}
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      className="px-5 py-2.5 rounded-xl glass border border-white/5 text-[11px] font-black uppercase tracking-widest text-text-primary hover:border-accent-violet/50 transition-all cursor-default"
+                    >
+                      {skill}
+                    </motion.span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Side: Stats & Details */}
+          <div className="lg:col-span-5 space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+              {stats.map((stat, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  whileHover={{ x: 10 }}
+                  className="glass p-8 rounded-[24px] border border-white/5 flex items-center justify-between group hover:border-white/20 transition-all duration-500"
+                >
+                  <div className="flex items-center gap-6">
+                    <div className={`w-14 h-14 rounded-2xl bg-bg-surface flex items-center justify-center text-${stat.color} shadow-2xl border border-white/5 group-hover:scale-110 transition-transform`}>
                       {stat.icon}
                     </div>
-                    <div className="text-2xl font-black text-text-primary mb-1">{stat.value}</div>
-                    <div className="text-[10px] text-text-secondary font-black uppercase tracking-widest">{stat.label}</div>
+                    <div>
+                      <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">{stat.label}</p>
+                      <h4 className="text-3xl font-black text-text-primary tracking-tighter">{stat.value}</h4>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </AnimatedCard>
-          </motion.div>
-          
-          <div>
-            <h4 className="text-[11px] font-mono font-black mb-10 uppercase tracking-[0.3em] text-text-primary flex items-center gap-4">
-              <span className="w-12 h-[2px] bg-gradient-primary rounded-full" />
-              Engineering Expertise
-            </h4>
-            
-            <div className="flex flex-wrap gap-4 mb-16">
-              {profile?.skills.map((skill, i) => {
-                const category = getSkillCategory(skill);
-                return (
-                  <motion.div
-                    key={skill}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.05 }}
-                    className={`px-5 py-2 rounded-2xl border text-xs font-bold font-mono tracking-wide transition-all duration-300 cursor-default hover:scale-105 ${skillColors[category as keyof typeof skillColors]}`}
-                  >
-                    {skill}
-                  </motion.div>
-                );
-              })}
+                  <div className={`w-1 h-12 bg-${stat.color} opacity-20 rounded-full group-hover:opacity-100 transition-opacity`} />
+                </motion.div>
+              ))}
             </div>
-            
-            <AnimatedCard className="p-8 border-l-4 border-accent-blue">
-              <h5 className="text-lg font-bold mb-4 text-text-primary flex items-center gap-3">
-                <Ruler className="text-accent-blue" size={20} /> Engineering Philosophy
-              </h5>
-              <p className="text-text-secondary text-base font-medium leading-relaxed italic">
-                "I believe in structures that are not only architecturally sound but also safe for generations. Integrity and sustainability are the cornerstones of every blueprint I sign."
-              </p>
-            </AnimatedCard>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative group mt-8"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-accent-violet to-accent-cyan rounded-[32px] blur-2xl opacity-10 group-hover:opacity-20 transition-opacity" />
+              <div className="relative glass p-10 rounded-[32px] border border-white/5 bg-accent-violet/[0.02]">
+                <h5 className="text-xl font-black text-text-primary mb-4 flex items-center gap-3">
+                  <Building size={20} className="text-accent-violet" /> 
+                  Engineering Philosophy
+                </h5>
+                <p className="text-text-secondary text-base font-medium leading-relaxed italic opacity-80">
+                  "I believe in structures that are not only architecturally sound but also safe for generations. Integrity and sustainability are the cornerstones of every blueprint I sign."
+                </p>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
