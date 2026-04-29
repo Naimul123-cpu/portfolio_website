@@ -57,7 +57,7 @@ const StudySection: React.FC<StudySectionProps> = ({ studies }) => {
                   <div className="group relative">
                     <div className="absolute -inset-1 bg-gradient-to-br from-accent-cyan/20 to-accent-violet/20 rounded-[32px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     
-                    <div className="relative glass p-10 rounded-[32px] border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl">
+                    <div className="relative glass-card glass-card-hover p-10 rounded-[32px] shadow-2xl">
                       <div className={`flex items-center gap-5 mb-8 ${i % 2 === 0 ? 'md:flex-row-reverse' : 'flex-row'}`}>
                         <div className="w-16 h-16 glass rounded-2xl flex items-center justify-center border border-white/10 overflow-hidden bg-bg-surface shadow-xl group-hover:scale-110 transition-transform duration-500">
                           {study.logo ? (
@@ -93,7 +93,7 @@ const StudySection: React.FC<StudySectionProps> = ({ studies }) => {
                             {study.subjects.map((sub, idx) => {
                               const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
                               return (
-                                <span key={idx} className="px-3 py-1 rounded-lg glass border border-white/5 text-[9px] font-black text-text-primary uppercase tracking-widest hover:border-accent-cyan/30 transition-colors">
+                                <span key={idx} className="tech-badge">
                                   {cleanSub}
                                 </span>
                               );

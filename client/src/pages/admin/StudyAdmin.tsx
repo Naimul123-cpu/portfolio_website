@@ -211,7 +211,7 @@ const StudyAdmin: React.FC = () => {
               >
                 <div className="absolute -inset-1 bg-gradient-to-r from-accent-pink/20 to-accent-violet/20 rounded-[40px] opacity-0 group-hover:opacity-100 blur-2xl transition-all duration-700" />
                 
-                <div className="relative glass p-10 md:p-12 rounded-[40px] flex flex-col xl:flex-row items-center justify-between gap-10 group border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl bg-[#0A0A12]/60">
+                <div className="relative glass-card glass-card-hover p-10 md:p-12 rounded-[40px] flex flex-col xl:flex-row items-center justify-between gap-10 group shadow-2xl bg-[#0A0A12]/60">
                   <div className="flex flex-col md:flex-row items-center gap-10">
                     <div className="relative">
                       <div className="w-24 h-24 glass rounded-[32px] flex items-center justify-center text-accent-pink border border-white/5 overflow-hidden bg-bg-surface/50 transition-all duration-500 group-hover:scale-105 group-hover:border-accent-pink/30">
@@ -334,7 +334,7 @@ const StudyAdmin: React.FC = () => {
                           {formData.subjects.map((sub: string) => {
                             const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
                             return (
-                              <span key={sub} className="flex items-center gap-4 px-6 py-3 glass rounded-2xl border border-white/5 text-[11px] font-black text-text-primary uppercase tracking-widest bg-white/[0.02]">
+                              <span key={sub} className="tech-badge">
                                 <div className="w-1.5 h-1.5 rounded-full bg-accent-pink shadow-glow-pink" />
                                 {cleanSub}
                                 <X size={16} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors ml-2" onClick={() => removeSubject(sub)} />

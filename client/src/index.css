@@ -147,6 +147,32 @@
 }
 
 /* Aurora/Mesh Gradient Orbs Animation */
+  .glass-card {
+    @apply glass border border-white/5 shadow-2xl transition-all duration-700;
+    background: rgba(13, 13, 22, 0.4);
+  }
+  
+  .glass-card-hover {
+    @apply hover:border-white/20 hover:bg-white/[0.05] hover:-translate-y-2;
+  }
+
+  .node-active {
+    @apply relative flex h-3 w-3;
+  }
+  
+  .node-active-ping {
+    @apply animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-cyan opacity-75;
+  }
+  
+  .node-active-dot {
+    @apply relative inline-flex rounded-full h-3 w-3 bg-accent-cyan shadow-glow-cyan;
+  }
+
+  .tech-badge {
+    @apply px-4 py-2 rounded-xl glass border border-white/5 text-[10px] font-black uppercase tracking-widest text-text-primary hover:border-accent-violet/50 transition-all duration-300;
+  }
+}
+
 @keyframes aurora-float {
   0% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(10%, 15%) scale(1.1); }

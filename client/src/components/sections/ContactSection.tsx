@@ -99,7 +99,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ profile }) => {
                 {/* Glow Effect */}
                 <div className={`absolute -inset-1 bg-${item.color} rounded-[32px] blur-xl opacity-0 group-hover:opacity-20 transition-opacity`} />
                 
-                <div className="relative glass p-8 rounded-[32px] border border-white/5 bg-white/[0.02] hover:border-white/20 transition-all duration-500 h-full flex flex-col">
+                <div className="relative glass-card glass-card-hover p-8 rounded-[32px] bg-white/[0.02] h-full flex flex-col">
                   <div className={`w-14 h-14 glass rounded-2xl flex items-center justify-center text-${item.color} mb-8 shadow-2xl border-white/5`}>
                     {item.icon}
                   </div>

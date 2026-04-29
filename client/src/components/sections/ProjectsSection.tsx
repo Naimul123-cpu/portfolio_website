@@ -65,7 +65,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) => {
                 {/* Card Glow Background */}
                 <div className="absolute -inset-1 bg-gradient-to-br from-accent-violet/20 to-accent-cyan/20 rounded-[40px] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                <div className="relative glass rounded-[40px] overflow-hidden group border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl h-full flex flex-col">
+                <div className="relative glass-card glass-card-hover rounded-[40px] overflow-hidden group shadow-2xl h-full flex flex-col">
                   {/* Thumbnail Container */}
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img 
@@ -126,7 +126,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) => {
                     
                     <div className="flex flex-wrap gap-2 mb-10">
                       {project.technologies.slice(0, 4).map((tech) => (
-                        <span key={tech} className="text-[9px] font-black text-text-primary glass px-3 py-1.5 rounded-lg border border-white/5 hover:border-accent-violet/30 transition-colors uppercase tracking-widest">
+                        <span key={tech} className="tech-badge">
                           {tech}
                         </span>
                       ))}

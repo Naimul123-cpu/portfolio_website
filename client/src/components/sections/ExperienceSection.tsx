@@ -55,7 +55,7 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experiences }) =>
                   <div className="group relative">
                     <div className="absolute -inset-1 bg-gradient-to-r from-accent-violet/20 to-accent-cyan/20 rounded-[32px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     
-                    <div className="relative glass p-8 md:p-10 rounded-[32px] border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl">
+                    <div className="relative glass-card glass-card-hover p-8 md:p-10 rounded-[32px] shadow-2xl">
                       <div className={`flex items-center gap-4 mb-6 ${i % 2 === 0 ? 'md:flex-row-reverse' : 'flex-row'}`}>
                         <div className="w-16 h-16 glass rounded-2xl flex items-center justify-center border border-white/10 overflow-hidden bg-bg-surface group-hover:scale-110 transition-transform duration-500 shadow-xl">
                           {exp.logo ? (
@@ -86,7 +86,7 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experiences }) =>
 
                       <div className={`flex flex-wrap gap-2 mb-8 ${i % 2 === 0 ? 'md:justify-end' : 'justify-start'}`}>
                         {exp.technologies.slice(0, 4).map((tech) => (
-                          <span key={tech} className="px-3 py-1 rounded-lg glass border border-white/5 text-[9px] font-black text-text-primary uppercase tracking-widest hover:border-accent-violet/30 transition-colors">
+                          <span key={tech} className="tech-badge">
                             {tech}
                           </span>
                         ))}

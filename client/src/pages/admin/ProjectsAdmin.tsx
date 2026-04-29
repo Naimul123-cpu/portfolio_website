@@ -215,7 +215,7 @@ const ProjectsAdmin: React.FC = () => {
               >
                 <div className="absolute -inset-1 bg-gradient-to-br from-accent-violet/20 to-accent-cyan/20 rounded-[40px] opacity-0 group-hover:opacity-100 blur-2xl transition-all duration-500" />
                 
-                <div className="relative glass rounded-[40px] overflow-hidden group border border-white/5 hover:border-white/20 transition-all duration-500 shadow-2xl h-full flex flex-col bg-[#0D0D16]/40">
+                <div className="relative glass-card glass-card-hover rounded-[40px] overflow-hidden group shadow-2xl h-full flex flex-col bg-[#0D0D16]/40">
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <img src={project.thumbnail} alt={project.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                     
@@ -400,7 +400,7 @@ const ProjectsAdmin: React.FC = () => {
                       </div>
                       <div className="flex flex-wrap gap-3">
                         {formData.technologies.map((tech: string) => (
-                          <span key={tech} className="flex items-center gap-4 px-6 py-3 glass rounded-2xl border border-white/5 text-[11px] font-black text-text-primary uppercase tracking-widest group bg-white/[0.02]">
+                          <span key={tech} className="tech-badge">
                             <div className="w-1.5 h-1.5 rounded-full bg-accent-violet shadow-glow-violet" />
                             {tech}
                             <X size={16} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors ml-2" onClick={() => removeTech(tech)} />
