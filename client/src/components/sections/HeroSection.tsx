@@ -37,7 +37,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+    <section className="relative min-h-screen flex items-center pt-32 md:pt-40 overflow-hidden">
       {/* Background Decorative Grid */}
       <div className="absolute inset-0 bg-grid opacity-[0.03] pointer-events-none" />
       
