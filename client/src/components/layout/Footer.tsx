@@ -1,7 +1,8 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaGithub, FaLinkedin, FaTwitter, FaFacebook, FaInstagram, FaYoutube, FaDiscord } from 'react-icons/fa';
-import { Heart, Lock } from 'lucide-react';
-import { IProfile } from '../../types';
+import { FaGithub, FaLinkedin, FaTwitter, FaDiscord } from 'react-icons/fa';
+import { Heart, Lock, ShieldCheck, Cpu } from 'lucide-react';
+import type { IProfile } from '../../types';
 
 interface FooterProps {
   profile: IProfile | null;
@@ -11,65 +12,98 @@ const Footer: React.FC<FooterProps> = ({ profile }) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-20 py-20 border-t border-border bg-bg-card relative overflow-hidden">
-      {/* Decorative gradient blur */}
-      <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-accent-violet/5 blur-[100px] rounded-full -mb-20 -mr-20" />
+    <footer className="mt-32 relative overflow-hidden">
+      {/* Aurora Divider */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid md:grid-cols-4 gap-12 items-start">
+      <div className="container mx-auto px-6 md:px-12 py-24 relative z-10">
+        <div className="grid md:grid-cols-4 gap-16 items-start">
           <div className="col-span-2">
-            <h3 className="text-3xl font-display font-black text-gradient mb-6 tracking-tighter">
+            <h3 className="text-4xl font-display font-black text-gradient bg-gradient-aurora animate-gradient-shift bg-[length:400%_400%] mb-8 tracking-tighter">
               {profile?.name?.toUpperCase() || 'NAIM.DEV'}
             </h3>
-            <p className="text-text-secondary text-base max-w-sm font-light leading-relaxed mb-8">
-              {profile?.tagline || 'Building purposeful digital experiences with passion and precision.'}
+            <p className="text-text-secondary text-lg max-w-sm font-medium leading-relaxed mb-10 tracking-wide">
+              {profile?.tagline || 'Building high-performance digital architectures with passion and technical precision.'}
             </p>
             <div className="flex gap-4">
-              {profile?.socialLinks.github && (
-                <a href={profile.socialLinks.github} target="_blank" rel="noreferrer" className="w-10 h-10 glass rounded-xl flex items-center justify-center text-text-secondary hover:text-accent-violet hover:border-accent-violet/50 transition-all">
-                  <FaGithub size={18} />
+              {[
+                { icon: <FaGithub size={20} />, link: profile?.socialLinks.github, glow: 'shadow-glow-violet' },
+                { icon: <FaLinkedin size={20} />, link: profile?.socialLinks.linkedin, glow: 'shadow-glow-blue' },
+                { icon: <FaTwitter size={20} />, link: profile?.socialLinks.twitter, glow: 'shadow-glow-cyan' },
+                { icon: <FaDiscord size={20} />, link: profile?.socialLinks.discord, glow: 'shadow-glow-pink' },
+              ].map((social, i) => social.link && (
+                <a 
+                  key={i}
+                  href={social.link} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className={`w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-secondary hover:text-text-primary border-white/5 hover:border-white/20 hover:${social.glow} transition-all duration-300`}
+                >
+                  {social.icon}
                 </a>
-              )}
-              {profile?.socialLinks.linkedin && (
-                <a href={profile.socialLinks.linkedin} target="_blank" rel="noreferrer" className="w-10 h-10 glass rounded-xl flex items-center justify-center text-text-secondary hover:text-accent-violet hover:border-accent-violet/50 transition-all">
-                  <FaLinkedin size={18} />
-                </a>
-              )}
-              {profile?.socialLinks.twitter && (
-                <a href={profile.socialLinks.twitter} target="_blank" rel="noreferrer" className="w-10 h-10 glass rounded-xl flex items-center justify-center text-text-secondary hover:text-accent-violet hover:border-accent-violet/50 transition-all">
-                  <FaTwitter size={18} />
-                </a>
-              )}
+              ))}
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <h4 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-text-primary">Navigation</h4>
-            <a href="#about" className="text-text-secondary hover:text-accent-violet transition-colors text-sm font-bold uppercase tracking-widest">About</a>
-            <a href="#study" className="text-text-secondary hover:text-accent-violet transition-colors text-sm font-bold uppercase tracking-widest">Study</a>
-            <a href="#experience" className="text-text-secondary hover:text-accent-violet transition-colors text-sm font-bold uppercase tracking-widest">Experience</a>
-            <a href="#projects" className="text-text-secondary hover:text-accent-violet transition-colors text-sm font-bold uppercase tracking-widest">Projects</a>
-            <a href="#contact" className="text-text-secondary hover:text-accent-violet transition-colors text-sm font-bold uppercase tracking-widest">Contact</a>
+          <div className="flex flex-col gap-6">
+            <h4 className="text-[11px] font-mono font-black mb-4 uppercase tracking-[0.3em] text-text-primary flex items-center gap-3">
+              <span className="w-8 h-[2px] bg-gradient-primary rounded-full" />
+              Navigation
+            </h4>
+            {['About', 'Study', 'Experience', 'Projects', 'Contact'].map((item) => (
+              <a 
+                key={item}
+                href={`#${item.toLowerCase()}`} 
+                className="text-text-secondary hover:text-accent-violet transition-all text-xs font-black uppercase tracking-[0.2em] group flex items-center gap-3"
+              >
+                <div className="w-0 h-[2px] bg-accent-violet group-hover:w-4 transition-all duration-300" />
+                {item}
+              </a>
+            ))}
           </div>
 
-          <div className="flex flex-col gap-4">
-            <h4 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-text-primary">System</h4>
-            <Link to="/login" className="text-text-secondary hover:text-accent-violet transition-colors text-sm font-bold uppercase tracking-widest flex items-center gap-2">
-              <Lock size={14} /> Admin Access
+          <div className="flex flex-col gap-6">
+            <h4 className="text-[11px] font-mono font-black mb-4 uppercase tracking-[0.3em] text-text-primary flex items-center gap-3">
+              <span className="w-8 h-[2px] bg-gradient-secondary rounded-full" />
+              Identity
+            </h4>
+            <Link 
+              to="/login" 
+              className="group glass p-4 rounded-2xl border border-white/5 flex items-center gap-4 hover:border-accent-violet/30 transition-all duration-500"
+            >
+              <div className="w-10 h-10 rounded-xl bg-accent-violet/10 flex items-center justify-center text-accent-violet group-hover:bg-accent-violet group-hover:text-white transition-all">
+                <Lock size={18} />
+              </div>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-primary">Admin Access</p>
+                <p className="text-[9px] font-bold text-text-muted uppercase">Secure Vault</p>
+              </div>
             </Link>
-            <div className="mt-4 p-4 glass-card text-[10px] font-bold text-text-secondary/50 uppercase tracking-widest">
-              Status: Operational
+            
+            <div className="p-4 glass rounded-2xl border border-white/5 flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 flex items-center justify-center text-accent-emerald animate-pulse">
+                <ShieldCheck size={18} />
+              </div>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-primary">System Status</p>
+                <p className="text-[9px] font-bold text-accent-emerald uppercase">Operational</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-20 pt-10 border-t border-border/20 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary">
-          <p>© {currentYear} {profile?.name || 'NAIM'}. All rights reserved.</p>
-          <div className="flex items-center gap-2 group">
-            Built with <Heart size={14} className="text-accent-cyan fill-accent-cyan animate-pulse" /> using MERN Stack
+        <div className="mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[11px] font-black uppercase tracking-[0.3em] text-text-muted">
+          <p>© {currentYear} {profile?.name || 'NAIM'}. Built for the future.</p>
+          <div className="flex items-center gap-3 group px-6 py-2 glass rounded-full border border-white/5">
+            <Cpu size={14} className="text-accent-violet" />
+            <span>MERN STACK ARCHITECTURE</span>
+            <Heart size={14} className="text-accent-pink fill-accent-pink animate-pulse" />
           </div>
         </div>
       </div>
+
+      {/* Ground Glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-accent-violet/20 to-transparent blur-xl" />
     </footer>
   );
 };

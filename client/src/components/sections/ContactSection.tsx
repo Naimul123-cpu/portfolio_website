@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MessageSquare, MapPin, Home, Send } from 'lucide-react';
+import { Mail, Phone, MessageSquare, MapPin, Home, Send, MessageCircle } from 'lucide-react';
 import SectionTitle from '../ui/SectionTitle';
 import SectionIllustration from '../ui/SectionIllustration';
+import AnimatedCard from '../ui/AnimatedCard';
+import GlowButton from '../ui/GlowButton';
 import type { IProfile } from '../../types';
 
 interface ContactSectionProps {
@@ -15,93 +17,104 @@ const ContactSection: React.FC<ContactSectionProps> = ({ profile }) => {
   const contactItems = [
     { 
       icon: <Mail size={24} />, 
-      label: 'Email', 
+      label: 'Direct Email', 
       value: profile.email, 
       link: `mailto:${profile.email}`,
-      show: !!profile.email 
+      color: 'text-accent-violet',
+      glow: 'shadow-glow-violet'
     },
     { 
       icon: <Phone size={24} />, 
-      label: 'Phone', 
+      label: 'Phone Call', 
       value: profile.phone, 
       link: `tel:${profile.phone}`,
-      show: !!profile.phone 
+      color: 'text-accent-blue',
+      glow: 'shadow-glow-blue'
     },
     { 
-      icon: <MessageSquare size={24} />, 
-      label: 'WhatsApp', 
+      icon: <MessageCircle size={24} />, 
+      label: 'WhatsApp Me', 
       value: profile.whatsapp, 
       link: `https://wa.me/${profile.whatsapp?.replace(/\D/g, '')}`,
-      show: !!profile.whatsapp 
+      color: 'text-accent-emerald',
+      glow: 'shadow-glow-emerald'
     },
     { 
       icon: <MapPin size={24} />, 
-      label: 'Present Address', 
+      label: 'Current Base', 
       value: profile.presentAddress, 
-      show: !!profile.presentAddress 
+      color: 'text-accent-cyan',
+      glow: 'shadow-glow-cyan'
     },
     { 
       icon: <Home size={24} />, 
-      label: 'Permanent Address', 
+      label: 'Permanent Hub', 
       value: profile.permanentAddress, 
-      show: !!profile.permanentAddress 
+      color: 'text-accent-pink',
+      glow: 'shadow-glow-pink'
     },
     { 
       icon: <Send size={24} />, 
-      label: 'Location', 
+      label: 'Service Zone', 
       value: profile.location, 
-      show: !!profile.location 
+      color: 'text-accent-amber',
+      glow: ''
     },
-  ].filter(item => item.show);
+  ].filter(item => item.value);
 
   return (
-    <section id="contact" className="py-24 relative overflow-hidden">
-      <SectionIllustration src="https://raw.githubusercontent.com/thoughtbot/undraw/master/lib/undraw/templates/undraw_contact_us_re_4n67.svg" />
+    <section id="contact" className="py-32 relative overflow-hidden">
+      <SectionIllustration icon={<MessageSquare />} className="opacity-10" />
       
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
         <SectionTitle 
-          title="Get In Touch" 
-          subtitle="Let's collaborate on something amazing or just say hello."
+          eyebrow="CONTACT"
+          title="Let's Start A <Conversation>" 
+          subtitle="Whether you have a project in mind or just want to connect, I'm always open to new opportunities."
         />
         
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-6">
-            {contactItems.map((item, i) => (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                {item.link ? (
-                  <a 
-                    href={item.link} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="glass-card p-6 flex items-center gap-6 group hover:border-accent-violet/50 hover:-translate-y-1 transition-all"
-                  >
-                    <div className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-accent-violet group-hover:bg-accent-violet group-hover:text-white transition-all">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-1">{item.label}</p>
-                      <p className="text-lg font-bold text-text-primary break-all">{item.value}</p>
-                    </div>
-                  </a>
-                ) : (
-                  <div className="glass-card p-6 flex items-center gap-6">
-                    <div className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-accent-violet">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-text-secondary uppercase tracking-widest mb-1">{item.label}</p>
-                      <p className="text-lg font-bold text-text-primary">{item.value}</p>
-                    </div>
+        <div className="max-w-6xl mx-auto">
+          <AnimatedCard gradient className="p-0 mb-16 overflow-hidden">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x border-white/5">
+              {contactItems.map((item) => (
+                <div key={item.label} className="group p-10 hover:bg-white/[0.02] transition-colors duration-500">
+                  <div className={`w-14 h-14 glass rounded-2xl flex items-center justify-center ${item.color} mb-8 group-hover:scale-110 group-hover:${item.glow} transition-all duration-500`}>
+                    {item.icon}
                   </div>
-                )}
-              </motion.div>
-            ))}
+                  <p className="text-[10px] font-mono font-black text-text-muted uppercase tracking-[0.2em] mb-3">{item.label}</p>
+                  {item.link ? (
+                    <a 
+                      href={item.link} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="text-xl font-black text-text-primary hover:text-gradient transition-all break-all"
+                    >
+                      {item.value}
+                    </a>
+                  ) : (
+                    <p className="text-xl font-black text-text-primary">{item.value}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </AnimatedCard>
+
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="glass p-12 rounded-[40px] border border-white/10 inline-block relative group"
+            >
+              <div className="absolute inset-0 bg-gradient-primary blur-[100px] opacity-10 group-hover:opacity-20 transition-opacity" />
+              <h4 className="text-4xl font-black mb-8 text-text-primary">Ready to <span className="text-gradient">Innovate?</span></h4>
+              <p className="text-text-secondary text-lg mb-10 max-w-md mx-auto font-medium tracking-wide">
+                Drop me a message and let's discuss how we can build something exceptional together.
+              </p>
+              <GlowButton size="lg" className="px-12" onClick={() => window.open(`mailto:${profile.email}`, '_blank')}>
+                Send A Message
+              </GlowButton>
+            </motion.div>
           </div>
         </div>
       </div>

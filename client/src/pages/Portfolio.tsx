@@ -32,17 +32,27 @@ const Portfolio: React.FC = () => {
   }
 
   return (
-    <div className="bg-bg-primary">
-      <Header />
-      <main>
-        <HeroSection profile={profile} />
-        <AboutSection profile={profile} />
-        <StudySection studies={studies} />
-        <ExperienceSection experiences={experiences} />
-        <ProjectsSection projects={projects} />
-        <ContactSection profile={profile} />
-      </main>
-      <Footer profile={profile} />
+    <div className="relative min-h-screen">
+      {/* Global Background Elements */}
+      <div className="aurora-container">
+        <div className="aurora-orb orb-1" />
+        <div className="aurora-orb orb-2" />
+        <div className="aurora-orb orb-3" />
+      </div>
+      <div className="bg-texture" />
+      
+      <div className="relative z-10">
+        <Header />
+        <main>
+          <HeroSection profile={profile} />
+          <AboutSection profile={profile} />
+          <StudySection studies={studies} />
+          <ExperienceSection experiences={experiences} />
+          <ProjectsSection projects={projects} />
+          <ContactSection profile={profile} />
+        </main>
+        <Footer profile={profile} />
+      </div>
     </div>
   );
 };

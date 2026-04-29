@@ -95,162 +95,157 @@ const ProfileAdmin: React.FC = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="flex bg-bg-primary min-h-screen">
+    <div className="min-h-screen bg-bg-base flex overflow-hidden">
+      {/* Aurora Orbs for Admin */}
+      <div className="aurora-container opacity-20">
+        <div className="aurora-orb orb-1 scale-75" />
+        <div className="aurora-orb orb-3 scale-75" />
+      </div>
+      <div className="bg-texture opacity-[0.02]" />
+
       <AdminSidebar />
-      <div className="flex-grow ml-64 p-10">
-      <div className="flex justify-between items-center mb-10">
-        <h1 className="text-3xl font-display font-bold text-gradient">Profile Settings</h1>
-        <GlowButton onClick={handleSubmit} disabled={isSaving} className="flex items-center gap-2">
-          {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
-          Save Changes
-        </GlowButton>
-      </div>
 
-      <div className="grid lg:grid-cols-2 gap-8">
-        <div className="space-y-8">
-          {/* Basic Info */}
-          <div className="glass-card p-8">
-            <h2 className="text-xl font-bold mb-6">Basic Information</h2>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Full Name</label>
-                  <input name="name" value={formData.name} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+      <main className="flex-grow ml-72 p-12 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
+          <div>
+            <div className="flex items-center gap-4 mb-4">
+              <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
+                Identity Management
+              </span>
+            </div>
+            <h1 className="text-5xl font-display font-black text-text-primary tracking-tight">
+              Profile <span className="text-gradient bg-gradient-aurora">Configuration</span>
+            </h1>
+            <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Define how the world sees your professional persona.</p>
+          </div>
+          <GlowButton onClick={handleSubmit} disabled={isSaving} className="flex items-center gap-3 px-10 py-4 shadow-glow-violet">
+            {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
+            <span className="font-black">SYNC CHANGES</span>
+          </GlowButton>
+        </header>
+
+        <div className="grid lg:grid-cols-2 gap-10">
+          <div className="space-y-10">
+            {/* Basic Info */}
+            <div className="glass p-10 rounded-[40px] border border-white/10 relative group">
+              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-primary opacity-30" />
+              <h2 className="text-2xl font-black mb-10 text-text-primary tracking-tight flex items-center gap-4">
+                <span className="w-10 h-10 glass rounded-xl flex items-center justify-center text-accent-violet"><Plus size={20} /></span>
+                Core Information
+              </h2>
+              <div className="space-y-8">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Public Name</label>
+                    <input name="name" value={formData.name} onChange={handleInputChange} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet focus:bg-white/10 transition-all font-medium" />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Professional Title</label>
+                    <input name="tagline" value={formData.tagline} onChange={handleInputChange} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet focus:bg-white/10 transition-all font-medium" />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Tagline</label>
-                  <input name="tagline" value={formData.tagline} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+                
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Email Endpoint</label>
+                    <input name="email" value={formData.email} onChange={handleInputChange} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet focus:bg-white/10 transition-all font-medium" />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Contact Line</label>
+                    <input name="phone" value={formData.phone} onChange={handleInputChange} className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet focus:bg-white/10 transition-all font-medium" />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2">Narrative Biography</label>
+                  <textarea name="bio" value={formData.bio} onChange={handleInputChange} rows={6} className="w-full glass bg-white/5 border border-white/10 rounded-3xl p-6 text-text-primary outline-none focus:border-accent-violet focus:bg-white/10 transition-all font-medium leading-relaxed" />
                 </div>
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Email</label>
-                  <input name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Phone Number</label>
-                  <input name="phone" value={formData.phone} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
-                </div>
-              </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">WhatsApp</label>
-                  <input name="whatsapp" value={formData.whatsapp} onChange={handleInputChange} placeholder="+8801..." className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Location (City, Country)</label>
-                  <input name="location" value={formData.location} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Present Address</label>
-                <input name="presentAddress" value={formData.presentAddress} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Permanent Address</label>
-                <input name="permanentAddress" value={formData.permanentAddress} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Bio</label>
-                <textarea name="bio" value={formData.bio} onChange={handleInputChange} rows={4} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+            {/* Social Links */}
+            <div className="glass p-10 rounded-[40px] border border-white/10">
+              <h2 className="text-2xl font-black mb-10 text-text-primary tracking-tight">Digital Presence</h2>
+              <div className="grid grid-cols-2 gap-6">
+                {['github', 'linkedin', 'twitter', 'discord'].map(platform => (
+                  <div key={platform} className="space-y-3">
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2 capitalize">{platform}</label>
+                    <input 
+                      name={`social_${platform}`} 
+                      value={formData.socialLinks[platform]} 
+                      onChange={handleInputChange}
+                      placeholder={`https://${platform}.com/...`}
+                      className="w-full glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet focus:bg-white/10 transition-all font-medium"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Social Links */}
-          <div className="glass-card p-8">
-            <h2 className="text-xl font-bold mb-6">Social Links</h2>
-            <div className="grid grid-cols-2 gap-4">
-              {['github', 'linkedin', 'twitter', 'facebook', 'instagram', 'youtube', 'discord', 'website'].map(platform => (
-                <div key={platform}>
-                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2 capitalize">{platform}</label>
-                  <input 
-                    name={`social_${platform}`} 
-                    value={formData.socialLinks[platform]} 
-                    onChange={handleInputChange}
-                    placeholder={`https://${platform}.com/...`}
-                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
-                  />
+          <div className="space-y-10">
+            {/* Assets */}
+            <div className="glass p-10 rounded-[40px] border border-white/10">
+              <h2 className="text-2xl font-black mb-10 text-text-primary tracking-tight">Visual Identity</h2>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2 text-center">Avatar Profile</label>
+                  <div className="relative group cursor-pointer aspect-square glass bg-white/5 border border-dashed border-white/20 rounded-[32px] flex flex-col items-center justify-center overflow-hidden hover:border-accent-violet/50 transition-all duration-500">
+                    <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-10 transition-opacity" />
+                    {avatar ? (
+                      <img src={URL.createObjectURL(avatar)} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    ) : formData.avatar ? (
+                      <img src={formData.avatar} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    ) : (
+                      <div className="text-center group-hover:scale-110 transition-transform duration-500">
+                        <Upload className="text-accent-violet mb-4 mx-auto" size={32} />
+                        <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">Upload Frame</span>
+                      </div>
+                    )}
+                    <input type="file" onChange={(e) => setAvatar(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" />
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-8">
-          {/* Assets */}
-          <div className="glass-card p-8">
-            <h2 className="text-xl font-bold mb-6">Assets</h2>
-            <div className="grid grid-cols-2 gap-8">
-              <div>
-                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Avatar</label>
-                <div className="relative group cursor-pointer h-40 bg-bg-primary border border-dashed border-white/20 rounded-2xl flex flex-col items-center justify-center overflow-hidden">
-                  {avatar ? (
-                    <img src={URL.createObjectURL(avatar)} className="w-full h-full object-cover" />
-                  ) : formData.avatar ? (
-                    <img src={formData.avatar} className="w-full h-full object-cover" />
-                  ) : (
-                    <>
-                      <Upload className="text-text-secondary mb-2" />
-                      <span className="text-xs text-text-secondary">Upload Image</span>
-                    </>
-                  )}
-                  <input 
-                    type="file" 
-                    onChange={(e) => setAvatar(e.target.files?.[0] || null)}
-                    className="absolute inset-0 opacity-0 cursor-pointer" 
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Resume (PDF)</label>
-                <div className="relative h-40 bg-bg-primary border border-dashed border-white/20 rounded-2xl flex flex-col items-center justify-center">
-                  <Upload className="text-text-secondary mb-2" />
-                  <span className="text-xs text-text-secondary text-center px-4">
-                    {resume ? resume.name : formData.resumeUrl ? 'Current Resume Uploaded' : 'Upload PDF'}
-                  </span>
-                  <input 
-                    type="file" 
-                    onChange={(e) => setResume(e.target.files?.[0] || null)}
-                    className="absolute inset-0 opacity-0 cursor-pointer" 
-                  />
+                <div className="space-y-4">
+                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] ml-2 text-center">Resume Protocol (PDF)</label>
+                  <div className="relative group aspect-square glass bg-white/5 border border-dashed border-white/20 rounded-[32px] flex flex-col items-center justify-center overflow-hidden hover:border-accent-blue/50 transition-all duration-500">
+                    <div className="absolute inset-0 bg-gradient-secondary opacity-0 group-hover:opacity-10 transition-opacity" />
+                    <Upload className="text-accent-blue mb-4 group-hover:scale-110 transition-transform duration-500" size={32} />
+                    <span className="text-[10px] font-black text-text-muted uppercase tracking-widest text-center px-6">
+                      {resume ? resume.name : formData.resumeUrl ? 'Active Protocol Loaded' : 'Deploy PDF'}
+                    </span>
+                    <input type="file" onChange={(e) => setResume(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Skills */}
-          <div className="glass-card p-8">
-            <h2 className="text-xl font-bold mb-6">Skills Management</h2>
-            <div className="flex gap-2 mb-4">
-              <input 
-                value={newSkill}
-                onChange={(e) => setNewSkill(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && addSkill()}
-                placeholder="Add a skill (e.g. React)"
-                className="flex-grow bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
-              />
-              <button onClick={addSkill} className="p-3 bg-accent-violet rounded-xl hover:scale-105 transition-transform">
-                <Plus size={24} />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {formData.skills.map((skill: string) => (
-                <div key={skill} className="flex items-center gap-2 px-3 py-1.5 glass rounded-lg border-accent-violet/20 text-sm">
-                  {skill}
-                  <X size={14} className="cursor-pointer hover:text-accent-tertiary" onClick={() => removeSkill(skill)} />
-                </div>
-              ))}
+            {/* Skills */}
+            <div className="glass p-10 rounded-[40px] border border-white/10">
+              <h2 className="text-2xl font-black mb-10 text-text-primary tracking-tight">Technical Arsenal</h2>
+              <div className="flex gap-4 mb-8">
+                <input 
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && addSkill()}
+                  placeholder="Incorporate new tech..."
+                  className="flex-grow glass bg-white/5 border border-white/10 rounded-2xl p-4 text-text-primary outline-none focus:border-accent-violet focus:bg-white/10 transition-all font-medium"
+                />
+                <button onClick={addSkill} className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center text-white shadow-glow-violet hover:scale-110 transition-all active:scale-95">
+                  <Plus size={24} />
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {formData.skills.map((skill: string) => (
+                  <div key={skill} className="flex items-center gap-3 px-5 py-2.5 glass rounded-2xl border-white/5 text-xs font-bold text-text-primary hover:border-accent-violet/30 transition-all group">
+                    {skill}
+                    <X size={14} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors" onClick={() => removeSkill(skill)} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      </div>
+      </main>
     </div>
   );
 };

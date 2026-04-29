@@ -3,21 +3,32 @@ import { motion } from 'framer-motion';
 
 interface AnimatedCardProps {
   children: React.ReactNode;
-  delay?: number;
   className?: string;
+  delay?: number;
+  gradient?: boolean;
 }
 
-const AnimatedCard: React.FC<AnimatedCardProps> = ({ children, delay = 0, className = '' }) => {
+const AnimatedCard: React.FC<AnimatedCardProps> = ({ 
+  children, 
+  className = '', 
+  delay = 0,
+  gradient = false
+}) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ y: 40, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ y: -10 }}
-      className={`glass-card p-6 ${className}`}
+      transition={{ duration: 0.6, delay, ease: [0.34, 1.56, 0.64, 1] as any }}
+      whileHover={{ y: -8 }}
+      className={`group relative glass-card p-6 ${className}`}
     >
-      {children}
+      {gradient && (
+        <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      )}
+      <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-[0.02] transition-opacity duration-500" />
+      <div className="relative z-10">{children}</div>
+      <div className="absolute inset-0 border border-white/0 group-hover:border-white/10 transition-colors duration-500 rounded-3xl pointer-events-none" />
     </motion.div>
   );
 };

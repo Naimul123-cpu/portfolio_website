@@ -26,22 +26,27 @@ const Header: React.FC = () => {
 
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'py-4 glass border-b border-border' : 'py-6 bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled 
+          ? 'py-4 glass border-b border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)]' 
+          : 'py-8 bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-6 flex justify-between items-center">
+      <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-2xl font-display font-black tracking-tighter"
+          className="relative group"
         >
-          <a href="#" className="text-gradient">NAIM.DEV</a>
+          <a href="#" className="text-2xl font-display font-extrabold tracking-tight text-gradient bg-gradient-aurora animate-gradient-shift bg-[length:400%_400%]">
+            NAIM.DEV
+          </a>
+          <div className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-primary group-hover:w-full transition-all duration-500" />
         </motion.div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <nav className="flex gap-8">
+        <div className="hidden md:flex items-center gap-10">
+          <nav className="flex gap-10">
             {navLinks.map((link, i) => (
               <motion.a
                 key={link.name}
@@ -49,34 +54,42 @@ const Header: React.FC = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="text-text-secondary hover:text-accent-violet transition-colors font-medium text-sm uppercase tracking-widest"
+                className="relative group text-text-secondary hover:text-text-primary transition-colors font-semibold text-[13px] uppercase tracking-[0.2em]"
               >
                 {link.name}
+                <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-gradient-primary group-hover:w-full transition-all duration-300 rounded-full" />
               </motion.a>
             ))}
           </nav>
           
+          <div className="h-6 w-px bg-white/10 mx-2" />
+
           <button 
             onClick={toggleTheme}
-            className="p-2 rounded-full glass hover:text-accent-violet transition-all duration-500"
+            className="relative w-14 h-7 rounded-full glass p-1 flex items-center transition-all duration-500 group"
           >
-            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            <motion.div 
+              animate={{ x: theme === 'light' ? 0 : 28 }}
+              className="w-5 h-5 rounded-full bg-gradient-primary flex items-center justify-center shadow-lg shadow-accent-violet/30"
+            >
+              {theme === 'light' ? <Sun size={12} className="text-white" /> : <Moon size={12} className="text-white" />}
+            </motion.div>
           </button>
         </div>
 
         {/* Mobile Toggle */}
-        <div className="flex md:hidden items-center gap-4">
+        <div className="flex md:hidden items-center gap-6">
           <button 
             onClick={toggleTheme}
-            className="p-2 rounded-full glass hover:text-accent-violet transition-all duration-500"
+            className="p-2 rounded-xl glass text-accent-violet"
           >
             {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
           </button>
           <button 
-            className="text-text-primary"
+            className="w-10 h-10 flex items-center justify-center rounded-xl glass text-text-primary"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X /> : <Menu />}
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
@@ -85,20 +98,21 @@ const Header: React.FC = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-b border-accent-primary/20 overflow-hidden"
+            initial={{ opacity: 0, y: -20, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: 'auto' }}
+            exit={{ opacity: 0, y: -20, height: 0 }}
+            className="md:hidden glass border-b border-white/10 backdrop-blur-2xl overflow-hidden"
           >
-            <div className="flex flex-col p-6 gap-4">
+            <div className="flex flex-col p-8 gap-6">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-text-secondary hover:text-accent-primary transition-colors text-lg font-medium"
+                  className="text-text-secondary hover:text-accent-violet transition-all text-xl font-bold tracking-tight flex items-center justify-between group"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}
+                  <div className="w-0 h-[2px] bg-gradient-primary group-hover:w-12 transition-all duration-300" />
                 </a>
               ))}
             </div>

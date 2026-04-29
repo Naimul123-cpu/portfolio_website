@@ -1,29 +1,34 @@
 import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 
 interface SectionIllustrationProps {
-  src: string;
+  icon: React.ReactNode;
   className?: string;
 }
 
-const SectionIllustration: React.FC<SectionIllustrationProps> = ({ src, className }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.3 });
-
+const SectionIllustration: React.FC<SectionIllustrationProps> = ({ icon, className = '' }) => {
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-      transition={{ duration: 1, ease: "easeOut" }}
-      className={`section-bg-illustration float-animation ${className || ''}`}
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 1, delay: 0.2 }}
+      className={`absolute right-[5%] top-1/2 -translate-y-1/2 pointer-events-none z-0 hidden lg:block ${className}`}
     >
-      <img 
-        src={src} 
-        alt="illustration" 
-        className="w-full h-full object-contain"
-      />
+      <motion.div
+        animate={{
+          y: [0, -20, 0],
+          rotate: [0, 5, 0]
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="text-[var(--accent-violet)]"
+        style={{ opacity: 'var(--illustration-opacity)' }}
+      >
+        {React.cloneElement(icon as React.ReactElement<any>, { size: 300 })}
+      </motion.div>
     </motion.div>
   );
 };

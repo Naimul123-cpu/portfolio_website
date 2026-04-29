@@ -27,61 +27,78 @@ const AdminSidebar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
 
   const navItems = [
-    { label: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} /> },
-    { label: 'Profile', path: '/admin/profile', icon: <Users size={20} /> },
-    { label: 'Projects', path: '/admin/projects', icon: <FolderGit2 size={20} /> },
-    { label: 'Experience', path: '/admin/experience', icon: <Briefcase size={20} /> },
-    { label: 'Study', path: '/admin/study', icon: <GraduationCap size={20} /> },
+    { label: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={18} /> },
+    { label: 'Profile', path: '/admin/profile', icon: <Users size={18} /> },
+    { label: 'Projects', path: '/admin/projects', icon: <FolderGit2 size={18} /> },
+    { label: 'Experience', path: '/admin/experience', icon: <Briefcase size={18} /> },
+    { label: 'Study', path: '/admin/study', icon: <GraduationCap size={18} /> },
   ];
 
   return (
-    <aside className="w-64 glass border-r border-border p-6 flex flex-col fixed h-full z-50">
-      <div className="mb-8 text-xl font-display font-black text-gradient tracking-widest">ADMIN PANEL</div>
+    <aside className="w-72 glass border-r border-white/10 p-8 flex flex-col fixed h-full z-50 backdrop-blur-3xl shadow-[4px_0_32px_rgba(0,0,0,0.2)]">
+      <div className="mb-12 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center text-white shadow-glow-violet">
+          <LayoutDashboard size={20} />
+        </div>
+        <div className="text-xl font-display font-black text-gradient bg-gradient-aurora tracking-tighter">AURORA.CMS</div>
+      </div>
       
       <div className="flex flex-col gap-4 mb-10">
-        <div className="flex items-center gap-4 p-3 glass-card bg-bg-secondary/50">
-          <div className="w-10 h-10 rounded-full bg-accent-violet flex items-center justify-center font-bold text-white shadow-lg shadow-accent-violet/20">
-            {user?.name?.charAt(0)}
+        <div className="p-5 glass rounded-3xl border border-white/10 bg-white/[0.03]">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center font-black text-white shadow-lg text-lg">
+              {user?.name?.charAt(0)}
+            </div>
+            <div className="overflow-hidden">
+              <p className="font-black truncate text-sm text-text-primary tracking-tight">{user?.name}</p>
+              <span className="px-2 py-0.5 rounded-lg bg-accent-violet/10 border border-accent-violet/20 text-[8px] font-black text-accent-violet uppercase tracking-widest inline-block">
+                {user?.role}
+              </span>
+            </div>
           </div>
-          <div className="overflow-hidden">
-            <p className="font-bold truncate text-sm">{user?.name}</p>
-            <p className="text-[10px] text-text-secondary uppercase font-black tracking-widest">{user?.role}</p>
-          </div>
+          
+          <button 
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-between gap-3 p-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-all group"
+          >
+            <span className="text-[9px] font-black uppercase tracking-widest text-text-muted group-hover:text-text-primary">
+              {theme === 'light' ? 'NIGHT MODE' : 'DAY MODE'}
+            </span>
+            <div className="p-1.5 rounded-lg bg-bg-surface text-text-primary">
+              {theme === 'light' ? <Moon size={12} /> : <Sun size={12} />}
+            </div>
+          </button>
         </div>
-
-        <button 
-          onClick={toggleTheme}
-          className="flex items-center justify-between gap-3 p-3 glass-card bg-bg-secondary/30 hover:bg-bg-secondary transition-all"
-        >
-          <span className="text-[10px] font-black uppercase tracking-widest text-text-secondary">
-            {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-          </span>
-          {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-        </button>
       </div>
 
-      <nav className="flex-grow space-y-1">
+      <nav className="flex-grow space-y-3">
+        <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-4 pl-2">System Core</p>
         {navItems.map((item) => (
           <Link 
             key={item.path}
             to={item.path} 
-            className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
+            className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 group ${
               isActive(item.path) 
-                ? 'bg-accent-violet/10 text-accent-violet border border-accent-violet/20 font-bold shadow-sm' 
-                : 'text-text-secondary hover:bg-bg-secondary/50'
+                ? 'bg-gradient-primary text-white shadow-glow-violet translate-x-2' 
+                : 'text-text-secondary hover:bg-white/5 hover:text-text-primary border border-transparent hover:border-white/5'
             }`}
           >
-            {item.icon} <span className="text-sm uppercase tracking-widest font-bold">{item.label}</span>
+            <div className={`${isActive(item.path) ? 'text-white' : 'text-accent-violet group-hover:scale-110'} transition-transform duration-300`}>
+              {item.icon}
+            </div>
+            <span className="text-[11px] uppercase tracking-[0.2em] font-black">{item.label}</span>
           </Link>
         ))}
       </nav>
 
-      <button 
-        onClick={handleLogout}
-        className="mt-auto flex items-center gap-3 p-3 rounded-xl hover:bg-accent-cyan/10 text-text-secondary hover:text-accent-cyan transition-all font-bold text-xs uppercase tracking-widest"
-      >
-        <LogOut size={18} /> Logout Session
-      </button>
+      <div className="pt-8 mt-auto border-t border-white/10">
+        <button 
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-accent-pink/5 hover:bg-accent-pink/10 text-accent-pink border border-accent-pink/10 transition-all font-black text-[10px] uppercase tracking-widest hover:shadow-glow-pink"
+        >
+          <LogOut size={18} /> Terminate Session
+        </button>
+      </div>
     </aside>
   );
 };
