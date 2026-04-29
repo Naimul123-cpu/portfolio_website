@@ -305,7 +305,7 @@ const StudyAdmin: React.FC = () => {
                           <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Entity Type</label>
                           <select name="institutionType" value={formData.institutionType} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-black appearance-none cursor-pointer uppercase text-[10px] tracking-widest">
                             {['School', 'College', 'University', 'Online Course', 'Training Institute', 'Certification', 'Other'].map(type => (
-                              <option key={type} value={type}>{type}</option>
+                              <option key={type} value={type} className="bg-[#0A0A12] text-text-primary">{type}</option>
                             ))}
                           </select>
                         </div>

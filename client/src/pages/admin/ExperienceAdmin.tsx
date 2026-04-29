@@ -387,17 +387,17 @@ const ExperienceAdmin: React.FC = () => {
                           <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Environment</label>
                           <select name="workplaceType" value={formData.workplaceType} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-black appearance-none cursor-pointer uppercase text-[10px] tracking-widest">
                             {['Company', 'Business', 'Freelance', 'Remote', 'Own Business', 'NGO', 'Government', 'Other'].map(type => (
-                              <option key={type} value={type}>{type}</option>
+                              <option key={type} value={type} className="bg-[#0A0A12] text-text-primary">{type}</option>
                             ))}
                           </select>
                         </div>
                         <div className="space-y-4">
                           <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Structural Type</label>
                           <select name="type" value={formData.type} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-cyan/50 transition-all font-black appearance-none cursor-pointer uppercase text-[10px] tracking-widest">
-                            <option value="Full-time">Full-time Node</option>
-                            <option value="Part-time">Part-time Node</option>
-                            <option value="Freelance">Contract Flow</option>
-                            <option value="Internship">Learning Core</option>
+                             <option value="Full-time" className="bg-[#0A0A12] text-text-primary">Full-time Node</option>
+                            <option value="Part-time" className="bg-[#0A0A12] text-text-primary">Part-time Node</option>
+                            <option value="Freelance" className="bg-[#0A0A12] text-text-primary">Contract Flow</option>
+                            <option value="Internship" className="bg-[#0A0A12] text-text-primary">Learning Core</option>
                           </select>
                         </div>
                       </div>
