@@ -8,27 +8,27 @@ interface AboutSectionProps {
   profile: IProfile | null;
 }
 
-import { User, Cpu, Rocket, Code2 } from 'lucide-react';
+import { User, HardHat, Ruler, DraftingCompass, Building } from 'lucide-react';
 import AnimatedCard from '../ui/AnimatedCard';
 
 const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
   const stats = [
-    { label: 'Experience', value: '3+', icon: <Cpu className="text-accent-violet" /> },
-    { label: 'Projects', value: '50+', icon: <Rocket className="text-accent-blue" /> },
-    { label: 'Technologies', value: '20+', icon: <Code2 className="text-accent-cyan" /> },
+    { label: 'Experience', value: '3+', icon: <HardHat className="text-accent-blue" /> },
+    { label: 'Projects', value: '50+', icon: <Building className="text-accent-violet" /> },
+    { label: 'Software', value: '15+', icon: <DraftingCompass className="text-accent-cyan" /> },
   ];
 
   const getSkillCategory = (skill: string) => {
-    const frontend = ['React', 'Next.js', 'Tailwind', 'CSS', 'HTML', 'JavaScript', 'TypeScript'];
-    const backend = ['Node.js', 'Express', 'MongoDB', 'Python', 'SQL', 'PostgreSQL'];
-    if (frontend.some(s => skill.includes(s))) return 'frontend';
-    if (backend.some(s => skill.includes(s))) return 'backend';
+    const structural = ['SAP2000', 'ETABS', 'STAAD.Pro', 'Structural', 'RCC', 'Steel'];
+    const management = ['Project', 'Site', 'Costing', 'Management', 'Estimation'];
+    if (structural.some(s => skill.includes(s))) return 'structural';
+    if (management.some(s => skill.includes(s))) return 'management';
     return 'tools';
   };
 
   const skillColors = {
-    frontend: 'text-accent-blue border-accent-blue/20 bg-accent-blue/5 hover:bg-accent-blue/10 shadow-glow-blue',
-    backend: 'text-accent-violet border-accent-violet/20 bg-accent-violet/5 hover:bg-accent-violet/10 shadow-glow-violet',
+    structural: 'text-accent-blue border-accent-blue/20 bg-accent-blue/5 hover:bg-accent-blue/10 shadow-glow-blue',
+    management: 'text-accent-violet border-accent-violet/20 bg-accent-violet/5 hover:bg-accent-violet/10 shadow-glow-violet',
     tools: 'text-accent-emerald border-accent-emerald/20 bg-accent-emerald/5 hover:bg-accent-emerald/10 shadow-glow-emerald'
   };
 
@@ -39,8 +39,8 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <SectionTitle 
           eyebrow="ABOUT ME"
-          title="The Story Behind The <Code>" 
-          subtitle="Combining technical precision with creative vision to build the future."
+          title="Architecting The <Future>" 
+          subtitle="Combining mathematical precision with practical site management to build resilient infrastructure."
         />
         
         <div className="grid lg:grid-cols-2 gap-20 items-start">
@@ -52,10 +52,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
           >
             <AnimatedCard gradient className="p-10 mb-10">
               <h3 className="text-3xl font-display font-black mb-8 text-text-primary leading-tight">
-                Crafting digital experiences through <span className="text-gradient">clean code</span> and elegant design.
+                Crafting physical landscapes through <span className="text-gradient">precise engineering</span> and durable design.
               </h3>
               <p className="text-text-secondary text-lg leading-relaxed mb-10 whitespace-pre-wrap font-medium">
-                {profile?.bio || 'Passionate developer dedicated to creating high-quality, efficient, and user-friendly web applications.'}
+                {profile?.bio || 'Professional Civil Engineer dedicated to creating safe, efficient, and sustainable infrastructure solutions for modern urban development.'}
               </p>
               
               <div className="grid grid-cols-3 gap-6">
@@ -75,7 +75,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
           <div>
             <h4 className="text-[11px] font-mono font-black mb-10 uppercase tracking-[0.3em] text-text-primary flex items-center gap-4">
               <span className="w-12 h-[2px] bg-gradient-primary rounded-full" />
-              Technical Arsenal
+              Engineering Expertise
             </h4>
             
             <div className="flex flex-wrap gap-4 mb-16">
@@ -96,12 +96,12 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
               })}
             </div>
             
-            <AnimatedCard className="p-8 border-l-4 border-accent-violet">
+            <AnimatedCard className="p-8 border-l-4 border-accent-blue">
               <h5 className="text-lg font-bold mb-4 text-text-primary flex items-center gap-3">
-                <Rocket className="text-accent-violet" size={20} /> Philosophy
+                <Ruler className="text-accent-blue" size={20} /> Engineering Philosophy
               </h5>
               <p className="text-text-secondary text-base font-medium leading-relaxed italic">
-                "I believe in software that is not only functional but also a joy to use. Simplicity and clarity are the cornerstones of every line of code I write."
+                "I believe in structures that are not only architecturally sound but also safe for generations. Integrity and sustainability are the cornerstones of every blueprint I sign."
               </p>
             </AnimatedCard>
           </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
-import { ArrowRight, Download, Terminal } from 'lucide-react';
+import { ArrowRight, Download, HardHat, Ruler, DraftingCompass } from 'lucide-react';
 import type { IProfile } from '../../types';
 import GlowButton from '../ui/GlowButton';
 
@@ -28,8 +28,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
 
   return (
     <section className="relative min-h-screen flex items-center pt-24 overflow-hidden">
-      {/* Decorative Grid */}
-      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+      {/* Decorative Grid - Now representing drafting paper */}
+      <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
 
       <div className="container mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-16 items-center z-10">
         <motion.div
@@ -39,35 +39,35 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
           className="relative"
         >
           <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8">
-            <span className="flex items-center gap-2 px-4 py-1.5 glass rounded-full border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet">
+            <span className="flex items-center gap-2 px-4 py-1.5 glass rounded-full border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] text-accent-blue">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-violet opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-violet"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-blue opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-blue"></span>
               </span>
-              ✦ Available for Projects ✦
+              ✦ Open for Engineering Consultancy ✦
             </span>
           </motion.div>
           
           <motion.h1 variants={itemVariants} className="text-7xl md:text-8xl font-display font-black leading-[1] mb-8 text-text-primary">
-            I'm <span className="text-gradient bg-gradient-aurora animate-gradient-shift bg-[length:400%_400%] block mt-2">{profile?.name || 'Developer'}</span>
+            I'm <span className="text-gradient bg-gradient-aurora animate-gradient-shift bg-[length:400%_400%] block mt-2">{profile?.name || 'Engineer'}</span>
           </motion.h1>
 
           <motion.div variants={itemVariants} className="flex items-center gap-3 text-2xl md:text-3xl font-bold text-text-secondary mb-10 h-12">
-            <Terminal size={28} className="text-accent-violet" />
-            <span className="text-text-primary">Full-Stack Engineer</span>
+            <HardHat size={28} className="text-accent-blue" />
+            <span className="text-text-primary">Civil & Structural Engineer</span>
           </motion.div>
           
           <motion.p variants={itemVariants} className="text-lg text-text-secondary mb-12 max-w-xl leading-relaxed font-medium tracking-wide">
-            {profile?.bio || "Building high-performance digital experiences with a focus on modern aesthetics and technical precision. Let's turn your vision into a stunning reality."}
+            {profile?.bio || "Designing resilient infrastructure and sustainable urban solutions. Specialized in structural integrity, site management, and technical precision for modern construction."}
           </motion.p>
           
           <motion.div variants={itemVariants} className="flex flex-wrap gap-6 mb-12">
             <GlowButton onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
-              View My Work <ArrowRight size={18} className="inline ml-2" />
+              View Projects <ArrowRight size={18} className="inline ml-2" />
             </GlowButton>
             {profile?.resumeUrl && (
               <GlowButton variant="outline" onClick={() => window.open(profile.resumeUrl, '_blank')}>
-                Resume <Download size={18} className="inline ml-2" />
+                Project Portfolio <Download size={18} className="inline ml-2" />
               </GlowButton>
             )}
           </motion.div>
@@ -104,22 +104,22 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
             <div className="absolute inset-2 p-[1px] rounded-full bg-gradient-aurora animate-spin [animation-duration:12s] [animation-direction:reverse]" />
             
             {/* Outer Glow */}
-            <div className="absolute inset-0 bg-accent-violet/20 blur-[60px] rounded-full animate-pulse-slow" />
+            <div className="absolute inset-0 bg-accent-blue/20 blur-[60px] rounded-full animate-pulse-slow" />
 
-            {/* Orbiting Tech Icons */}
+            {/* Orbiting Tech Icons - Now Engineering Tools */}
             <div className="absolute inset-0 animate-orbit pointer-events-none">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 p-3 glass rounded-xl border border-white/10 shadow-glow-violet bg-bg-card">
-                <span className="text-xs font-black text-accent-violet uppercase">React</span>
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 p-3 glass rounded-xl border border-white/10 shadow-glow-blue bg-bg-card">
+                <span className="text-xs font-black text-accent-blue uppercase">AutoCAD</span>
               </div>
             </div>
             <div className="absolute inset-0 animate-orbit [animation-delay:-5s] pointer-events-none">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 p-3 glass rounded-xl border border-white/10 shadow-glow-blue bg-bg-card">
-                <span className="text-xs font-black text-accent-blue uppercase">Node</span>
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 p-3 glass rounded-xl border border-white/10 shadow-glow-violet bg-bg-card">
+                <span className="text-xs font-black text-accent-violet uppercase">Revit</span>
               </div>
             </div>
             <div className="absolute inset-0 animate-orbit [animation-delay:-10s] pointer-events-none">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 p-3 glass rounded-xl border border-white/10 shadow-glow-cyan bg-bg-card">
-                <span className="text-xs font-black text-accent-cyan uppercase">Next.js</span>
+                <span className="text-xs font-black text-accent-cyan uppercase">SAP2000</span>
               </div>
             </div>
 

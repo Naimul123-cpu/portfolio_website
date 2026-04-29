@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub } from 'react-icons/fa';
-import { ArrowRight, Code2, Globe, Star } from 'lucide-react';
+import { ArrowRight, DraftingCompass, Globe, Star, HardHat } from 'lucide-react';
 import SectionTitle from '../ui/SectionTitle';
 import SectionIllustration from '../ui/SectionIllustration';
 import GlowButton from '../ui/GlowButton';
@@ -23,13 +23,13 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) => {
 
   return (
     <section id="projects" className="py-32 relative overflow-hidden">
-      <SectionIllustration icon={<Code2 />} className="opacity-10" />
+      <SectionIllustration icon={<DraftingCompass />} className="opacity-10" />
       
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <SectionTitle 
-          eyebrow="PROJECTS"
-          title="Digital <Manifestations>" 
-          subtitle="A collection of high-performance applications built with modern technologies."
+          eyebrow="ENGINEERING"
+          title="Structural <Solutions>" 
+          subtitle="A showcase of infrastructure projects, site management, and technical blueprints."
         />
         
         {/* Filters */}
@@ -142,10 +142,10 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) => {
         
         <div className="mt-24 text-center">
           <AnimatedCard className="inline-block p-12 max-w-2xl mx-auto">
-            <h4 className="text-3xl font-black mb-6 text-text-primary">Curious to see <span className="text-gradient">More?</span></h4>
-            <p className="text-text-secondary text-lg mb-10 font-medium">I'm constantly building and experimenting with new tech. Explore my full repository of digital architectures on GitHub.</p>
-            <GlowButton variant="secondary" size="lg" onClick={() => window.open('https://github.com', '_blank')}>
-              Browse Full Catalog <ArrowRight size={20} className="inline ml-2" />
+            <h4 className="text-3xl font-black mb-6 text-text-primary">Interested in <span className="text-gradient">Consultation?</span></h4>
+            <p className="text-text-secondary text-lg mb-10 font-medium">I am always open to discussing new structural challenges and large-scale infrastructure developments. Let's build something enduring together.</p>
+            <GlowButton variant="secondary" size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
+              Start a Discussion <ArrowRight size={20} className="inline ml-2" />
             </GlowButton>
           </AnimatedCard>
         </div>

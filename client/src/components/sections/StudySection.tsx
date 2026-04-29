@@ -37,9 +37,9 @@ const StudySection: React.FC<StudySectionProps> = ({ studies }) => {
       
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <SectionTitle 
-          eyebrow="EDUCATION"
-          title="My Academic <Evolution>" 
-          subtitle="Continuous learning and academic excellence from institutions worldwide."
+          eyebrow="FOUNDATION"
+          title="Professional <Academics>" 
+          subtitle="Rigorous academic training and technical certifications from leading engineering institutions."
         />
         
         <div className="relative max-w-5xl mx-auto">
