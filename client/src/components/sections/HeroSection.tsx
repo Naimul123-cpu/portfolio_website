@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
-import { ArrowRight, Download, HardHat, Ruler, DraftingCompass } from 'lucide-react';
+import { ArrowRight, Download, HardHat } from 'lucide-react';
 import type { IProfile } from '../../types';
 import GlowButton from '../ui/GlowButton';
 

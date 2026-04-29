@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { FaGithub, FaLinkedin, FaTwitter, FaDiscord } from 'react-icons/fa';
-import { Heart, Lock, ShieldCheck, Cpu } from 'lucide-react';
+import { Heart, ShieldCheck, Cpu } from 'lucide-react';
 import type { IProfile } from '../../types';
 
 interface FooterProps {

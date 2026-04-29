@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub } from 'react-icons/fa';
-import { ArrowRight, DraftingCompass, Globe, Star, HardHat } from 'lucide-react';
+import { ArrowRight, DraftingCompass, Globe, Star } from 'lucide-react';
 import SectionTitle from '../ui/SectionTitle';
 import SectionIllustration from '../ui/SectionIllustration';
 import GlowButton from '../ui/GlowButton';
