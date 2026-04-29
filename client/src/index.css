@@ -58,12 +58,18 @@
   }
   
   .glass-card {
-    @apply glass rounded-[var(--radius-lg)] transition-all duration-500;
+    @apply glass border border-white/5 shadow-2xl transition-all duration-700;
+    background: rgba(13, 13, 22, 0.4);
   }
 
   .glass-card:hover {
-    @apply border-white/20 -translate-y-1 shadow-[0_20px_50px_rgba(0,0,0,0.5)];
+    @apply border-white/20 -translate-y-2 shadow-[0_20px_50px_rgba(0,0,0,0.5)];
     box-shadow: 0 0 30px rgba(124, 58, 237, 0.15), 0 20px 60px rgba(0,0,0,0.5);
+    background: rgba(13, 13, 22, 0.6);
+  }
+
+  .glass-card-hover {
+    @apply glass-card;
   }
 
   .text-gradient {
@@ -144,18 +150,8 @@
     top: 100%;
     opacity: 1;
   }
-}
 
-/* Aurora/Mesh Gradient Orbs Animation */
-  .glass-card {
-    @apply glass border border-white/5 shadow-2xl transition-all duration-700;
-    background: rgba(13, 13, 22, 0.4);
-  }
-  
-  .glass-card-hover {
-    @apply hover:border-white/20 hover:bg-white/[0.05] hover:-translate-y-2;
-  }
-
+  /* Node & Badge Components */
   .node-active {
     @apply relative flex h-3 w-3;
   }
@@ -172,6 +168,8 @@
     @apply px-4 py-2 rounded-xl glass border border-white/5 text-[10px] font-black uppercase tracking-widest text-text-primary hover:border-accent-violet/50 transition-all duration-300;
   }
 }
+
+
 
 @keyframes aurora-float {
   0% { transform: translate(0, 0) scale(1); }
