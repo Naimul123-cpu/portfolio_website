@@ -90,11 +90,15 @@ const StudySection: React.FC<StudySectionProps> = ({ studies }) => {
 
                     {study.subjects && study.subjects.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-8">
-                        {study.subjects.map((sub, idx) => (
-                          <span key={idx} className="px-3 py-1 rounded-lg glass border border-white/5 text-[10px] font-bold text-text-secondary uppercase tracking-wider hover:border-accent-violet/30 hover:text-accent-violet transition-colors">
-                            {sub}
-                          </span>
-                        ))}
+                        {study.subjects.map((sub, idx) => {
+                          const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
+                          if (!cleanSub) return null;
+                          return (
+                            <span key={idx} className="px-3 py-1 rounded-lg glass border border-white/5 text-[10px] font-bold text-text-secondary uppercase tracking-wider hover:border-accent-violet/30 hover:text-accent-violet transition-colors">
+                              {cleanSub}
+                            </span>
+                          );
+                        })}
                       </div>
                     )}
                     

@@ -359,12 +359,16 @@ const StudyAdmin: React.FC = () => {
                       <button type="button" onClick={addSubject} className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center text-white shadow-glow-violet hover:scale-110 transition-all"><Plus size={24} /></button>
                     </div>
                     <div className="flex flex-wrap gap-3">
-                      {formData.subjects.map((sub: string) => (
-                        <span key={sub} className="flex items-center gap-3 px-5 py-2.5 glass rounded-2xl border-white/5 text-[11px] font-black text-text-primary uppercase tracking-widest">
-                          {sub}
-                          <X size={14} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors" onClick={() => removeSubject(sub)} />
-                        </span>
-                      ))}
+                      {formData.subjects.map((sub: string) => {
+                        const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
+                        if (!cleanSub) return null;
+                        return (
+                          <span key={sub} className="flex items-center gap-3 px-5 py-2.5 glass rounded-2xl border-white/5 text-[11px] font-black text-text-primary uppercase tracking-widest group">
+                            {cleanSub}
+                            <X size={14} className="cursor-pointer text-text-muted hover:text-accent-pink transition-colors" onClick={() => removeSubject(sub)} />
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
 
