@@ -36,7 +36,7 @@ const StudySection: React.FC<StudySectionProps> = ({ studies }) => {
           {/* Central Timeline Line */}
           <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent md:-translate-x-1/2 hidden md:block" />
 
-          <div className="space-y-24">
+          <div className="space-y-16 md:space-y-24">
             {studies.sort((a, b) => Number(b.order) - Number(a.order)).map((study, i) => (
               <motion.div 
                 key={study._id}

@@ -238,7 +238,7 @@ const ExperienceAdmin: React.FC = () => {
 
       <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="flex-grow lg:ml-80 p-8 md:p-14 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+      <main className="flex-grow lg:ml-80 p-6 md:p-14 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-20">
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -248,7 +248,7 @@ const ExperienceAdmin: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-display font-black text-text-primary tracking-tighter">
               Manage <span className="text-gradient">Experience</span>
             </h1>
-            <p className="mt-4 text-text-muted font-medium tracking-wide text-lg opacity-80 uppercase text-[11px] tracking-[0.2em]">Document your professional trajectory and milestones.</p>
+            <p className="mt-4 text-text-muted font-medium tracking-wide text-base md:text-lg opacity-80 uppercase text-[11px] tracking-[0.2em]">Document your professional trajectory and milestones.</p>
           </div>
           <button 
             onClick={openAddModal} 

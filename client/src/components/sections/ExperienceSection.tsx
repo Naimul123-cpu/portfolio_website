@@ -34,7 +34,7 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experiences }) =>
           {/* Vertical Timeline Line */}
           <div className="absolute left-0 md:left-[50%] top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-accent-violet/50 to-transparent md:-translate-x-1/2 hidden md:block" />
 
-          <div className="space-y-24">
+          <div className="space-y-16 md:space-y-24">
             {experiences.sort((a, b) => Number(b.order) - Number(a.order)).map((exp, i) => (
               <motion.div 
                 key={exp._id}

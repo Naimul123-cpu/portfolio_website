@@ -66,10 +66,10 @@ const ContactSection: React.FC<ContactSectionProps> = ({ profile }) => {
             viewport={{ once: true }}
             className="lg:col-span-5"
           >
-            <h3 className="text-5xl md:text-6xl font-display font-black text-text-primary leading-[1.1] mb-8">
-              Let's build something <span className="text-gradient bg-gradient-aurora">Enduring</span>.
+            <h3 className="text-3xl sm:text-5xl md:text-6xl font-display font-black text-text-primary leading-[1.1] mb-8">
+              Let's build something <span className="text-gradient-aurora">Enduring</span>.
             </h3>
-            <p className="text-text-secondary text-lg font-medium leading-relaxed mb-10 opacity-70">
+            <p className="text-text-secondary text-base md:text-lg font-medium leading-relaxed mb-10 opacity-70">
               I'm always looking for ambitious projects and technical challenges. Whether it's a structural audit or a full-scale development, I'm ready to contribute my expertise.
             </p>
             

@@ -26,7 +26,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ title, subtitle, align = 'c
           <div className="w-10 h-[1px] bg-gradient-primary opacity-50" />
         </div>
       )}
-      <h2 className="text-4xl md:text-6xl font-display font-black mb-8 text-text-primary leading-tight">
+      <h2 className="text-3xl sm:text-4xl md:text-6xl font-display font-black mb-8 text-text-primary leading-tight">
         {title.split(' ').map((word, i) => (
           word.startsWith('<') ? (
             <span key={i} className="text-gradient-aurora block md:inline mx-1">{word.replace(/<|>/g, '')}</span>

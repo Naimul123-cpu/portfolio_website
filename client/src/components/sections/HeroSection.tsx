@@ -58,11 +58,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
             </span>
           </motion.div>
           
-          <motion.h1 variants={itemVariants} className="text-6xl md:text-8xl font-display font-black leading-[0.9] mb-6 text-text-primary">
+          <motion.h1 variants={itemVariants} className="text-4xl sm:text-6xl md:text-8xl font-display font-black leading-[0.9] mb-6 text-text-primary">
             I'm <span className="text-gradient-aurora block mt-4">{profile?.name || 'Engineer'}</span>
           </motion.h1>
 
-          <motion.div variants={itemVariants} className="h-12 mb-8">
+          <motion.div variants={itemVariants} className="min-h-[3rem] mb-8">
             <AnimatePresence mode="wait">
               <motion.p
                 key={roleIndex}
@@ -124,7 +124,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] as any }}
           className="relative order-1 lg:order-2 flex justify-center lg:justify-end"
         >
-          <div className="relative w-72 h-72 md:w-[500px] md:h-[500px]">
+          <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-[500px] md:h-[500px]">
             {/* Rotating Cyber Ring */}
             <div className="absolute inset-0 rounded-full border-2 border-dashed border-accent-violet/30 animate-spin [animation-duration:20s]" />
             <div className="absolute inset-8 rounded-full border border-dashed border-accent-cyan/20 animate-spin [animation-duration:15s] [animation-direction:reverse]" />

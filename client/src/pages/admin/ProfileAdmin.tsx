@@ -108,7 +108,7 @@ const ProfileAdmin: React.FC = () => {
 
       <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="flex-grow lg:ml-80 p-8 md:p-14 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+      <main className="flex-grow lg:ml-80 p-6 md:p-14 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-20">
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -118,7 +118,7 @@ const ProfileAdmin: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-display font-black text-text-primary tracking-tighter">
               Profile <span className="text-gradient">Console</span>
             </h1>
-            <p className="mt-4 text-text-muted font-medium tracking-wide text-lg opacity-80 uppercase text-[11px] tracking-[0.2em]">Define how the world sees your engineering persona.</p>
+            <p className="mt-4 text-text-muted font-medium tracking-wide text-base md:text-lg opacity-80 uppercase text-[11px] tracking-[0.2em]">Define how the world sees your engineering persona.</p>
           </div>
           <button 
             onClick={handleSubmit} 
@@ -144,7 +144,7 @@ const ProfileAdmin: React.FC = () => {
                   <h2 className="text-3xl font-black text-text-primary tracking-tighter">Core Attributes</h2>
                 </div>
                 <div className="space-y-10">
-                  <div className="grid grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Public Name</label>
                       <input name="name" value={formData.name} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-violet/50 focus:bg-white/[0.05] transition-all font-medium" />
@@ -155,7 +155,7 @@ const ProfileAdmin: React.FC = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Email Endpoint</label>
                       <input name="email" value={formData.email} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-violet/50 focus:bg-white/[0.05] transition-all font-medium" />
@@ -179,7 +179,7 @@ const ProfileAdmin: React.FC = () => {
                 <Globe size={24} className="text-accent-cyan" />
                 <h2 className="text-3xl font-black text-text-primary tracking-tighter">Digital Presence</h2>
               </div>
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 {['github', 'linkedin', 'twitter', 'discord'].map(platform => (
                   <div key={platform} className="space-y-4">
                     <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2 capitalize">{platform}</label>
