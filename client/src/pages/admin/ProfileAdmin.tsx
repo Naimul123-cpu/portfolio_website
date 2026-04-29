@@ -14,7 +14,10 @@ const ProfileAdmin: React.FC = () => {
     bio: '',
     email: '',
     phone: '',
+    whatsapp: '',
     location: '',
+    presentAddress: '',
+    permanentAddress: '',
     socialLinks: { github: '', linkedin: '', twitter: '', facebook: '', instagram: '', youtube: '', discord: '', website: '' },
     skills: []
   });
@@ -61,7 +64,7 @@ const ProfileAdmin: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setIsSaving(true);
     try {
       const data = new FormData();
@@ -96,7 +99,7 @@ const ProfileAdmin: React.FC = () => {
       <AdminSidebar />
       <div className="flex-grow ml-64 p-10">
       <div className="flex justify-between items-center mb-10">
-        <h1 className="text-3xl font-display font-bold">Profile Settings</h1>
+        <h1 className="text-3xl font-display font-bold text-gradient">Profile Settings</h1>
         <GlowButton onClick={handleSubmit} disabled={isSaving} className="flex items-center gap-2">
           {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
           Save Changes
@@ -109,33 +112,52 @@ const ProfileAdmin: React.FC = () => {
           <div className="glass-card p-8">
             <h2 className="text-xl font-bold mb-6">Basic Information</h2>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Full Name</label>
-                <input 
-                  name="name" 
-                  value={formData.name} 
-                  onChange={handleInputChange}
-                  className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Full Name</label>
+                  <input name="name" value={formData.name} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Tagline</label>
+                  <input name="tagline" value={formData.tagline} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Tagline</label>
-                <input 
-                  name="tagline" 
-                  value={formData.tagline} 
-                  onChange={handleInputChange}
-                  className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
-                />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Email</label>
+                  <input name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Phone Number</label>
+                  <input name="phone" value={formData.phone} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+                </div>
               </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">WhatsApp</label>
+                  <input name="whatsapp" value={formData.whatsapp} onChange={handleInputChange} placeholder="+8801..." className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Location (City, Country)</label>
+                  <input name="location" value={formData.location} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Present Address</label>
+                <input name="presentAddress" value={formData.presentAddress} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Permanent Address</label>
+                <input name="permanentAddress" value={formData.permanentAddress} onChange={handleInputChange} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
+              </div>
+
               <div>
                 <label className="block text-sm font-bold text-text-secondary uppercase mb-2">Bio</label>
-                <textarea 
-                  name="bio" 
-                  value={formData.bio} 
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
-                />
+                <textarea name="bio" value={formData.bio} onChange={handleInputChange} rows={4} className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet" />
               </div>
             </div>
           </div>
@@ -152,7 +174,7 @@ const ProfileAdmin: React.FC = () => {
                     value={formData.socialLinks[platform]} 
                     onChange={handleInputChange}
                     placeholder={`https://${platform}.com/...`}
-                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
+                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
                   />
                 </div>
               ))}
@@ -211,15 +233,15 @@ const ProfileAdmin: React.FC = () => {
                 onChange={(e) => setNewSkill(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && addSkill()}
                 placeholder="Add a skill (e.g. React)"
-                className="flex-grow bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
+                className="flex-grow bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
               />
-              <button onClick={addSkill} className="p-3 bg-accent-primary rounded-xl hover:scale-105 transition-transform">
+              <button onClick={addSkill} className="p-3 bg-accent-violet rounded-xl hover:scale-105 transition-transform">
                 <Plus size={24} />
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
               {formData.skills.map((skill: string) => (
-                <div key={skill} className="flex items-center gap-2 px-3 py-1.5 glass rounded-lg border-accent-primary/20 text-sm">
+                <div key={skill} className="flex items-center gap-2 px-3 py-1.5 glass rounded-lg border-accent-violet/20 text-sm">
                   {skill}
                   <X size={14} className="cursor-pointer hover:text-accent-tertiary" onClick={() => removeSkill(skill)} />
                 </div>

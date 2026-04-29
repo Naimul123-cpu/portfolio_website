@@ -4,21 +4,21 @@ import path from 'path';
 const storage = multer.memoryStorage();
 
 const fileFilter = (req: any, file: any, cb: any) => {
-  const allowedTypes = /jpeg|jpg|png|webp|pdf/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
-
-  if (extname && mimetype) {
+  const allowedExtensions = /jpeg|jpg|png|gif|webp|svg|bmp|tiff|mp4|mov|avi|mkv|webm/;
+  const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+  
+  // For resource_type: 'auto' in cloudinary, we can be more flexible with mimetypes
+  if (extname) {
     return cb(null, true);
   } else {
-    cb(new Error('Images and PDFs only!'));
+    cb(new Error('Unsupported file format!'));
   }
 };
 
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 500 * 1024 * 1024 }, // 500MB limit as requested
 });
 
 export default upload;

@@ -19,9 +19,9 @@ const Dashboard: React.FC = () => {
   const { studies, experiences, projects } = usePortfolioData();
 
   const stats = [
-    { label: 'Projects', value: projects.length, icon: <FolderGit2 size={24} />, color: 'bg-accent-primary' },
-    { label: 'Experience', value: experiences.length, icon: <Briefcase size={24} />, color: 'bg-accent-secondary' },
-    { label: 'Education', value: studies.length, icon: <GraduationCap size={24} />, color: 'bg-accent-tertiary' },
+    { label: 'Projects', value: projects.length, icon: <FolderGit2 size={24} />, color: 'bg-accent-violet' },
+    { label: 'Experience', value: experiences.length, icon: <Briefcase size={24} />, color: 'bg-accent-cyan' },
+    { label: 'Education', value: studies.length, icon: <GraduationCap size={24} />, color: 'bg-accent-violet' },
   ];
 
   return (
@@ -33,11 +33,11 @@ const Dashboard: React.FC = () => {
       <main className="flex-grow ml-64 p-10">
         <header className="flex justify-between items-center mb-10">
           <div>
-            <h1 className="text-3xl font-display font-bold mb-2">Welcome Back, {user?.name}</h1>
-            <p className="text-text-secondary">Here's an overview of your portfolio performance.</p>
+            <h1 className="text-3xl font-display font-black mb-2 text-gradient tracking-tight">Welcome Back, {user?.name}</h1>
+            <p className="text-text-secondary font-medium tracking-wide">Here's an overview of your portfolio performance.</p>
           </div>
           <div className="flex gap-4">
-            <GlowButton onClick={() => window.open('/', '_blank')} variant="outline" className="flex items-center gap-2">
+            <GlowButton onClick={() => window.open('/', '_blank')} variant="outline" className="flex items-center gap-2 border-border text-text-primary">
               View Site <ExternalLink size={18} />
             </GlowButton>
           </div>
@@ -48,13 +48,13 @@ const Dashboard: React.FC = () => {
             <motion.div
               key={stat.label}
               whileHover={{ y: -5 }}
-              className="glass-card p-6 flex items-center gap-6"
+              className="glass-card p-6 flex items-center gap-6 group hover:border-accent-violet/30"
             >
-              <div className={`p-4 rounded-2xl ${stat.color} text-white`}>
+              <div className={`p-4 rounded-2xl ${stat.color} text-white shadow-lg shadow-current/20 group-hover:scale-110 transition-transform`}>
                 {stat.icon}
               </div>
               <div>
-                <p className="text-text-secondary text-sm font-bold uppercase tracking-widest">{stat.label}</p>
+                <p className="text-text-secondary text-[10px] font-black uppercase tracking-widest">{stat.label}</p>
                 <p className="text-3xl font-display font-black">{stat.value}</p>
               </div>
             </motion.div>
@@ -65,45 +65,45 @@ const Dashboard: React.FC = () => {
           <div className="glass-card p-8">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold">Recent Projects</h2>
-              <Link to="/admin/projects" className="text-accent-primary text-sm font-bold hover:underline">Manage All</Link>
+              <Link to="/admin/projects" className="text-accent-violet text-sm font-bold hover:underline">Manage All</Link>
             </div>
             <div className="space-y-4">
               {projects.slice(0, 3).map(proj => (
-                <div key={proj._id} className="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-                  <div className="w-12 h-12 rounded-lg bg-bg-primary overflow-hidden">
+                <div key={proj._id} className="flex items-center gap-4 p-4 glass-card bg-bg-secondary/50 border-border/50">
+                  <div className="w-12 h-12 rounded-lg bg-bg-primary border border-border/50 overflow-hidden shadow-sm">
                     <img src={proj.thumbnail} alt="" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <p className="font-bold">{proj.title}</p>
-                    <p className="text-xs text-text-secondary">{proj.category}</p>
+                    <p className="font-bold text-sm">{proj.title}</p>
+                    <p className="text-[10px] text-text-secondary uppercase tracking-widest font-black">{proj.category}</p>
                   </div>
                   <div className="ml-auto">
-                    <span className="px-2 py-0.5 rounded text-[10px] bg-accent-secondary/10 text-accent-secondary uppercase font-bold">{proj.status}</span>
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-accent-cyan/10 text-accent-cyan uppercase font-black tracking-tighter border border-accent-cyan/20">{proj.status}</span>
                   </div>
                 </div>
               ))}
-              {projects.length === 0 && <p className="text-text-secondary text-center py-4">No projects found.</p>}
+              {projects.length === 0 && <p className="text-text-secondary text-center py-4 text-sm">No projects found.</p>}
             </div>
           </div>
 
           <div className="glass-card p-8">
             <h2 className="text-xl font-bold mb-6">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-4">
-              <Link to="/admin/projects" className="p-4 bg-accent-primary/10 border border-accent-primary/30 rounded-2xl flex flex-col items-center gap-2 hover:bg-accent-primary/20 transition-all group">
-                <Plus size={24} className="text-accent-primary group-hover:scale-125 transition-transform" />
-                <span className="font-bold text-sm">Add Project</span>
+              <Link to="/admin/projects" className="p-6 bg-accent-violet/10 border border-accent-violet/30 rounded-2xl flex flex-col items-center gap-2 hover:bg-accent-violet/20 transition-all group">
+                <Plus size={24} className="text-accent-violet group-hover:scale-125 transition-transform" />
+                <span className="font-bold text-xs uppercase tracking-widest text-accent-violet">Add Project</span>
               </Link>
-              <Link to="/admin/experience" className="p-4 bg-accent-secondary/10 border border-accent-secondary/30 rounded-2xl flex flex-col items-center gap-2 hover:bg-accent-secondary/20 transition-all group">
-                <Plus size={24} className="text-accent-secondary group-hover:scale-125 transition-transform" />
-                <span className="font-bold text-sm">Add Experience</span>
+              <Link to="/admin/experience" className="p-6 bg-accent-cyan/10 border border-accent-cyan/30 rounded-2xl flex flex-col items-center gap-2 hover:bg-accent-cyan/20 transition-all group">
+                <Plus size={24} className="text-accent-cyan group-hover:scale-125 transition-transform" />
+                <span className="font-bold text-xs uppercase tracking-widest text-accent-cyan">Add Experience</span>
               </Link>
-              <Link to="/admin/profile" className="p-4 bg-white/5 border border-white/10 rounded-2xl flex flex-col items-center gap-2 hover:bg-white/10 transition-all group">
+              <Link to="/admin/profile" className="p-6 glass-card bg-bg-secondary/50 border border-border flex flex-col items-center gap-2 hover:bg-bg-secondary transition-all group">
                 <Settings size={24} className="text-text-secondary group-hover:scale-125 transition-transform" />
-                <span className="font-bold text-sm">Update Profile</span>
+                <span className="font-bold text-xs uppercase tracking-widest text-text-secondary">Profile</span>
               </Link>
-              <Link to="/admin/study" className="p-4 bg-accent-tertiary/10 border border-accent-tertiary/30 rounded-2xl flex flex-col items-center gap-2 hover:bg-accent-tertiary/20 transition-all group">
-                <Plus size={24} className="text-accent-tertiary group-hover:scale-125 transition-transform" />
-                <span className="font-bold text-sm">Add Study</span>
+              <Link to="/admin/study" className="p-6 bg-accent-violet/10 border border-accent-violet/30 rounded-2xl flex flex-col items-center gap-2 hover:bg-accent-violet/20 transition-all group">
+                <Plus size={24} className="text-accent-violet group-hover:scale-125 transition-transform" />
+                <span className="font-bold text-xs uppercase tracking-widest text-accent-violet">Add Study</span>
               </Link>
             </div>
           </div>

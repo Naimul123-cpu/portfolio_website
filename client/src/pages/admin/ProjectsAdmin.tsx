@@ -131,25 +131,25 @@ const ProjectsAdmin: React.FC = () => {
 
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
         {projects.sort((a, b) => b.order - a.order).map((project) => (
-          <div key={project._id} className="glass-card overflow-hidden group border border-white/5 hover:border-accent-primary/30 transition-all">
+          <div key={project._id} className="glass-card overflow-hidden group border border-white/5 hover:border-accent-violet/30 transition-all">
             <div className="relative aspect-video">
               <img src={project.thumbnail} alt={project.title} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
                 <button 
                   onClick={() => openEditModal(project)}
-                  className="p-3 bg-accent-primary rounded-full hover:scale-110 transition-transform"
+                  className="p-3 bg-accent-violet rounded-full hover:scale-110 transition-transform"
                 >
                   <Edit2 size={20} />
                 </button>
                 <button 
                   onClick={() => handleDelete(project._id)}
-                  className="p-3 bg-accent-tertiary rounded-full hover:scale-110 transition-transform"
+                  className="p-3 bg-accent-cyan rounded-full hover:scale-110 transition-transform"
                 >
                   <Trash2 size={20} />
                 </button>
               </div>
               {project.featured && (
-                <div className="absolute top-2 left-2 px-2 py-0.5 bg-accent-primary text-[10px] font-bold rounded uppercase">Featured</div>
+                <div className="absolute top-2 left-2 px-2 py-0.5 bg-accent-violet text-[10px] font-bold rounded uppercase">Featured</div>
               )}
             </div>
             <div className="p-4">
@@ -167,12 +167,12 @@ const ProjectsAdmin: React.FC = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
           <div className="absolute inset-0 bg-bg-primary/80 backdrop-blur-sm" onClick={() => setIsModalOpen(false)} />
-          <div className="relative glass-card w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 shadow-2xl border-accent-primary/20">
+          <div className="relative glass-card w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 shadow-2xl border-accent-violet/20">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-display font-bold">
                 {editingProject ? 'Edit Project' : 'Add New Project'}
               </h2>
-              <button onClick={() => setIsModalOpen(false)} className="p-2 hover:text-accent-tertiary transition-colors">
+              <button onClick={() => setIsModalOpen(false)} className="p-2 hover:text-accent-cyan transition-colors">
                 <X size={24} />
               </button>
             </div>
@@ -185,7 +185,7 @@ const ProjectsAdmin: React.FC = () => {
                     name="title" 
                     value={formData.title} 
                     onChange={handleInputChange}
-                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
+                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
                     required
                   />
                 </div>
@@ -196,7 +196,7 @@ const ProjectsAdmin: React.FC = () => {
                     value={formData.category} 
                     onChange={handleInputChange}
                     placeholder="Web App, Mobile, UI/UX..."
-                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
+                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
                     required
                   />
                 </div>
@@ -207,7 +207,7 @@ const ProjectsAdmin: React.FC = () => {
                     value={formData.description} 
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
+                    className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
                     required
                   />
                 </div>
@@ -218,7 +218,7 @@ const ProjectsAdmin: React.FC = () => {
                       name="liveUrl" 
                       value={formData.liveUrl} 
                       onChange={handleInputChange}
-                      className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
+                      className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
                     />
                   </div>
                   <div>
@@ -227,7 +227,7 @@ const ProjectsAdmin: React.FC = () => {
                       name="githubUrl" 
                       value={formData.githubUrl} 
                       onChange={handleInputChange}
-                      className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
+                      className="w-full bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
                     />
                   </div>
                 </div>
@@ -262,10 +262,10 @@ const ProjectsAdmin: React.FC = () => {
                       value={techInput}
                       onChange={(e) => setTechInput(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTech())}
-                      className="flex-grow bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-primary"
+                      className="flex-grow bg-bg-primary border border-white/10 rounded-xl p-3 outline-none focus:border-accent-violet"
                       placeholder="React, Tailwind..."
                     />
-                    <button type="button" onClick={addTech} className="p-3 bg-accent-primary rounded-xl">
+                    <button type="button" onClick={addTech} className="p-3 bg-accent-violet rounded-xl">
                       <Plus size={24} />
                     </button>
                   </div>
@@ -273,7 +273,7 @@ const ProjectsAdmin: React.FC = () => {
                     {formData.technologies.map((tech: string) => (
                       <span key={tech} className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-lg text-sm">
                         {tech}
-                        <X size={14} className="cursor-pointer text-accent-tertiary" onClick={() => removeTech(tech)} />
+                        <X size={14} className="cursor-pointer text-accent-cyan" onClick={() => removeTech(tech)} />
                       </span>
                     ))}
                   </div>
@@ -286,7 +286,7 @@ const ProjectsAdmin: React.FC = () => {
                       name="featured" 
                       checked={formData.featured} 
                       onChange={handleInputChange}
-                      className="w-5 h-5 rounded border-white/10 bg-bg-primary text-accent-primary focus:ring-accent-primary"
+                      className="w-5 h-5 rounded border-white/10 bg-bg-primary text-accent-violet focus:ring-accent-violet"
                     />
                     <span className="text-sm font-bold text-text-secondary uppercase group-hover:text-text-primary transition-colors">Featured</span>
                   </label>

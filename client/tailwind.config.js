@@ -4,24 +4,28 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
         bg: {
-          primary: "#FCFBF7",
-          secondary: "#F4F2EE",
-          card: "#FFFFFF",
+          primary: "var(--bg-primary)",
+          secondary: "var(--bg-secondary)",
+          tertiary: "var(--bg-tertiary)",
+          card: "var(--bg-card)",
         },
         accent: {
-          primary: "#7C9082",
-          secondary: "#5D6D7E",
-          tertiary: "#D4A373",
+          primary: "var(--accent-violet)",
+          secondary: "var(--accent-cyan)",
+          tertiary: "var(--accent-cyan)",
+          violet: "var(--accent-violet)",
+          cyan: "var(--accent-cyan)",
         },
         text: {
-          primary: "#1A1A1A",
-          secondary: "#666666",
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
         },
-        border: "#E5E5E5",
+        border: "var(--border)",
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

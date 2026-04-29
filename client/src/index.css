@@ -1,28 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap');
+:root, [data-theme='light'] {
+  /* Light Theme */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8F8FA;
+  --bg-tertiary: #F0F0F5;
+  --bg-card: #FFFFFF;
+  --text-primary: #1A1A28;
+  --text-secondary: #606080;
+  --accent-violet: #6C63FF;
+  --accent-cyan: #00D4FF;
+  --accent-gradient: linear-gradient(135deg, #6C63FF, #00D4FF);
+  --border: #E5E5F0;
+  --shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.4);
+}
+
+[data-theme='dark'] {
+  /* Dark Theme */
+  --bg-primary: #0D0D14;
+  --bg-secondary: #12121C;
+  --bg-tertiary: #1A1A28;
+  --bg-card: #1A1A28;
+  --text-primary: #F0F0FF;
+  --text-secondary: #A0A0C0;
+  --accent-violet: #6C63FF;
+  --accent-cyan: #00D4FF;
+  --accent-gradient: linear-gradient(135deg, #6C63FF, #00D4FF);
+  --border: #2A2A3C;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  --glass-bg: rgba(26, 26, 40, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.05);
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --bg-primary: #FCFBF7;
-  --bg-secondary: #F4F2EE;
-  --bg-card: #FFFFFF;
-  --accent-primary: #7C9082; /* Muted Sage */
-  --accent-secondary: #5D6D7E; /* Soft Slate */
-  --accent-tertiary: #D4A373; /* Warm Sand */
-  --text-primary: #1A1A1A;
-  --text-secondary: #666666;
-  --border: #E5E5E5;
-}
-
 @layer base {
   body {
     @apply bg-bg-primary text-text-primary font-sans overflow-x-hidden;
-    background-image: 
-      radial-gradient(circle at 50% 0%, rgba(124, 144, 130, 0.05), transparent 50%),
-      radial-gradient(circle at 100% 100%, rgba(212, 163, 115, 0.03), transparent 40%);
-    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -32,36 +48,43 @@
 
 @layer components {
   .glass {
-    @apply bg-white/80 backdrop-blur-sm border border-border shadow-sm;
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
   }
   
   .glass-card {
-    @apply bg-white border border-border rounded-2xl transition-all duration-500 shadow-sm hover:shadow-md hover:-translate-y-1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    @apply rounded-2xl transition-all duration-300;
+    box-shadow: var(--shadow);
+  }
+
+  [data-theme='dark'] .glass-card {
+    background: rgba(26, 26, 40, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .btn-glow {
-    @apply relative overflow-hidden transition-all duration-300;
+  .btn-primary {
+    background: var(--accent-gradient);
+    @apply text-white px-6 py-2.5 rounded-full font-medium transition-all duration-300 hover:opacity-90 hover:shadow-lg active:scale-95;
   }
 
-  .btn-glow::after {
-    content: '';
-    @apply absolute inset-0 opacity-0 transition-opacity duration-300 bg-black/5;
-  }
-
-  .btn-glow:hover::after {
-    @apply opacity-100;
-  }
-
-  .timeline-line {
-    @apply absolute left-0 top-0 bottom-0 w-px bg-border;
+  .badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
   }
 }
 
-/* Syne font is already loaded via Google Fonts import at the top */
 .font-display {
   font-family: 'Syne', sans-serif;
 }
@@ -76,9 +99,42 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-bg-primary;
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-border rounded-full hover:bg-text-secondary transition-colors;
+  background: var(--border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Section Background Illustrations */
+.section-bg-illustration {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  width: 400px;
+  height: 400px;
+  opacity: 0.05;
+  z-index: 0;
+  pointer-events: none;
+  filter: grayscale(1) brightness(var(--illustration-brightness, 1));
+}
+
+[data-theme='dark'] .section-bg-illustration {
+  --illustration-brightness: 2;
+  opacity: 0.08;
+}
+
+@keyframes float {
+  0% { transform: translateY(-50%) translateX(0px); }
+  100% { transform: translateY(calc(-50% - 20px)) translateX(10px); }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite alternate;
 }

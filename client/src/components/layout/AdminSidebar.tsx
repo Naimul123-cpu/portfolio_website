@@ -1,17 +1,21 @@
 import React from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { 
   Users, 
   Briefcase, 
   GraduationCap, 
   FolderGit2, 
   LogOut,
-  LayoutDashboard
+  LayoutDashboard,
+  Sun,
+  Moon
 } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 
 const AdminSidebar: React.FC = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,40 +35,52 @@ const AdminSidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-64 glass border-r border-white/5 p-6 flex flex-col fixed h-full z-50">
-      <div className="mb-10 text-xl font-display font-black text-gradient">ADMIN PANEL</div>
+    <aside className="w-64 glass border-r border-border p-6 flex flex-col fixed h-full z-50">
+      <div className="mb-8 text-xl font-display font-black text-gradient tracking-widest">ADMIN PANEL</div>
       
-      <div className="flex items-center gap-4 p-4 glass rounded-xl mb-10">
-        <div className="w-10 h-10 rounded-full bg-accent-primary flex items-center justify-center font-bold">
-          {user?.name?.charAt(0)}
+      <div className="flex flex-col gap-4 mb-10">
+        <div className="flex items-center gap-4 p-3 glass-card bg-bg-secondary/50">
+          <div className="w-10 h-10 rounded-full bg-accent-violet flex items-center justify-center font-bold text-white shadow-lg shadow-accent-violet/20">
+            {user?.name?.charAt(0)}
+          </div>
+          <div className="overflow-hidden">
+            <p className="font-bold truncate text-sm">{user?.name}</p>
+            <p className="text-[10px] text-text-secondary uppercase font-black tracking-widest">{user?.role}</p>
+          </div>
         </div>
-        <div className="overflow-hidden">
-          <p className="font-bold truncate">{user?.name}</p>
-          <p className="text-xs text-text-secondary uppercase">{user?.role}</p>
-        </div>
+
+        <button 
+          onClick={toggleTheme}
+          className="flex items-center justify-between gap-3 p-3 glass-card bg-bg-secondary/30 hover:bg-bg-secondary transition-all"
+        >
+          <span className="text-[10px] font-black uppercase tracking-widest text-text-secondary">
+            {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          </span>
+          {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+        </button>
       </div>
 
-      <nav className="flex-grow space-y-2">
+      <nav className="flex-grow space-y-1">
         {navItems.map((item) => (
           <Link 
             key={item.path}
             to={item.path} 
-            className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
+            className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
               isActive(item.path) 
-                ? 'bg-white/5 text-accent-primary border border-accent-primary/20' 
-                : 'text-text-secondary hover:bg-white/5'
+                ? 'bg-accent-violet/10 text-accent-violet border border-accent-violet/20 font-bold shadow-sm' 
+                : 'text-text-secondary hover:bg-bg-secondary/50'
             }`}
           >
-            {item.icon} {item.label}
+            {item.icon} <span className="text-sm uppercase tracking-widest font-bold">{item.label}</span>
           </Link>
         ))}
       </nav>
 
       <button 
         onClick={handleLogout}
-        className="mt-auto flex items-center gap-3 p-3 rounded-lg hover:bg-accent-tertiary/20 text-accent-tertiary transition-colors"
+        className="mt-auto flex items-center gap-3 p-3 rounded-xl hover:bg-accent-cyan/10 text-text-secondary hover:text-accent-cyan transition-all font-bold text-xs uppercase tracking-widest"
       >
-        <LogOut size={20} /> Logout
+        <LogOut size={18} /> Logout Session
       </button>
     </aside>
   );

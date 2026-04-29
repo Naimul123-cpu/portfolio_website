@@ -105,11 +105,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
             <div className="absolute inset-0 bg-accent-primary/5 rounded-[40px] rotate-3" />
             
             {/* Avatar Image Container */}
-            <div className="absolute inset-0 rounded-[40px] overflow-hidden border border-border shadow-2xl bg-white transition-transform hover:-rotate-1 duration-700">
+            <div className="absolute inset-0 rounded-[40px] overflow-hidden border border-border shadow-2xl bg-bg-card transition-transform hover:-rotate-1 duration-700">
               {profile?.avatar ? (
                 <img src={profile.avatar} alt={profile.name} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-bg-secondary flex items-center justify-center text-accent-primary text-6xl font-display">
+                <div className="w-full h-full bg-bg-secondary flex items-center justify-center text-accent-violet text-6xl font-display">
                   {profile?.name?.charAt(0) || 'N'}
                 </div>
               )}
@@ -119,7 +119,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
             <motion.div
               animate={{ y: [0, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -bottom-6 -right-6 bg-white px-6 py-4 rounded-2xl border border-border shadow-xl z-20"
+              className="absolute -bottom-6 -right-6 bg-bg-card px-6 py-4 rounded-2xl border border-border shadow-xl z-20"
             >
               <p className="text-xs text-text-secondary uppercase tracking-widest mb-1">Current Focus</p>
               <p className="text-sm font-bold text-text-primary">React & Node.js</p>

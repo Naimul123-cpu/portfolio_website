@@ -8,6 +8,9 @@ export interface IProfile {
   location?: string;
   avatar?: string;
   resumeUrl?: string;
+  presentAddress?: string;
+  permanentAddress?: string;
+  whatsapp?: string;
   socialLinks: { 
     github?: string; 
     linkedin?: string; 
@@ -31,6 +34,8 @@ export interface IStudy {
   grade?: string;
   description?: string;
   logo?: string;
+  institutionType: string;
+  subjects: string[];
   order: number;
 }
 
@@ -45,6 +50,14 @@ export interface IExperience {
   description: string;
   technologies: string[];
   logo?: string;
+  workplaceType: string;
+  workSamples: {
+    type: 'image' | 'video';
+    url: string;
+    publicId: string;
+    caption?: string;
+    thumbnail?: string;
+  }[];
   order: number;
 }
 

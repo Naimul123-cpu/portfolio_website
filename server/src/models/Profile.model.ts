@@ -9,6 +9,9 @@ export interface IProfile extends Document {
   location: string;
   avatar: string;
   resumeUrl: string;
+  presentAddress?: string;
+  permanentAddress?: string;
+  whatsapp?: string;
   socialLinks: {
     github?: string;
     linkedin?: string;
@@ -33,6 +36,9 @@ const profileSchema = new Schema<IProfile>(
     location: { type: String },
     avatar: { type: String },
     resumeUrl: { type: String },
+    presentAddress: { type: String },
+    permanentAddress: { type: String },
+    whatsapp: { type: String },
     socialLinks: {
       github: { type: String },
       linkedin: { type: String },

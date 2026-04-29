@@ -23,7 +23,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ title, subtitle, align = 'c
           {subtitle}
         </p>
       )}
-      <div className={`mt-6 h-px w-12 bg-accent-primary ${align === 'center' ? 'mx-auto' : ''}`} />
+      <div className={`mt-6 h-px w-12 bg-accent-violet ${align === 'center' ? 'mx-auto' : ''}`} />
     </motion.div>
   );
 };
