@@ -302,7 +302,7 @@ const ExperienceAdmin: React.FC = () => {
                       </div>
 
                       <div className="flex flex-wrap items-center justify-center md:justify-start gap-6">
-                        <p className="text-xl font-bold text-gradient bg-gradient-aurora tracking-tight">{exp.company}</p>
+                        <p className="text-xl font-bold text-gradient-aurora tracking-tight">{exp.company}</p>
                         <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-white/10" />
                         <div className="flex items-center gap-2 text-text-muted font-black uppercase tracking-[0.2em] text-[10px]">
                           <Calendar size={14} className="text-accent-violet" />
