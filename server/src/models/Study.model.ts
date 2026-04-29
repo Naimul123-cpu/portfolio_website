@@ -19,7 +19,7 @@ const studySchema = new Schema<IStudy>(
   {
     institution: { type: String, required: true },
     degree: { type: String, required: true },
-    field: { type: String, required: true },
+    field: { type: String },
     startYear: { type: Number, required: true },
     endYear: { type: Number },
     grade: { type: String },

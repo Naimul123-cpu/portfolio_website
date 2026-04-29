@@ -27,6 +27,7 @@ const StudyAdmin: React.FC = () => {
   const [formData, setFormData] = useState<any>({
     institution: '',
     degree: '',
+    field: '',
     description: '',
     startYear: new Date().getFullYear(),
     endYear: '',
@@ -99,6 +100,7 @@ const StudyAdmin: React.FC = () => {
     setFormData({
       institution: study.institution,
       degree: study.degree,
+      field: study.field || '',
       description: study.description || '',
       startYear: study.startYear,
       endYear: study.endYear || '',
@@ -320,6 +322,10 @@ const StudyAdmin: React.FC = () => {
                       <div className="space-y-4">
                         <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Degree / Qualification</label>
                         <input name="degree" value={formData.degree} onChange={handleInputChange} required className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-medium" />
+                      </div>
+                      <div className="space-y-4">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Major / Field of Study</label>
+                        <input name="field" value={formData.field} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-pink/50 transition-all font-medium" placeholder="e.g. Science, Engineering, Arts..." />
                       </div>
                     </div>
 
