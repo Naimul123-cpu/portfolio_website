@@ -1,68 +1,72 @@
-import React, { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Save, Loader2, GraduationCap, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePortfolioData } from '../../hooks/usePortfolioData';
-import GlowButton from '../../components/ui/GlowButton';
-import api from '../../services/api';
+import { 
+  Plus, 
+  GraduationCap, 
+  Calendar, 
+  Trash2, 
+  Edit2, 
+  Save, 
+  X, 
+  Loader2, 
+  Upload,
+  ArrowRight
+} from 'lucide-react';
+import api from '../../utils/api';
 import { toast } from 'react-hot-toast';
 import AdminSidebar from '../../components/layout/AdminSidebar';
+import GlowButton from '../../components/ui/GlowButton';
 
 const StudyAdmin: React.FC = () => {
-  const { studies, refresh } = usePortfolioData();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [studies, setStudies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [editingStudy, setEditingStudy] = useState<any>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const [formData, setFormData] = useState<any>({
     institution: '',
     degree: '',
-    field: '',
-    institutionType: 'University',
-    subjects: [],
-    startYear: 2020,
-    endYear: 2024,
-    grade: '',
     description: '',
-    order: 0
+    startYear: new Date().getFullYear(),
+    endYear: '',
+    grade: '',
+    subjects: [] as string[],
+    institutionType: 'University'
   });
+
   const [logo, setLogo] = useState<File | null>(null);
   const [subjectInput, setSubjectInput] = useState('');
 
-  const openAddModal = () => {
-    setEditingStudy(null);
-    setFormData({
-      institution: '',
-      degree: '',
-      field: '',
-      institutionType: 'University',
-      subjects: [],
-      startYear: new Date().getFullYear() - 4,
-      endYear: new Date().getFullYear(),
-      grade: '',
-      description: '',
-      order: 0
-    });
-    setLogo(null);
-    setIsModalOpen(true);
-  };
+  useEffect(() => {
+    fetchStudies();
+  }, []);
 
-  const openEditModal = (study: any) => {
-    setEditingStudy(study);
-    setFormData({ ...study, subjects: study.subjects || [] });
-    setLogo(null);
-    setIsModalOpen(true);
+  const fetchStudies = async () => {
+    try {
+      const response = await api.get('/study');
+      setStudies(response.data);
+    } catch (error) {
+      toast.error('Failed to fetch studies');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev: any) => ({ ...prev, [name]: value }));
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const addSubject = () => {
-    if (subjectInput && !formData.subjects.includes(subjectInput)) {
+    if (subjectInput.trim() && !formData.subjects.includes(subjectInput.trim())) {
       setFormData((prev: any) => ({
         ...prev,
-        subjects: [...prev.subjects, subjectInput]
+        subjects: [...prev.subjects, subjectInput.trim()]
       }));
       setSubjectInput('');
     }
@@ -75,37 +79,72 @@ const StudyAdmin: React.FC = () => {
     }));
   };
 
+  const openAddModal = () => {
+    setEditingStudy(null);
+    setFormData({
+      institution: '',
+      degree: '',
+      description: '',
+      startYear: new Date().getFullYear(),
+      endYear: '',
+      grade: '',
+      subjects: [],
+      institutionType: 'University'
+    });
+    setLogo(null);
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (study: any) => {
+    setEditingStudy(study);
+    setFormData({
+      institution: study.institution,
+      degree: study.degree,
+      description: study.description || '',
+      startYear: study.startYear,
+      endYear: study.endYear || '',
+      grade: study.grade || '',
+      subjects: study.subjects || [],
+      institutionType: study.institutionType || 'University'
+    });
+    setLogo(null);
+    setIsModalOpen(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+
     try {
       const data = new FormData();
-      Object.keys(formData).forEach(key => {
+      Object.entries(formData).forEach(([key, value]) => {
         if (key === 'subjects') {
-          data.append(key, JSON.stringify(formData[key]));
-        } else if (key !== '_id' && key !== '__v' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'logo') {
-          data.append(key, formData[key]);
+          data.append(key, JSON.stringify(value));
+        } else if (value !== null && value !== undefined) {
+          data.append(key, value.toString());
         }
       });
-
-      if (logo) data.append('logo', logo);
+      
+      if (logo) {
+        data.append('logo', logo);
+      }
 
       if (editingStudy) {
         await api.put(`/study/${editingStudy._id}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Education record updated!');
+        toast.success('Academic node updated');
       } else {
         await api.post('/study', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Education record added!');
+        toast.success('Academic node created');
       }
       
       setIsModalOpen(false);
-      refresh();
-    } catch (error: any) {
-      toast.error('Failed to save record');
+      fetchStudies();
+    } catch (error) {
+      toast.error('Failed to save study');
     } finally {
       setIsSaving(false);
     }
@@ -116,7 +155,7 @@ const StudyAdmin: React.FC = () => {
       try {
         await api.delete(`/study/${id}`);
         toast.success('Record deleted');
-        refresh();
+        fetchStudies();
       } catch (error) {
         toast.error('Failed to delete record');
       }
@@ -124,6 +163,91 @@ const StudyAdmin: React.FC = () => {
   };
 
   return (
+    <div className="min-h-screen bg-bg-base flex overflow-hidden">
+      {/* Aurora Orbs for Admin */}
+      <div className="aurora-container opacity-20">
+        <div className="aurora-orb orb-1 scale-75" />
+        <div className="aurora-orb orb-3 scale-75" />
+      </div>
+      <div className="bg-texture opacity-[0.02]" />
+
+      <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+
+      <main className="flex-grow lg:ml-72 p-6 md:p-12 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <button 
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-3 glass rounded-2xl text-accent-violet shadow-glow-violet"
+            >
+              <GraduationCap size={24} />
+            </button>
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
+                  Academic Ledger
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-display font-black text-text-primary tracking-tight">
+                Educational <span className="text-gradient bg-gradient-aurora">Timeline</span>
+              </h1>
+              <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Document your intellectual growth and certifications.</p>
+            </div>
+          </div>
+          <GlowButton onClick={openAddModal} className="flex items-center gap-3 px-10 py-4 shadow-glow-violet">
+            <Plus size={20} />
+            <span className="font-black">ADD ACADEMIC NODE</span>
+          </GlowButton>
+        </header>
+
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <Loader2 className="animate-spin text-accent-violet" size={48} />
+          </div>
+        ) : (
+          <div className="max-w-4xl mx-auto space-y-6">
+            {studies.sort((a, b) => b.order - a.order).map((study, i) => (
+              <motion.div 
+                key={study._id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05 }}
+                whileHover={{ x: 10 }}
+                className="glass p-8 rounded-[32px] flex items-center justify-between group border border-white/5 hover:border-accent-violet/30 transition-all duration-500 shadow-2xl relative overflow-hidden"
+              >
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-primary opacity-30" />
+                <div className="flex items-center gap-8">
+                  <div className="w-20 h-20 glass rounded-2xl flex items-center justify-center text-accent-violet border border-white/10 overflow-hidden shadow-lg relative bg-white/[0.03]">
+                    {study.logo ? (
+                      <img src={study.logo} alt="" className="w-full h-full object-contain p-2" />
+                    ) : (
+                      <GraduationCap size={36} />
+                    )}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-4 mb-2">
+                      <h3 className="font-black text-2xl text-text-primary tracking-tight">{study.degree}</h3>
+                      <span className="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-accent-violet/10 text-accent-violet border border-accent-violet/20">{study.institutionType}</span>
+                    </div>
+                    <p className="text-gradient font-bold text-lg mb-3">{study.institution}</p>
+                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-text-muted">
+                      <span className="flex items-center gap-2"><Calendar size={14} className="text-accent-violet" /> {study.startYear} — {study.endYear || 'Present'}</span>
+                      {study.grade && <span className="px-3 py-1 glass rounded-lg border border-white/10">PERFORMANCE: {study.grade}</span>}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                  <button onClick={() => openEditModal(study)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-primary hover:bg-accent-violet hover:text-white transition-all shadow-xl border-white/10">
+                    <Edit2 size={20} />
+                  </button>
+                  <button onClick={() => handleDelete(study._id)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-xl border-white/10">
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </main>
 
       {/* Modal - Moved outside main for perfect centering */}

@@ -1,36 +1,94 @@
-import React, { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Upload, Save, Loader2, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePortfolioData } from '../../hooks/usePortfolioData';
-import GlowButton from '../../components/ui/GlowButton';
-import api from '../../services/api';
+import { 
+  Plus, 
+  Search, 
+  Filter, 
+  MoreVertical, 
+  Edit2, 
+  Trash2, 
+  ExternalLink, 
+  Github, 
+  Star,
+  Upload,
+  X,
+  Save,
+  Loader2
+} from 'lucide-react';
+import api from '../../utils/api';
 import { toast } from 'react-hot-toast';
 import AdminSidebar from '../../components/layout/AdminSidebar';
+import GlowButton from '../../components/ui/GlowButton';
 
 const ProjectsAdmin: React.FC = () => {
-  const { projects, refresh } = usePortfolioData();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [editingProject, setEditingProject] = useState<any>(null);
-  const [formData, setFormData] = useState<any>({
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
+  const [formData, setFormData] = useState({
     title: '',
     description: '',
+    thumbnail: '',
     category: '',
-    technologies: [],
+    technologies: [] as string[],
     liveUrl: '',
     githubUrl: '',
     featured: false,
     status: 'completed'
   });
+
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [techInput, setTechInput] = useState('');
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const response = await api.get('/projects');
+      setProjects(response.data);
+    } catch (error) {
+      toast.error('Failed to fetch projects');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    }));
+  };
+
+  const addTech = () => {
+    if (techInput.trim() && !formData.technologies.includes(techInput.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        technologies: [...prev.technologies, techInput.trim()]
+      }));
+      setTechInput('');
+    }
+  };
+
+  const removeTech = (tech: string) => {
+    setFormData(prev => ({
+      ...prev,
+      technologies: prev.technologies.filter(t => t !== tech)
+    }));
+  };
 
   const openAddModal = () => {
     setEditingProject(null);
     setFormData({
       title: '',
       description: '',
+      thumbnail: '',
       category: '',
       technologies: [],
       liveUrl: '',
@@ -44,64 +102,54 @@ const ProjectsAdmin: React.FC = () => {
 
   const openEditModal = (project: any) => {
     setEditingProject(project);
-    setFormData({ ...project });
+    setFormData({
+      title: project.title,
+      description: project.description,
+      thumbnail: project.thumbnail,
+      category: project.category,
+      technologies: project.technologies,
+      liveUrl: project.liveUrl || '',
+      githubUrl: project.githubUrl || '',
+      featured: project.featured,
+      status: project.status
+    });
     setThumbnail(null);
     setIsModalOpen(true);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
-    setFormData((prev: any) => ({ ...prev, [name]: val }));
-  };
-
-  const addTech = () => {
-    if (techInput && !formData.technologies.includes(techInput)) {
-      setFormData((prev: any) => ({
-        ...prev,
-        technologies: [...prev.technologies, techInput]
-      }));
-      setTechInput('');
-    }
-  };
-
-  const removeTech = (tech: string) => {
-    setFormData((prev: any) => ({
-      ...prev,
-      technologies: prev.technologies.filter((t: string) => t !== tech)
-    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+
     try {
       const data = new FormData();
-      Object.keys(formData).forEach(key => {
+      Object.entries(formData).forEach(([key, value]) => {
         if (key === 'technologies') {
-          data.append(key, JSON.stringify(formData[key]));
-        } else if (key !== '_id' && key !== '__v' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'thumbnail') {
-          data.append(key, formData[key]);
+          data.append(key, JSON.stringify(value));
+        } else {
+          data.append(key, value.toString());
         }
       });
-
-      if (thumbnail) data.append('thumbnail', thumbnail);
+      
+      if (thumbnail) {
+        data.append('thumbnail', thumbnail);
+      }
 
       if (editingProject) {
         await api.put(`/projects/${editingProject._id}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Project updated!');
+        toast.success('Project updated successfully');
       } else {
         await api.post('/projects', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Project added!');
+        toast.success('Project created successfully');
       }
       
       setIsModalOpen(false);
-      refresh();
-    } catch (error: any) {
+      fetchProjects();
+    } catch (error) {
       toast.error('Failed to save project');
     } finally {
       setIsSaving(false);
@@ -112,8 +160,8 @@ const ProjectsAdmin: React.FC = () => {
     if (window.confirm('Are you sure you want to delete this project?')) {
       try {
         await api.delete(`/projects/${id}`);
-        toast.success('Project deleted');
-        refresh();
+        toast.success('Project deleted successfully');
+        fetchProjects();
       } catch (error) {
         toast.error('Failed to delete project');
       }
@@ -121,6 +169,102 @@ const ProjectsAdmin: React.FC = () => {
   };
 
   return (
+    <div className="min-h-screen bg-bg-base flex overflow-hidden">
+      {/* Aurora Orbs for Admin */}
+      <div className="aurora-container opacity-20">
+        <div className="aurora-orb orb-1 scale-75" />
+        <div className="aurora-orb orb-2 scale-75" />
+      </div>
+      <div className="bg-texture opacity-[0.02]" />
+
+      <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+
+      <main className="flex-grow lg:ml-72 p-6 md:p-12 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <button 
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-3 glass rounded-2xl text-accent-violet shadow-glow-violet"
+            >
+              <Plus size={24} />
+            </button>
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
+                  Project Vault
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-display font-black text-text-primary tracking-tight">
+                Manage <span className="text-gradient bg-gradient-aurora">Showcase</span>
+              </h1>
+              <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Curate and refine your collection of engineering masterpieces.</p>
+            </div>
+          </div>
+          <GlowButton onClick={openAddModal} className="flex items-center gap-3 px-10 py-4 shadow-glow-violet">
+            <Plus size={20} />
+            <span className="font-black">INITIALIZE NEW PROJECT</span>
+          </GlowButton>
+        </header>
+
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <Loader2 className="animate-spin text-accent-violet" size={48} />
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
+            {projects.sort((a, b) => b.order - a.order).map((project, i) => (
+              <motion.div 
+                key={project._id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.05 }}
+                whileHover={{ y: -8 }}
+                className="glass rounded-[32px] overflow-hidden group border border-white/10 hover:border-accent-violet/30 transition-all duration-500 shadow-2xl"
+              >
+                <div className="relative aspect-video overflow-hidden">
+                  <img src={project.thumbnail} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-bg-base/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center gap-6">
+                    <motion.button 
+                      whileHover={{ scale: 1.1, rotate: -5 }}
+                      onClick={() => openEditModal(project)}
+                      className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-accent-violet hover:bg-accent-violet hover:text-white transition-all shadow-2xl border-white/20"
+                    >
+                      <Edit2 size={24} />
+                    </motion.button>
+                    <motion.button 
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      onClick={() => handleDelete(project._id)}
+                      className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-2xl border-white/20"
+                    >
+                      <Trash2 size={24} />
+                    </motion.button>
+                  </div>
+                  {project.featured && (
+                    <div className="absolute top-4 left-4 px-4 py-1.5 bg-gradient-primary text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-glow-violet flex items-center gap-2 border border-white/20">
+                      <Star size={12} fill="white" /> Featured
+                    </div>
+                  )}
+                  <div className="absolute top-4 right-4 px-3 py-1 glass rounded-lg text-[9px] font-black uppercase tracking-widest text-text-primary border border-white/10">
+                    {project.status}
+                  </div>
+                </div>
+                <div className="p-8">
+                  <h3 className="text-2xl font-black text-text-primary truncate mb-3 tracking-tight group-hover:text-gradient transition-all duration-500">{project.title}</h3>
+                  <div className="flex justify-between items-center pt-6 border-t border-white/5">
+                    <p className="text-[10px] text-text-muted uppercase tracking-[0.2em] font-black">{project.category}</p>
+                    <div className="flex -space-x-2">
+                      {project.technologies.slice(0, 3).map((tech: string, i: number) => (
+                        <div key={i} className="w-8 h-8 glass rounded-lg border border-white/10 flex items-center justify-center text-[8px] font-black text-text-primary shadow-lg bg-bg-surface">
+                          {tech.charAt(0)}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </main>
 
       {/* Modal - Moved outside main for perfect centering */}

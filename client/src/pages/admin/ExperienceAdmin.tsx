@@ -1,119 +1,80 @@
-import React, { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Save, Loader2, Briefcase, Calendar, Eye, Play, Upload } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePortfolioData } from '../../hooks/usePortfolioData';
-import GlowButton from '../../components/ui/GlowButton';
-import api from '../../services/api';
+import { 
+  Plus, 
+  Briefcase, 
+  Calendar, 
+  Trash2, 
+  Edit2, 
+  Save, 
+  X, 
+  Loader2, 
+  Upload, 
+  Eye, 
+  Play,
+  ArrowRight
+} from 'lucide-react';
+import api from '../../utils/api';
 import { toast } from 'react-hot-toast';
 import AdminSidebar from '../../components/layout/AdminSidebar';
+import GlowButton from '../../components/ui/GlowButton';
 
 const ExperienceAdmin: React.FC = () => {
-  const { experiences, refresh } = usePortfolioData();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [experiences, setExperiences] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [editingExp, setEditingExp] = useState<any>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const [formData, setFormData] = useState<any>({
     company: '',
     role: '',
-    type: 'Full-time',
-    workplaceType: 'Company',
+    description: '',
     startDate: '',
     endDate: '',
     isCurrent: false,
-    description: '',
-    technologies: [],
-    workSamples: [],
-    order: 0
+    technologies: [] as string[],
+    workplaceType: 'Company',
+    type: 'Full-time',
+    workSamples: [] as any[]
   });
+
   const [logo, setLogo] = useState<File | null>(null);
   const [techInput, setTechInput] = useState('');
-  const [uploadingSamples, setUploadingSamples] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadingSamples, setUploadingSamples] = useState(false);
 
-  const openAddModal = () => {
-    setEditingExp(null);
-    setFormData({
-      company: '',
-      role: '',
-      type: 'Full-time',
-      workplaceType: 'Company',
-      startDate: '',
-      endDate: '',
-      isCurrent: false,
-      description: '',
-      technologies: [],
-      workSamples: [],
-      order: 0
-    });
-    setLogo(null);
-    setIsModalOpen(true);
+  useEffect(() => {
+    fetchExperiences();
+  }, []);
+
+  const fetchExperiences = async () => {
+    try {
+      const response = await api.get('/experience');
+      setExperiences(response.data);
+    } catch (error) {
+      toast.error('Failed to fetch experiences');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const openEditModal = (exp: any) => {
-    setEditingExp(exp);
-    const formattedData = {
-      ...exp,
-      startDate: exp.startDate ? new Date(exp.startDate).toISOString().split('T')[0] : '',
-      endDate: exp.endDate ? new Date(exp.endDate).toISOString().split('T')[0] : '',
-      workSamples: exp.workSamples || []
-    };
-    setFormData(formattedData);
-    setLogo(null);
-    setIsModalOpen(true);
-  };
+  const refresh = fetchExperiences;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
-    setFormData((prev: any) => ({ ...prev, [name]: val }));
-  };
-
-  const handleSampleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0 || !editingExp) return;
-
-    setUploadingSamples(true);
-    setUploadProgress(0);
-
-    const data = new FormData();
-    Array.from(files).forEach(file => data.append('samples', file));
-
-    try {
-      const response = await api.post(`/experience/${editingExp._id}/work-samples`, data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1));
-          setUploadProgress(percentCompleted);
-        }
-      });
-      setFormData((prev: any) => ({ ...prev, workSamples: response.data.workSamples }));
-      toast.success('Samples uploaded successfully!');
-      refresh();
-    } catch (error) {
-      toast.error('Failed to upload samples');
-    } finally {
-      setUploadingSamples(false);
-    }
-  };
-
-  const deleteSample = async (sampleId: string) => {
-    if (!window.confirm('Delete this work sample?')) return;
-    try {
-      const response = await api.delete(`/experience/${editingExp._id}/work-samples/${sampleId}`);
-      setFormData((prev: any) => ({ ...prev, workSamples: response.data.workSamples }));
-      toast.success('Sample deleted');
-      refresh();
-    } catch (error) {
-      toast.error('Failed to delete sample');
-    }
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    }));
   };
 
   const addTech = () => {
-    if (techInput && !formData.technologies.includes(techInput)) {
+    if (techInput.trim() && !formData.technologies.includes(techInput.trim())) {
       setFormData((prev: any) => ({
         ...prev,
-        technologies: [...prev.technologies, techInput]
+        technologies: [...prev.technologies, techInput.trim()]
       }));
       setTechInput('');
     }
@@ -126,26 +87,121 @@ const ExperienceAdmin: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSaving(true);
+  const openAddModal = () => {
+    setEditingExp(null);
+    setFormData({
+      company: '',
+      role: '',
+      description: '',
+      startDate: '',
+      endDate: '',
+      isCurrent: false,
+      technologies: [],
+      workplaceType: 'Company',
+      type: 'Full-time',
+      workSamples: []
+    });
+    setLogo(null);
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (exp: any) => {
+    setEditingExp(exp);
+    setFormData({
+      company: exp.company,
+      role: exp.role,
+      description: exp.description || '',
+      startDate: exp.startDate ? new Date(exp.startDate).toISOString().split('T')[0] : '',
+      endDate: exp.endDate ? new Date(exp.endDate).toISOString().split('T')[0] : '',
+      isCurrent: exp.isCurrent,
+      technologies: exp.technologies || [],
+      workplaceType: exp.workplaceType || 'Company',
+      type: exp.type || 'Full-time',
+      workSamples: exp.workSamples || []
+    });
+    setLogo(null);
+    setIsModalOpen(true);
+  };
+
+  const handleSampleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!editingExp?._id && !formData._id) {
+      toast.error('Please save experience details first');
+      return;
+    }
+
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploadingSamples(true);
+    setUploadProgress(0);
+
     try {
-      const data = new FormData();
-      Object.keys(formData).forEach(key => {
-        if (key === 'technologies') {
-          data.append(key, JSON.stringify(formData[key]));
-        } else if (key !== '_id' && key !== '__v' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'logo' && key !== 'workSamples') {
-          data.append(key, formData[key]);
+      const expId = editingExp?._id || formData._id;
+      const uploadData = new FormData();
+      Array.from(files).forEach(file => {
+        uploadData.append('samples', file);
+      });
+
+      const response = await api.post(`/experience/${expId}/samples`, uploadData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 100));
+          setUploadProgress(percentCompleted);
         }
       });
 
-      if (logo) data.append('logo', logo);
+      setFormData((prev: any) => ({
+        ...prev,
+        workSamples: response.data.workSamples
+      }));
+      toast.success('Samples uploaded successfully');
+      refresh();
+    } catch (error) {
+      toast.error('Failed to upload samples');
+    } finally {
+      setUploadingSamples(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const deleteSample = async (sampleId: string) => {
+    try {
+      const expId = editingExp?._id || formData._id;
+      await api.delete(`/experience/${expId}/samples/${sampleId}`);
+      setFormData((prev: any) => ({
+        ...prev,
+        workSamples: prev.workSamples.filter((s: any) => s._id !== sampleId)
+      }));
+      toast.success('Sample removed');
+      refresh();
+    } catch (error) {
+      toast.error('Failed to delete sample');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+
+    try {
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === 'technologies' || key === 'workSamples') {
+          data.append(key, JSON.stringify(value));
+        } else if (value !== null && value !== undefined) {
+          data.append(key, value.toString());
+        }
+      });
+      
+      if (logo) {
+        data.append('logo', logo);
+      }
 
       if (editingExp) {
         await api.put(`/experience/${editingExp._id}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        toast.success('Experience updated!');
+        toast.success('Experience node updated');
       } else {
         const response = await api.post('/experience', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
@@ -176,6 +232,94 @@ const ExperienceAdmin: React.FC = () => {
   };
 
   return (
+    <div className="min-h-screen bg-bg-base flex overflow-hidden">
+      {/* Aurora Orbs for Admin */}
+      <div className="aurora-container opacity-20">
+        <div className="aurora-orb orb-1 scale-75" />
+        <div className="aurora-orb orb-2 scale-75" />
+      </div>
+      <div className="bg-texture opacity-[0.02]" />
+
+      <AdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+
+      <main className="flex-grow lg:ml-72 p-6 md:p-12 relative z-10 overflow-y-auto max-h-screen scrollbar-hide">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-16">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <button 
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-3 glass rounded-2xl text-accent-violet shadow-glow-violet"
+            >
+              <Briefcase size={24} />
+            </button>
+            <div>
+              <div className="flex items-center gap-4 mb-4">
+                <span className="px-4 py-1.5 glass rounded-full text-[10px] font-black uppercase tracking-[0.2em] text-accent-violet border border-white/10">
+                  Career Ledger
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-display font-black text-text-primary tracking-tight">
+                Manage <span className="text-gradient bg-gradient-aurora">Experience</span>
+              </h1>
+              <p className="mt-4 text-text-secondary font-medium tracking-wide text-lg">Document your professional trajectory and milestones.</p>
+            </div>
+          </div>
+          <GlowButton onClick={openAddModal} className="flex items-center gap-3 px-10 py-4 shadow-glow-violet">
+            <Plus size={20} />
+            <span className="font-black">ADD EXPERIENCE NODE</span>
+          </GlowButton>
+        </header>
+
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <Loader2 className="animate-spin text-accent-violet" size={48} />
+          </div>
+        ) : (
+          <div className="max-w-5xl mx-auto space-y-6">
+            {experiences.sort((a, b) => b.order - a.order).map((exp, i) => (
+              <motion.div 
+                key={exp._id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05 }}
+                whileHover={{ x: 10 }}
+                className="glass p-8 rounded-[32px] flex items-center justify-between group border border-white/5 hover:border-accent-violet/30 transition-all duration-500 shadow-2xl relative overflow-hidden"
+              >
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-primary opacity-30" />
+                <div className="flex items-center gap-8">
+                  <div className="w-20 h-20 glass rounded-2xl flex items-center justify-center text-accent-violet border border-white/10 overflow-hidden shadow-lg relative bg-white/[0.03]">
+                    {exp.logo ? (
+                      <img src={exp.logo} alt="" className="w-full h-full object-contain p-2" />
+                    ) : (
+                      <Briefcase size={36} />
+                    )}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-4 mb-2">
+                      <h3 className="font-black text-2xl text-text-primary tracking-tight">{exp.role}</h3>
+                      <span className="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-accent-violet/10 text-accent-violet border border-accent-violet/20">{exp.workplaceType}</span>
+                    </div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <p className="text-gradient font-bold text-lg">{exp.company}</p>
+                      <span className="text-[10px] px-2 py-0.5 rounded-lg glass border border-white/10 font-black uppercase tracking-widest text-text-muted">{exp.type}</span>
+                    </div>
+                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-text-muted">
+                      <span className="flex items-center gap-2"><Calendar size={14} className="text-accent-violet" /> {new Date(exp.startDate).getFullYear()} — {exp.isCurrent ? 'Present' : exp.endDate ? new Date(exp.endDate).getFullYear() : ''}</span>
+                      {exp.workSamples?.length > 0 && <span className="flex items-center gap-2"><Eye size={14} className="text-accent-blue" /> {exp.workSamples.length} Evidence Protocols</span>}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                  <button onClick={() => openEditModal(exp)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-primary hover:bg-accent-violet hover:text-white transition-all shadow-xl border-white/10">
+                    <Edit2 size={20} />
+                  </button>
+                  <button onClick={() => handleDelete(exp._id)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-accent-pink hover:bg-accent-pink hover:text-white transition-all shadow-xl border-white/10">
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </main>
 
       {/* Modal - Moved outside main for perfect centering */}
@@ -296,7 +440,7 @@ const ExperienceAdmin: React.FC = () => {
                           <Eye size={20} className="text-accent-blue" />
                           Evidence Repository
                         </h3>
-                        {!editingExp ? (
+                        {!editingExp && !formData._id ? (
                           <div className="p-8 glass rounded-3xl border border-white/5 text-center">
                             <p className="text-[10px] font-black text-text-muted uppercase tracking-widest">Initialize experience protocol first to upload evidence.</p>
                           </div>
