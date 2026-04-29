@@ -59,6 +59,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
       <aside className={`
         fixed top-0 left-0 bottom-0 w-72 glass border-r border-white/10 p-8 flex flex-col z-[70] 
         transition-transform duration-500 lg:translate-x-0 backdrop-blur-3xl shadow-[4px_0_32px_rgba(0,0,0,0.2)]
+        overflow-y-auto scrollbar-hide
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="mb-12 flex items-center justify-between">
