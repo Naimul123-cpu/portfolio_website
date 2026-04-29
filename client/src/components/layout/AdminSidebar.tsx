@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { 
@@ -10,7 +11,8 @@ import {
   LogOut,
   LayoutDashboard,
   Sun,
-  Moon
+  Moon,
+  X
 } from 'lucide-react';
 
 interface AdminSidebarProps {
