@@ -12,6 +12,7 @@ export const getProfile = async (req: Request, res: Response) => {
 };
 
 export const updateProfile = async (req: Request, res: Response) => {
+  const uploadedPublicIds: string[] = [];
   try {
     let profile = await Profile.findOne();
     const data = { ...req.body };
@@ -23,7 +24,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     if (files?.avatar) {
-      const result = await new Promise((resolve, reject) => {
+      const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'portfolio/avatars' },
           (error, result) => {
@@ -33,11 +34,18 @@ export const updateProfile = async (req: Request, res: Response) => {
         );
         stream.end(files.avatar[0].buffer);
       });
-      data.avatar = (result as any).secure_url;
+
+      if (profile?.avatarPublicId) {
+        await cloudinary.uploader.destroy(profile.avatarPublicId);
+      }
+
+      data.avatar = result.secure_url;
+      data.avatarPublicId = result.public_id;
+      uploadedPublicIds.push(result.public_id);
     }
 
     if (files?.resume) {
-      const result = await new Promise((resolve, reject) => {
+      const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'portfolio/resumes', resource_type: 'raw' },
           (error, result) => {
@@ -47,7 +55,14 @@ export const updateProfile = async (req: Request, res: Response) => {
         );
         stream.end(files.resume[0].buffer);
       });
-      data.resumeUrl = (result as any).secure_url;
+
+      if (profile?.resumePublicId) {
+        await cloudinary.uploader.destroy(profile.resumePublicId, { resource_type: 'raw' });
+      }
+
+      data.resumeUrl = result.secure_url;
+      data.resumePublicId = result.public_id;
+      uploadedPublicIds.push(result.public_id);
     }
 
     if (profile) {
@@ -58,6 +73,9 @@ export const updateProfile = async (req: Request, res: Response) => {
 
     res.json(profile);
   } catch (error) {
+    for (const id of uploadedPublicIds) {
+      await cloudinary.uploader.destroy(id);
+    }
     res.status(500).json({ message: (error as Error).message });
   }
 };

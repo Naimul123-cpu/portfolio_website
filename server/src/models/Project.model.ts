@@ -5,7 +5,8 @@ export interface IProject extends Document {
   description: string;
   longDescription?: string;
   thumbnail?: string;
-  images: string[];
+  thumbnailPublicId?: string;
+  images: { url: string; publicId: string }[];
   technologies: string[];
   category: string;
   liveUrl?: string;
@@ -21,7 +22,11 @@ const projectSchema = new Schema<IProject>(
     description: { type: String, required: true },
     longDescription: { type: String },
     thumbnail: { type: String },
-    images: [{ type: String }],
+    thumbnailPublicId: { type: String },
+    images: [{
+      url: { type: String },
+      publicId: { type: String }
+    }],
     technologies: [{ type: String }],
     category: { type: String },
     liveUrl: { type: String },

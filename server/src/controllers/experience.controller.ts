@@ -12,12 +12,13 @@ export const getAllExperience = async (req: Request, res: Response) => {
 };
 
 export const createExperience = async (req: Request, res: Response) => {
+  let uploadedPublicId: string | null = null;
   try {
     const data = { ...req.body };
     if (typeof data.technologies === 'string') data.technologies = JSON.parse(data.technologies);
     
     if (req.file) {
-      const result = await new Promise((resolve, reject) => {
+      const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'portfolio/logos' },
           (error, result) => {
@@ -27,22 +28,31 @@ export const createExperience = async (req: Request, res: Response) => {
         );
         stream.end(req.file!.buffer);
       });
-      data.logo = (result as any).secure_url;
+      data.logo = result.secure_url;
+      data.logoPublicId = result.public_id;
+      uploadedPublicId = result.public_id;
     }
     const experience = await Experience.create(data);
     res.status(201).json(experience);
   } catch (error) {
+    if (uploadedPublicId) {
+      await cloudinary.uploader.destroy(uploadedPublicId);
+    }
     res.status(500).json({ message: (error as Error).message });
   }
 };
 
 export const updateExperience = async (req: Request, res: Response) => {
+  let uploadedPublicId: string | null = null;
   try {
+    const existingExp = await Experience.findById(req.params.id);
+    if (!existingExp) return res.status(404).json({ message: 'Experience not found' });
+
     const data = { ...req.body };
     if (typeof data.technologies === 'string') data.technologies = JSON.parse(data.technologies);
 
     if (req.file) {
-      const result = await new Promise((resolve, reject) => {
+      const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'portfolio/logos' },
           (error, result) => {
@@ -52,17 +62,44 @@ export const updateExperience = async (req: Request, res: Response) => {
         );
         stream.end(req.file!.buffer);
       });
-      data.logo = (result as any).secure_url;
+      data.logo = result.secure_url;
+      data.logoPublicId = result.public_id;
+      uploadedPublicId = result.public_id;
+
+      // Delete old logo
+      if (existingExp.logoPublicId) {
+        await cloudinary.uploader.destroy(existingExp.logoPublicId);
+      }
     }
+    
     const experience = await Experience.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(experience);
   } catch (error) {
+    if (uploadedPublicId) {
+      await cloudinary.uploader.destroy(uploadedPublicId);
+    }
     res.status(500).json({ message: (error as Error).message });
   }
 };
 
 export const deleteExperience = async (req: Request, res: Response) => {
   try {
+    const experience = await Experience.findById(req.params.id);
+    if (!experience) return res.status(404).json({ message: 'Experience not found' });
+
+    // Delete logo from Cloudinary
+    if (experience.logoPublicId) {
+      await cloudinary.uploader.destroy(experience.logoPublicId);
+    }
+
+    // Delete work samples from Cloudinary
+    if (experience.workSamples && experience.workSamples.length > 0) {
+      const deletePromises = experience.workSamples.map(sample => 
+        cloudinary.uploader.destroy(sample.publicId, { resource_type: sample.type === 'video' ? 'video' : 'image' })
+      );
+      await Promise.all(deletePromises);
+    }
+
     await Experience.findByIdAndDelete(req.params.id);
     res.json({ message: 'Experience deleted' });
   } catch (error) {

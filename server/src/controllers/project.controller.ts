@@ -27,6 +27,7 @@ export const getProjectById = async (req: Request, res: Response) => {
 };
 
 export const createProject = async (req: Request, res: Response) => {
+  const uploadedPublicIds: string[] = [];
   try {
     const data = { ...req.body };
     if (typeof data.technologies === 'string') data.technologies = JSON.parse(data.technologies);
@@ -34,7 +35,7 @@ export const createProject = async (req: Request, res: Response) => {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     if (files?.thumbnail) {
-      const result = await new Promise((resolve, reject) => {
+      const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'portfolio/projects' },
           (error, result) => {
@@ -44,13 +45,15 @@ export const createProject = async (req: Request, res: Response) => {
         );
         stream.end(files.thumbnail[0].buffer);
       });
-      data.thumbnail = (result as any).secure_url;
+      data.thumbnail = result.secure_url;
+      data.thumbnailPublicId = result.public_id;
+      uploadedPublicIds.push(result.public_id);
     }
 
     if (files?.images) {
-      const imageUrls = [];
+      const imagesData = [];
       for (const file of files.images) {
-        const result = await new Promise((resolve, reject) => {
+        const result: any = await new Promise((resolve, reject) => {
           const stream = cloudinary.uploader.upload_stream(
             { folder: 'portfolio/projects' },
             (error, result) => {
@@ -60,27 +63,36 @@ export const createProject = async (req: Request, res: Response) => {
           );
           stream.end(file.buffer);
         });
-        imageUrls.push((result as any).secure_url);
+        imagesData.push({ url: result.secure_url, publicId: result.public_id });
+        uploadedPublicIds.push(result.public_id);
       }
-      data.images = imageUrls;
+      data.images = imagesData;
     }
 
     const project = await Project.create(data);
     res.status(201).json(project);
   } catch (error) {
+    // Cleanup uploaded files on failure
+    for (const id of uploadedPublicIds) {
+      await cloudinary.uploader.destroy(id);
+    }
     res.status(500).json({ message: (error as Error).message });
   }
 };
 
 export const updateProject = async (req: Request, res: Response) => {
+  const uploadedPublicIds: string[] = [];
   try {
+    const existingProject = await Project.findById(req.params.id);
+    if (!existingProject) return res.status(404).json({ message: 'Project not found' });
+
     const data = { ...req.body };
     if (typeof data.technologies === 'string') data.technologies = JSON.parse(data.technologies);
 
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     if (files?.thumbnail) {
-      const result = await new Promise((resolve, reject) => {
+      const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'portfolio/projects' },
           (error, result) => {
@@ -90,13 +102,21 @@ export const updateProject = async (req: Request, res: Response) => {
         );
         stream.end(files.thumbnail[0].buffer);
       });
-      data.thumbnail = (result as any).secure_url;
+      
+      // Delete old thumbnail
+      if (existingProject.thumbnailPublicId) {
+        await cloudinary.uploader.destroy(existingProject.thumbnailPublicId);
+      }
+
+      data.thumbnail = result.secure_url;
+      data.thumbnailPublicId = result.public_id;
+      uploadedPublicIds.push(result.public_id);
     }
 
     if (files?.images) {
-      const imageUrls = [];
+      const imagesData = [];
       for (const file of files.images) {
-        const result = await new Promise((resolve, reject) => {
+        const result: any = await new Promise((resolve, reject) => {
           const stream = cloudinary.uploader.upload_stream(
             { folder: 'portfolio/projects' },
             (error, result) => {
@@ -106,20 +126,40 @@ export const updateProject = async (req: Request, res: Response) => {
           );
           stream.end(file.buffer);
         });
-        imageUrls.push((result as any).secure_url);
+        imagesData.push({ url: result.secure_url, publicId: result.public_id });
+        uploadedPublicIds.push(result.public_id);
       }
-      data.images = data.images ? [...JSON.parse(data.images), ...imageUrls] : imageUrls;
+      
+      const oldImages = data.images ? JSON.parse(data.images) : existingProject.images;
+      data.images = [...oldImages, ...imagesData];
     }
 
     const project = await Project.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(project);
   } catch (error) {
+    for (const id of uploadedPublicIds) {
+      await cloudinary.uploader.destroy(id);
+    }
     res.status(500).json({ message: (error as Error).message });
   }
 };
 
 export const deleteProject = async (req: Request, res: Response) => {
   try {
+    const project = await Project.findById(req.params.id);
+    if (!project) return res.status(404).json({ message: 'Project not found' });
+
+    // Delete thumbnail
+    if (project.thumbnailPublicId) {
+      await cloudinary.uploader.destroy(project.thumbnailPublicId);
+    }
+
+    // Delete gallery images
+    if (project.images && project.images.length > 0) {
+      const deletePromises = project.images.map(img => cloudinary.uploader.destroy(img.publicId));
+      await Promise.all(deletePromises);
+    }
+
     await Project.findByIdAndDelete(req.params.id);
     res.json({ message: 'Project deleted' });
   } catch (error) {

@@ -8,7 +8,9 @@ export interface IProfile extends Document {
   phone: string;
   location: string;
   avatar: string;
+  avatarPublicId?: string;
   resumeUrl: string;
+  resumePublicId?: string;
   presentAddress?: string;
   permanentAddress?: string;
   whatsapp?: string;
@@ -24,6 +26,7 @@ export interface IProfile extends Document {
   };
   skills: string[];
   heroVideoUrl?: string;
+  videoPublicId?: string;
 }
 
 const profileSchema = new Schema<IProfile>(
@@ -35,7 +38,9 @@ const profileSchema = new Schema<IProfile>(
     phone: { type: String },
     location: { type: String },
     avatar: { type: String },
+    avatarPublicId: { type: String },
     resumeUrl: { type: String },
+    resumePublicId: { type: String },
     presentAddress: { type: String },
     permanentAddress: { type: String },
     whatsapp: { type: String },
@@ -51,6 +56,7 @@ const profileSchema = new Schema<IProfile>(
     },
     skills: [{ type: String }],
     heroVideoUrl: { type: String },
+    videoPublicId: { type: String },
   },
   { timestamps: true }
 );

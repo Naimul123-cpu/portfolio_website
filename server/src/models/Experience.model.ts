@@ -10,6 +10,7 @@ export interface IExperience extends Document {
   description: string;
   technologies: string[];
   logo?: string;
+  logoPublicId?: string;
   workplaceType: 'Company' | 'Business' | 'Freelance' | 'Remote' | 'Own Business' | 'NGO' | 'Government' | 'Other';
   workSamples: {
     type: 'image' | 'video';
@@ -32,6 +33,7 @@ const experienceSchema = new Schema<IExperience>(
     description: { type: String },
     technologies: [{ type: String }],
     logo: { type: String },
+    logoPublicId: { type: String },
     workplaceType: {
       type: String,
       enum: ['Company', 'Business', 'Freelance', 'Remote', 'Own Business', 'NGO', 'Government', 'Other'],
