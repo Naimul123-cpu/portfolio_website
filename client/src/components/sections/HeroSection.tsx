@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaGithub, FaLinkedin, FaTwitter, FaDiscord, FaFacebook, FaInstagram, FaYoutube, 
   FaGlobe, FaTiktok, FaReddit, FaPinterest, FaBehance, FaDribbble, FaMedium, 
