@@ -10,6 +10,7 @@ const ProfileAdmin: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [formData, setFormData] = useState<any>({
     name: '',
+    logoText: '',
     tagline: '',
     bio: '',
     email: '',
@@ -151,16 +152,22 @@ const ProfileAdmin: React.FC = () => {
                       <input name="name" value={formData.name} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-violet/50 focus:bg-white/[0.05] transition-all font-medium" />
                     </div>
                     <div className="space-y-4">
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Logo Branding (e.g. NAIM.DEV)</label>
+                      <input name="logoText" value={formData.logoText} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-violet/50 focus:bg-white/[0.05] transition-all font-medium" placeholder="NAIM.DEV" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div className="space-y-4">
                       <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Professional Title</label>
                       <input name="tagline" value={formData.tagline} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-violet/50 focus:bg-white/[0.05] transition-all font-medium" />
                     </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Email Endpoint</label>
                       <input name="email" value={formData.email} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-violet/50 focus:bg-white/[0.05] transition-all font-medium" />
                     </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2">Contact Line</label>
                       <input name="phone" value={formData.phone} onChange={handleInputChange} className="w-full glass bg-white/[0.03] border border-white/5 rounded-2xl py-5 px-6 text-text-primary outline-none focus:border-accent-violet/50 focus:bg-white/[0.05] transition-all font-medium" />

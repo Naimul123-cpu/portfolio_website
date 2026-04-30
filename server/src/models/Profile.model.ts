@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IProfile extends Document {
   name: string;
+  logoText?: string;
   tagline: string;
   bio: string;
   email: string;
@@ -32,6 +33,7 @@ export interface IProfile extends Document {
 const profileSchema = new Schema<IProfile>(
   {
     name: { type: String, required: true },
+    logoText: { type: String, default: 'NAIM.DEV' },
     tagline: { type: String, required: true },
     bio: { type: String, required: true },
     email: { type: String, required: true },

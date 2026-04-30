@@ -11,10 +11,18 @@ const Footer: React.FC<FooterProps> = ({ profile }) => {
   const currentYear = new Date().getFullYear();
 
   const getLogoParts = () => {
-    if (!profile?.name) return { main: 'NAIM', sub: '.DEV' };
-    const parts = profile.name.trim().split(' ');
+    const text = profile?.logoText || profile?.name || 'NAIM.DEV';
+    
+    // Split by first dot if exists
+    if (text.includes('.')) {
+      const parts = text.split('.');
+      return { main: parts[0].toUpperCase(), sub: '.' + parts.slice(1).join('.').toUpperCase() };
+    }
+    
+    // Fallback to space split
+    const parts = text.trim().split(' ');
     if (parts.length === 1) return { main: parts[0].toUpperCase(), sub: '.DEV' };
-    return { main: parts[0].toUpperCase(), sub: '.' + parts.slice(1).join(' ').toUpperCase() };
+    return { main: parts[0].toUpperCase(), sub: ' ' + parts.slice(1).join(' ').toUpperCase() };
   };
 
   const logo = getLogoParts();
