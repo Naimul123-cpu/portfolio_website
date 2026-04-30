@@ -56,10 +56,15 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) => {
               <motion.div
                 key={project._id}
                 layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
+                initial={{ opacity: 0, scale: 0.85, y: 30 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.85, y: 30 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: i * 0.1,
+                  ease: [0.16, 1, 0.3, 1] 
+                }}
                 className="group relative"
               >
                 {/* Card Glow Background */}

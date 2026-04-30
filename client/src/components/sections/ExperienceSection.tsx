@@ -38,10 +38,10 @@ const ExperienceSection: React.FC<ExperienceSectionProps> = ({ experiences }) =>
             {experiences.sort((a, b) => Number(b.order) - Number(a.order)).map((exp, i) => (
               <motion.div 
                 key={exp._id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -50 : 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: i * 0.1 }}
+                transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className={`relative flex flex-col md:flex-row items-center gap-12 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
               >
                 {/* Timeline Node Dot */}

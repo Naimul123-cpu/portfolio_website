@@ -30,10 +30,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
         <div className="grid lg:grid-cols-12 gap-12 items-start">
           {/* Left Side: Bio Card */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="lg:col-span-7"
           >
             <div className="relative group">
@@ -60,10 +60,14 @@ const AboutSection: React.FC<AboutSectionProps> = ({ profile }) => {
                   {profile?.skills.map((skill, i) => (
                     <motion.span
                       key={skill}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
+                      initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ delay: i * 0.05 }}
+                      transition={{ 
+                        duration: 0.4, 
+                        delay: i * 0.05,
+                        ease: "easeOut"
+                      }}
                       whileHover={{ scale: 1.1, y: -2 }}
                       className="px-5 py-2.5 rounded-xl glass border border-white/5 text-[11px] font-black uppercase tracking-widest text-text-primary hover:border-accent-violet/50 transition-all cursor-default"
                     >

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, Calendar, Star, BookOpen, Award } from 'lucide-react';
+import { GraduationCap, Calendar, BookOpen, Award } from 'lucide-react';
 import SectionTitle from '../ui/SectionTitle';
 import type { IStudy } from '../../types';
 
@@ -45,10 +45,14 @@ const StudySection: React.FC<StudySectionProps> = ({ studies }) => {
             return (
               <motion.div
                 key={study._id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
+                transition={{ 
+                  duration: 0.7, 
+                  delay: i * 0.1,
+                  ease: [0.16, 1, 0.3, 1] 
+                }}
                 className="group relative"
               >
                 {/* Glow Effect */}

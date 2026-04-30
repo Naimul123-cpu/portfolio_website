@@ -1,6 +1,7 @@
 export interface IProfile {
   _id: string;
   name: string;
+  logoText?: string;
   tagline: string;
   bio: string;
   email: string;
