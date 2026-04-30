@@ -4,8 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 if (process.env.CLOUDINARY_URL) {
-  // If CLOUDINARY_URL is present, the SDK handles config automatically
-  cloudinary.config(true);
+  // Manually parse cloudinary://api_key:api_secret@cloud_name
+  const url = process.env.CLOUDINARY_URL.replace('cloudinary://', '');
+  const [credentials, cloud_name] = url.split('@');
+  const [api_key, api_secret] = credentials.split(':');
+  cloudinary.config({ cloud_name, api_key, api_secret });
 } else {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
