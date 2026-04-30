@@ -4,8 +4,12 @@ import User from '../models/User.model';
 import { AuthRequest } from '../middleware/auth.middleware';
 
 const generateTokens = (id: string) => {
-  const accessToken = jwt.sign({ id }, process.env.JWT_SECRET!, { expiresIn: '15m' });
-  const refreshToken = jwt.sign({ id }, process.env.JWT_REFRESH_SECRET!, { expiresIn: '7d' });
+  const accessToken = jwt.sign({ id }, process.env.JWT_SECRET!, { 
+    expiresIn: process.env.JWT_ACCESS_EXPIRES || '15m' 
+  });
+  const refreshToken = jwt.sign({ id }, process.env.JWT_REFRESH_SECRET!, { 
+    expiresIn: process.env.JWT_REFRESH_EXPIRES || '7d' 
+  });
   return { accessToken, refreshToken };
 };
 
@@ -33,8 +37,8 @@ export const login = async (req: Request, res: Response) => {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
     res.json({
@@ -64,8 +68,8 @@ export const refresh = async (req: Request, res: Response) => {
     res.cookie('refreshToken', newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
     res.json({ accessToken });
