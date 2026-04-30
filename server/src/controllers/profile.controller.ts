@@ -15,7 +15,7 @@ export const updateProfile = async (req: Request, res: Response) => {
   const uploadedPublicIds: string[] = [];
   try {
     // Verify Cloudinary Config
-    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY) {
+    if (!process.env.CLOUDINARY_URL && (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY)) {
       throw new Error('Cloudinary configuration is missing on the server.');
     }
 

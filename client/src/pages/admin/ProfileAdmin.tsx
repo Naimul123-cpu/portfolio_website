@@ -86,7 +86,8 @@ const ProfileAdmin: React.FC = () => {
       toast.success('Identity Optimized Successfully');
       refresh();
     } catch (error: any) {
-      toast.error('Identity Sync Failed');
+      const errorMessage = error.response?.data?.message || 'Identity Sync Failed';
+      toast.error(errorMessage);
     } finally {
       setIsSaving(false);
     }

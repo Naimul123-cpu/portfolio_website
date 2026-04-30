@@ -28,7 +28,11 @@ export const getProjectById = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
   const uploadedPublicIds: string[] = [];
-  try {
+    // Verify Cloudinary Config
+    if (!process.env.CLOUDINARY_URL && (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY)) {
+      throw new Error('Cloudinary configuration is missing on the server.');
+    }
+
     const data = { ...req.body };
     if (typeof data.technologies === 'string' && data.technologies.trim() !== '') {
       try {
@@ -92,7 +96,11 @@ export const createProject = async (req: Request, res: Response) => {
 
 export const updateProject = async (req: Request, res: Response) => {
   const uploadedPublicIds: string[] = [];
-  try {
+    // Verify Cloudinary Config
+    if (!process.env.CLOUDINARY_URL && (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY)) {
+      throw new Error('Cloudinary configuration is missing on the server.');
+    }
+
     const existingProject = await Project.findById(req.params.id);
     if (!existingProject) return res.status(404).json({ message: 'Project not found' });
 
