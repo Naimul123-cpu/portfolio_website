@@ -47,8 +47,8 @@ const StudyAdmin: React.FC = () => {
     try {
       const response = await api.get('/study');
       setStudies(response.data);
-    } catch (error) {
-      toast.error('Failed to fetch studies');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to fetch studies');
     } finally {
       setLoading(false);
     }
@@ -144,8 +144,8 @@ const StudyAdmin: React.FC = () => {
       
       setIsModalOpen(false);
       fetchStudies();
-    } catch (error) {
-      toast.error('Sync Protocol Failure');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Sync Protocol Failure');
     } finally {
       setIsSaving(false);
     }
@@ -157,8 +157,8 @@ const StudyAdmin: React.FC = () => {
         await api.delete(`/study/${id}`);
         toast.success('Record Deactivated');
         fetchStudies();
-      } catch (error) {
-        toast.error('Termination Failed');
+      } catch (error: any) {
+        toast.error(error.response?.data?.message || 'Termination Failed');
       }
     }
   };

@@ -52,8 +52,8 @@ const ExperienceAdmin: React.FC = () => {
     try {
       const response = await api.get('/experience');
       setExperiences(response.data);
-    } catch (error) {
-      toast.error('Failed to fetch experiences');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to fetch experiences');
     } finally {
       setLoading(false);
     }
@@ -153,8 +153,8 @@ const ExperienceAdmin: React.FC = () => {
       }));
       toast.success('Evidence Assets Synced');
       fetchExperiences();
-    } catch (error) {
-      toast.error('Upload Interrupted');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Upload Interrupted');
     } finally {
       setUploadingSamples(false);
       setUploadProgress(0);
@@ -171,8 +171,8 @@ const ExperienceAdmin: React.FC = () => {
       }));
       toast.success('Asset Purged');
       fetchExperiences();
-    } catch (error) {
-      toast.error('Deactivation Failed');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Deactivation Failed');
     }
   };
 
@@ -210,7 +210,7 @@ const ExperienceAdmin: React.FC = () => {
       
       fetchExperiences();
     } catch (error: any) {
-      toast.error('Sync Error: Node Modification Failed');
+      toast.error(error.response?.data?.message || 'Sync Error: Node Modification Failed');
     } finally {
       setIsSaving(false);
     }
@@ -222,8 +222,8 @@ const ExperienceAdmin: React.FC = () => {
         await api.delete(`/experience/${id}`);
         toast.success('Node Deactivated');
         fetchExperiences();
-      } catch (error) {
-        toast.error('Termination Failed');
+      } catch (error: any) {
+        toast.error(error.response?.data?.message || 'Termination Failed');
       }
     }
   };

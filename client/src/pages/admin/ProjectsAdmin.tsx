@@ -47,8 +47,8 @@ const ProjectsAdmin: React.FC = () => {
     try {
       const response = await api.get('/projects');
       setProjects(response.data);
-    } catch (error) {
-      toast.error('Failed to fetch projects');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to fetch projects');
     } finally {
       setLoading(false);
     }
@@ -145,8 +145,8 @@ const ProjectsAdmin: React.FC = () => {
       
       setIsModalOpen(false);
       fetchProjects();
-    } catch (error) {
-      toast.error('Failed to save project');
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to save project');
     } finally {
       setIsSaving(false);
     }
@@ -158,8 +158,8 @@ const ProjectsAdmin: React.FC = () => {
         await api.delete(`/projects/${id}`);
         toast.success('Asset deleted successfully');
         fetchProjects();
-      } catch (error) {
-        toast.error('Failed to delete asset');
+      } catch (error: any) {
+        toast.error(error.response?.data?.message || 'Failed to delete asset');
       }
     }
   };
