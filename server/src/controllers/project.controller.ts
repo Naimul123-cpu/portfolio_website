@@ -30,11 +30,17 @@ export const createProject = async (req: Request, res: Response) => {
   const uploadedPublicIds: string[] = [];
   try {
     const data = { ...req.body };
-    if (typeof data.technologies === 'string') data.technologies = JSON.parse(data.technologies);
+    if (typeof data.technologies === 'string' && data.technologies.trim() !== '') {
+      try {
+        data.technologies = JSON.parse(data.technologies);
+      } catch (e) {
+        console.error('Failed to parse technologies:', e);
+      }
+    }
 
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-    if (files?.thumbnail) {
+    if (files?.thumbnail?.[0]) {
       const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'portfolio/projects' },
@@ -50,7 +56,7 @@ export const createProject = async (req: Request, res: Response) => {
       uploadedPublicIds.push(result.public_id);
     }
 
-    if (files?.images) {
+    if (files?.images && files.images.length > 0) {
       const imagesData = [];
       for (const file of files.images) {
         const result: any = await new Promise((resolve, reject) => {
@@ -71,12 +77,16 @@ export const createProject = async (req: Request, res: Response) => {
 
     const project = await Project.create(data);
     res.status(201).json(project);
-  } catch (error) {
-    // Cleanup uploaded files on failure
+  } catch (error: any) {
+    console.error('PROJECT CREATE ERROR:', error);
     for (const id of uploadedPublicIds) {
-      await cloudinary.uploader.destroy(id);
+      try {
+        await cloudinary.uploader.destroy(id);
+      } catch (cleanupErr) {
+        console.error('Cleanup error:', cleanupErr);
+      }
     }
-    res.status(500).json({ message: (error as Error).message });
+    res.status(500).json({ message: error.message || 'Internal Server Error' });
   }
 };
 
@@ -87,11 +97,17 @@ export const updateProject = async (req: Request, res: Response) => {
     if (!existingProject) return res.status(404).json({ message: 'Project not found' });
 
     const data = { ...req.body };
-    if (typeof data.technologies === 'string') data.technologies = JSON.parse(data.technologies);
+    if (typeof data.technologies === 'string' && data.technologies.trim() !== '') {
+      try {
+        data.technologies = JSON.parse(data.technologies);
+      } catch (e) {
+        console.error('Failed to parse technologies:', e);
+      }
+    }
 
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-    if (files?.thumbnail) {
+    if (files?.thumbnail?.[0]) {
       const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: 'portfolio/projects' },
@@ -103,9 +119,12 @@ export const updateProject = async (req: Request, res: Response) => {
         stream.end(files.thumbnail[0].buffer);
       });
       
-      // Delete old thumbnail
       if (existingProject.thumbnailPublicId) {
-        await cloudinary.uploader.destroy(existingProject.thumbnailPublicId);
+        try {
+          await cloudinary.uploader.destroy(existingProject.thumbnailPublicId);
+        } catch (err) {
+          console.warn('Could not delete old thumbnail:', err);
+        }
       }
 
       data.thumbnail = result.secure_url;
@@ -113,7 +132,7 @@ export const updateProject = async (req: Request, res: Response) => {
       uploadedPublicIds.push(result.public_id);
     }
 
-    if (files?.images) {
+    if (files?.images && files.images.length > 0) {
       const imagesData = [];
       for (const file of files.images) {
         const result: any = await new Promise((resolve, reject) => {
@@ -130,17 +149,27 @@ export const updateProject = async (req: Request, res: Response) => {
         uploadedPublicIds.push(result.public_id);
       }
       
-      const oldImages = data.images ? JSON.parse(data.images) : existingProject.images;
+      let oldImages = [];
+      try {
+        oldImages = data.images ? JSON.parse(data.images) : existingProject.images;
+      } catch (e) {
+        oldImages = existingProject.images;
+      }
       data.images = [...oldImages, ...imagesData];
     }
 
-    const project = await Project.findByIdAndUpdate(req.params.id, data, { new: true });
+    const project = await Project.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true });
     res.json(project);
-  } catch (error) {
+  } catch (error: any) {
+    console.error('PROJECT UPDATE ERROR:', error);
     for (const id of uploadedPublicIds) {
-      await cloudinary.uploader.destroy(id);
+      try {
+        await cloudinary.uploader.destroy(id);
+      } catch (cleanupErr) {
+        console.error('Cleanup error:', cleanupErr);
+      }
     }
-    res.status(500).json({ message: (error as Error).message });
+    res.status(500).json({ message: error.message || 'Internal Server Error' });
   }
 };
 
