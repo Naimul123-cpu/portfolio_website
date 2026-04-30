@@ -28,6 +28,7 @@ export const getProjectById = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
   const uploadedPublicIds: string[] = [];
+  try {
     // Verify Cloudinary Config
     if (!process.env.CLOUDINARY_URL && (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY)) {
       throw new Error('Cloudinary configuration is missing on the server.');
@@ -96,6 +97,7 @@ export const createProject = async (req: Request, res: Response) => {
 
 export const updateProject = async (req: Request, res: Response) => {
   const uploadedPublicIds: string[] = [];
+  try {
     // Verify Cloudinary Config
     if (!process.env.CLOUDINARY_URL && (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY)) {
       throw new Error('Cloudinary configuration is missing on the server.');
