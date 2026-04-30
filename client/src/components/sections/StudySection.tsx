@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, Calendar, Star, BookOpen } from 'lucide-react';
+import { GraduationCap, Calendar, Star, BookOpen, Award } from 'lucide-react';
 import SectionTitle from '../ui/SectionTitle';
 import type { IStudy } from '../../types';
 
@@ -9,119 +9,143 @@ interface StudySectionProps {
 }
 
 const StudySection: React.FC<StudySectionProps> = ({ studies }) => {
-  const getTypeStyles = (type: string) => {
+  const getAccentColor = (type: string) => {
     switch (type) {
-      case 'University': return 'text-accent-violet border-accent-violet/30 bg-accent-violet/5';
-      case 'College': return 'text-accent-cyan border-accent-cyan/30 bg-accent-cyan/5';
-      case 'Online Course': return 'text-accent-pink border-accent-pink/30 bg-accent-pink/5';
-      default: return 'text-accent-blue border-accent-blue/30 bg-accent-blue/5';
+      case 'University': return { text: 'text-accent-violet', border: 'border-accent-violet/40', bg: 'bg-accent-violet/10', glow: 'from-accent-violet/30 to-accent-cyan/20', dot: 'bg-accent-violet' };
+      case 'College':    return { text: 'text-accent-cyan',   border: 'border-accent-cyan/40',   bg: 'bg-accent-cyan/10',   glow: 'from-accent-cyan/30 to-accent-violet/20',  dot: 'bg-accent-cyan' };
+      case 'Online Course': return { text: 'text-accent-pink', border: 'border-accent-pink/40', bg: 'bg-accent-pink/10', glow: 'from-accent-pink/30 to-accent-violet/20', dot: 'bg-accent-pink' };
+      case 'Certification': return { text: 'text-yellow-400', border: 'border-yellow-400/40', bg: 'bg-yellow-400/10', glow: 'from-yellow-400/30 to-accent-violet/20', dot: 'bg-yellow-400' };
+      default: return { text: 'text-accent-cyan', border: 'border-accent-cyan/40', bg: 'bg-accent-cyan/10', glow: 'from-accent-cyan/30 to-accent-violet/20', dot: 'bg-accent-cyan' };
     }
   };
 
+  const sorted = [...studies].sort((a, b) => Number(b.order) - Number(a.order));
+
   return (
     <section id="study" className="py-32 relative overflow-hidden">
-      {/* Background Icon */}
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 p-20 opacity-[0.02] pointer-events-none rotate-12">
-        <GraduationCap size={400} />
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-0 w-96 h-96 bg-accent-violet/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-accent-cyan/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 right-8 -translate-y-1/2 opacity-[0.025] pointer-events-none">
+          <GraduationCap size={500} />
+        </div>
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <SectionTitle 
+        <SectionTitle
           eyebrow="ACADEMIC FOUNDATION"
-          title="Educational <Blueprint>" 
-          subtitle="Rigorous engineering training and specialized certifications from leading technical institutions."
+          title="Educational <Blueprint>"
+          subtitle="Rigorous academic training and specialized certifications from leading institutions."
         />
-        
-        <div className="relative max-w-5xl mx-auto">
-          {/* Central Timeline Line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent md:-translate-x-1/2 hidden md:block" />
 
-          <div className="space-y-16 md:space-y-24">
-            {studies.sort((a, b) => Number(b.order) - Number(a.order)).map((study, i) => (
-              <motion.div 
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {sorted.map((study, i) => {
+            const accent = getAccentColor(study.institutionType);
+            return (
+              <motion.div
                 key={study._id}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: i * 0.1 }}
-                className={`relative flex flex-col md:flex-row items-center gap-12 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className="group relative"
               >
-                {/* Timeline Dot */}
-                <div className="absolute left-0 md:left-1/2 top-10 w-4 h-4 rounded-full -translate-x-1/2 z-20 hidden md:block">
-                  <div className="absolute inset-0 bg-accent-cyan animate-pulse rounded-full opacity-40" />
-                  <div className="relative w-full h-full bg-accent-cyan rounded-full shadow-glow-cyan" />
-                </div>
+                {/* Glow Effect */}
+                <div className={`absolute -inset-[1px] bg-gradient-to-br ${accent.glow} rounded-[28px] opacity-0 group-hover:opacity-100 blur-lg transition-all duration-700`} />
 
-                {/* Study Card */}
-                <div className={`w-full md:w-[45%] ${i % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                  <div className="group relative">
-                    <div className="absolute -inset-1 bg-gradient-to-br from-accent-cyan/20 to-accent-violet/20 rounded-[32px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    <div className="relative glass-card glass-card-hover p-10 rounded-[32px] shadow-2xl">
-                      <div className={`flex items-center gap-5 mb-8 ${i % 2 === 0 ? 'md:flex-row-reverse' : 'flex-row'}`}>
-                        <div className="w-16 h-16 glass rounded-2xl flex items-center justify-center border border-white/10 overflow-hidden bg-bg-surface shadow-xl group-hover:scale-110 transition-transform duration-500">
-                          {study.logo ? (
-                            <img src={study.logo} alt="" className="w-full h-full object-contain p-2" />
-                          ) : (
-                            <BookOpen size={28} className="text-accent-cyan" />
-                          )}
-                        </div>
-                        <div>
-                          <span className={`px-3 py-1 rounded-lg border text-[9px] font-black uppercase tracking-widest ${getTypeStyles(study.institutionType)}`}>
-                            {study.institutionType}
-                          </span>
-                          <h3 className="text-2xl font-black text-text-primary mt-2">{study.institution}</h3>
-                        </div>
+                {/* Card */}
+                <div className="relative h-full flex flex-col bg-[#0A0A12]/80 backdrop-blur-xl border border-white/8 rounded-[28px] overflow-hidden shadow-2xl transition-transform duration-500 group-hover:-translate-y-2">
+
+                  {/* Top accent bar */}
+                  <div className={`h-1 w-full bg-gradient-to-r ${accent.glow}`} />
+
+                  <div className="p-8 flex flex-col h-full">
+                    {/* Header Row */}
+                    <div className="flex items-start justify-between gap-4 mb-6">
+                      {/* Logo */}
+                      <div className={`w-16 h-16 rounded-2xl border ${accent.border} ${accent.bg} flex items-center justify-center overflow-hidden flex-shrink-0 transition-transform duration-500 group-hover:scale-110 shadow-lg`}>
+                        {study.logo ? (
+                          <img src={study.logo} alt="" className="w-full h-full object-contain p-2" />
+                        ) : (
+                          <BookOpen size={28} className={accent.text} />
+                        )}
                       </div>
 
-                      <div className="mb-8">
-                        <h4 className="text-xl font-bold text-gradient inline-block mb-3">{study.degree}</h4>
-                        <div className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-muted ${i % 2 === 0 ? 'md:justify-end' : 'justify-start'}`}>
-                          <Calendar size={14} className="text-accent-cyan" />
-                          {study.startYear} — {study.endYear || 'Present'}
-                        </div>
-                      </div>
+                      {/* Type Badge */}
+                      <span className={`px-3 py-1.5 rounded-xl border ${accent.border} ${accent.bg} ${accent.text} text-[9px] font-black uppercase tracking-widest flex-shrink-0`}>
+                        {study.institutionType}
+                      </span>
+                    </div>
 
-                      <p className="text-text-secondary text-sm leading-relaxed mb-8 font-medium opacity-70 line-clamp-3">
-                        {study.description}
-                      </p>
-
-                      {study.subjects && study.subjects.length > 0 && (
-                        <div className="mb-8">
-                          <p className={`text-[9px] font-black uppercase tracking-[0.2em] text-accent-cyan mb-4 ${i % 2 === 0 ? 'md:text-right' : 'text-left'}`}>Curriculum Pillars</p>
-                          <div className={`flex flex-wrap gap-2 ${i % 2 === 0 ? 'md:justify-end' : 'justify-start'}`}>
-                            {study.subjects.map((sub, idx) => {
-                              const cleanSub = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
-                              return (
-                                <span key={idx} className="tech-badge">
-                                  {cleanSub}
-                                </span>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-
-                      {study.grade && (
-                        <div className={`flex items-center gap-3 p-4 glass rounded-2xl border border-white/5 bg-accent-cyan/5 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                          <div className="p-2 bg-gradient-primary rounded-lg shadow-glow-violet">
-                            <Star size={14} className="text-white" />
-                          </div>
-                          <div className={i % 2 === 0 ? 'text-right' : 'text-left'}>
-                            <p className="text-[9px] font-black text-text-muted uppercase tracking-widest">Academic Merit</p>
-                            <p className="text-lg font-black text-text-primary">GPA: {study.grade}</p>
-                          </div>
-                        </div>
+                    {/* Institution & Degree */}
+                    <div className="mb-5">
+                      <p className="text-text-muted text-[11px] font-black uppercase tracking-widest mb-1">{study.institution}</p>
+                      <h3 className={`text-xl font-black ${accent.text} leading-tight`}>{study.degree}</h3>
+                      {study.field && (
+                        <p className="text-text-secondary text-sm font-medium mt-1 opacity-70">{study.field}</p>
                       )}
                     </div>
+
+                    {/* Date */}
+                    <div className="flex items-center gap-2 mb-5">
+                      <Calendar size={13} className={accent.text} />
+                      <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">
+                        {study.startYear} — {study.endYear || 'Present'}
+                      </span>
+                    </div>
+
+                    {/* Description */}
+                    {study.description && (
+                      <p className="text-text-secondary text-sm leading-relaxed mb-5 opacity-70 line-clamp-3 flex-grow">
+                        {study.description}
+                      </p>
+                    )}
+
+                    {/* Subjects */}
+                    {study.subjects && study.subjects.length > 0 && (
+                      <div className="mb-5">
+                        <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${accent.text} mb-3`}>Subjects</p>
+                        <div className="flex flex-wrap gap-2">
+                          {study.subjects.slice(0, 4).map((sub, idx) => {
+                            const clean = typeof sub === 'string' ? sub.replace(/[\[\]"]/g, '') : sub;
+                            return (
+                              <span key={idx} className={`px-3 py-1 rounded-lg border ${accent.border} ${accent.bg} text-[9px] font-black uppercase tracking-wider text-text-secondary`}>
+                                {clean}
+                              </span>
+                            );
+                          })}
+                          {study.subjects.length > 4 && (
+                            <span className="px-3 py-1 rounded-lg border border-white/10 bg-white/5 text-[9px] font-black text-text-muted">
+                              +{study.subjects.length - 4}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* GPA Row */}
+                    {study.grade && (
+                      <div className={`mt-auto flex items-center gap-3 p-4 rounded-xl border ${accent.border} ${accent.bg}`}>
+                        <div className={`w-8 h-8 rounded-lg ${accent.bg} border ${accent.border} flex items-center justify-center`}>
+                          <Award size={14} className={accent.text} />
+                        </div>
+                        <div>
+                          <p className="text-[8px] font-black text-text-muted uppercase tracking-widest">Academic Merit</p>
+                          <p className={`text-base font-black ${accent.text}`}>GPA: {study.grade}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bottom index number */}
+                  <div className="absolute bottom-6 right-7 text-[40px] font-black text-white/[0.03] select-none leading-none">
+                    {String(i + 1).padStart(2, '0')}
                   </div>
                 </div>
-
-                {/* Spacing for Timeline */}
-                <div className="hidden md:block w-[45%]" />
               </motion.div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>
