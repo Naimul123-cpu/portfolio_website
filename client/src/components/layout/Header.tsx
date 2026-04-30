@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Rocket } from 'lucide-react';
+import { IProfile } from '../../types';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  profile?: IProfile | null;
+}
+
+const Header: React.FC<HeaderProps> = ({ profile }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -13,6 +18,15 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const getLogoParts = () => {
+    if (!profile?.name) return { main: 'NAIM', sub: '.DEV' };
+    const parts = profile.name.trim().split(' ');
+    if (parts.length === 1) return { main: parts[0].toUpperCase(), sub: '.DEV' };
+    return { main: parts[0].toUpperCase(), sub: '.' + parts.slice(1).join(' ').toUpperCase() };
+  };
+
+  const logo = getLogoParts();
 
   const navLinks = [
     { name: 'About', href: '#about' },
@@ -43,9 +57,9 @@ const Header: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           className="relative group cursor-pointer"
         >
-          <a href="#" className="text-2xl font-display font-black tracking-tighter flex items-center gap-1">
-            <span className="text-gradient-aurora">NAIM</span>
-            <span className="text-text-primary">.DEV</span>
+          <a href="#" className="text-2xl font-display font-black tracking-tighter flex items-center gap-1 uppercase">
+            <span className="text-gradient-aurora">{logo.main}</span>
+            <span className="text-text-primary">{logo.sub}</span>
             <motion.span 
               animate={{ opacity: [1, 0, 1] }} 
               transition={{ duration: 1, repeat: Infinity }}
@@ -105,7 +119,10 @@ const Header: React.FC = () => {
             className="fixed inset-0 z-[200] bg-bg-base/95 backdrop-blur-3xl lg:hidden flex flex-col"
           >
             <div className="flex justify-between items-center p-8 border-b border-white/5">
-              <span className="text-2xl font-display font-black text-gradient-aurora">NAIM.DEV</span>
+              <span className="text-2xl font-display font-black uppercase">
+                <span className="text-gradient-aurora">{logo.main}</span>
+                <span className="text-text-primary">{logo.sub}</span>
+              </span>
               <button onClick={() => setIsMobileMenuOpen(false)} className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-primary">
                 <X size={24} />
               </button>

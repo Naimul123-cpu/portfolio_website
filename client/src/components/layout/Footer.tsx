@@ -10,6 +10,15 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ profile }) => {
   const currentYear = new Date().getFullYear();
 
+  const getLogoParts = () => {
+    if (!profile?.name) return { main: 'NAIM', sub: '.DEV' };
+    const parts = profile.name.trim().split(' ');
+    if (parts.length === 1) return { main: parts[0].toUpperCase(), sub: '.DEV' };
+    return { main: parts[0].toUpperCase(), sub: '.' + parts.slice(1).join(' ').toUpperCase() };
+  };
+
+  const logo = getLogoParts();
+
   return (
     <footer className="relative pt-32 pb-16 bg-bg-base overflow-hidden">
       {/* Full-width Gradient Border */}
@@ -19,9 +28,9 @@ const Footer: React.FC<FooterProps> = ({ profile }) => {
         <div className="grid lg:grid-cols-12 gap-16 items-start">
           {/* Identity Column */}
           <div className="lg:col-span-5">
-            <h3 className="text-4xl font-display font-black tracking-tighter mb-8">
-              <span className="text-gradient-aurora uppercase">{profile?.name || 'NAIM'}</span>
-              <span className="text-text-primary">.DEV</span>
+            <h3 className="text-4xl font-display font-black tracking-tighter mb-8 uppercase">
+              <span className="text-gradient-aurora">{logo.main}</span>
+              <span className="text-text-primary">{logo.sub}</span>
             </h3>
             <p className="text-text-secondary text-lg max-w-sm font-medium leading-relaxed mb-10 opacity-70">
               {profile?.tagline || 'Designing resilient infrastructure and sustainable engineering solutions for the modern age.'}

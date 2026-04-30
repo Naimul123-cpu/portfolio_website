@@ -42,7 +42,7 @@ const Portfolio: React.FC = () => {
       <div className="bg-texture" />
       
       <div className="relative z-10">
-        <Header />
+        <Header profile={profile} />
         <main>
           <HeroSection profile={profile} />
           <AboutSection profile={profile} />
