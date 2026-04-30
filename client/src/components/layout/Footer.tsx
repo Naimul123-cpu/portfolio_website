@@ -1,3 +1,4 @@
+import React from 'react';
 import { 
   FaGithub, FaLinkedin, FaTwitter, FaDiscord, FaFacebook, FaInstagram, FaYoutube, 
   FaGlobe, FaTiktok, FaReddit, FaPinterest, FaBehance, FaDribbble, FaMedium, 
