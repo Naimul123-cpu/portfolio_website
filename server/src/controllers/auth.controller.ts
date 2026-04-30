@@ -5,10 +5,10 @@ import { AuthRequest } from '../middleware/auth.middleware';
 
 const generateTokens = (id: string) => {
   const accessToken = jwt.sign({ id }, process.env.JWT_SECRET!, { 
-    expiresIn: process.env.JWT_ACCESS_EXPIRES || '15m' 
+    expiresIn: (process.env.JWT_ACCESS_EXPIRES as any) || '15m' 
   });
   const refreshToken = jwt.sign({ id }, process.env.JWT_REFRESH_SECRET!, { 
-    expiresIn: process.env.JWT_REFRESH_EXPIRES || '7d' 
+    expiresIn: (process.env.JWT_REFRESH_EXPIRES as any) || '7d' 
   });
   return { accessToken, refreshToken };
 };
