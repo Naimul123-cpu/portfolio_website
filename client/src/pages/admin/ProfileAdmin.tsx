@@ -188,7 +188,7 @@ const ProfileAdmin: React.FC = () => {
                 <h2 className="text-3xl font-black text-text-primary tracking-tighter">Digital Presence</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                {['github', 'linkedin', 'twitter', 'discord', 'facebook', 'instagram', 'youtube', 'website'].map(platform => (
+                {['github', 'linkedin', 'twitter', 'discord', 'facebook', 'instagram', 'youtube', 'website', 'tiktok', 'reddit', 'pinterest', 'behance', 'dribbble', 'medium', 'twitch', 'slack', 'telegram', 'snapchat', 'stackoverflow', 'quora', 'mastodon', 'threads'].map(platform => (
                   <div key={platform} className="space-y-4">
                     <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.3em] ml-2 capitalize">{platform}</label>
                     <input 

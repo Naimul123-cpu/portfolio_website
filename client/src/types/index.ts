@@ -21,6 +21,20 @@ export interface IProfile {
     youtube?: string;
     discord?: string;
     website?: string;
+    tiktok?: string;
+    reddit?: string;
+    pinterest?: string;
+    behance?: string;
+    dribbble?: string;
+    medium?: string;
+    twitch?: string;
+    slack?: string;
+    telegram?: string;
+    snapchat?: string;
+    stackoverflow?: string;
+    quora?: string;
+    mastodon?: string;
+    threads?: string;
   };
   skills: string[];
 }

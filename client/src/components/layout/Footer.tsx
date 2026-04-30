@@ -1,5 +1,9 @@
-import React from 'react';
-import { FaGithub, FaLinkedin, FaTwitter, FaDiscord, FaFacebook, FaInstagram, FaYoutube, FaGlobe } from 'react-icons/fa';
+import { 
+  FaGithub, FaLinkedin, FaTwitter, FaDiscord, FaFacebook, FaInstagram, FaYoutube, 
+  FaGlobe, FaTiktok, FaReddit, FaPinterest, FaBehance, FaDribbble, FaMedium, 
+  FaTwitch, FaSlack, FaTelegram, FaSnapchat, FaStackOverflow, FaQuora, FaMastodon
+} from 'react-icons/fa';
+import { SiThreads } from 'react-icons/si';
 import { Heart, Cpu, ShieldCheck } from 'lucide-react';
 import type { IProfile } from '../../types';
 
@@ -27,6 +31,31 @@ const Footer: React.FC<FooterProps> = ({ profile }) => {
 
   const logo = getLogoParts();
 
+  const socialConfig: Record<string, { icon: React.ReactNode, color: string }> = {
+    github: { icon: <FaGithub size={20} />, color: 'hover:text-white' },
+    linkedin: { icon: <FaLinkedin size={20} />, color: 'hover:text-[#0077B5]' },
+    twitter: { icon: <FaTwitter size={20} />, color: 'hover:text-[#1DA1F2]' },
+    discord: { icon: <FaDiscord size={20} />, color: 'hover:text-[#5865F2]' },
+    facebook: { icon: <FaFacebook size={20} />, color: 'hover:text-[#1877F2]' },
+    instagram: { icon: <FaInstagram size={20} />, color: 'hover:text-[#E4405F]' },
+    youtube: { icon: <FaYoutube size={20} />, color: 'hover:text-[#FF0000]' },
+    website: { icon: <FaGlobe size={20} />, color: 'hover:text-accent-emerald' },
+    tiktok: { icon: <FaTiktok size={20} />, color: 'hover:text-[#000000] hover:bg-white/10' },
+    reddit: { icon: <FaReddit size={20} />, color: 'hover:text-[#FF4500]' },
+    pinterest: { icon: <FaPinterest size={20} />, color: 'hover:text-[#BD081C]' },
+    behance: { icon: <FaBehance size={20} />, color: 'hover:text-[#1769FF]' },
+    dribbble: { icon: <FaDribbble size={20} />, color: 'hover:text-[#EA4C89]' },
+    medium: { icon: <FaMedium size={20} />, color: 'hover:text-white' },
+    twitch: { icon: <FaTwitch size={20} />, color: 'hover:text-[#9146FF]' },
+    slack: { icon: <FaSlack size={20} />, color: 'hover:text-[#4A154B]' },
+    telegram: { icon: <FaTelegram size={20} />, color: 'hover:text-[#0088CC]' },
+    snapchat: { icon: <FaSnapchat size={20} />, color: 'hover:text-[#FFFC00]' },
+    stackoverflow: { icon: <FaStackOverflow size={20} />, color: 'hover:text-[#F48024]' },
+    quora: { icon: <FaQuora size={20} />, color: 'hover:text-[#B92B27]' },
+    mastodon: { icon: <FaMastodon size={20} />, color: 'hover:text-[#6364FF]' },
+    threads: { icon: <SiThreads size={20} />, color: 'hover:text-white' },
+  };
+
   return (
     <footer className="relative pt-32 pb-16 bg-bg-base overflow-hidden">
       {/* Full-width Gradient Border */}
@@ -44,26 +73,21 @@ const Footer: React.FC<FooterProps> = ({ profile }) => {
               {profile?.tagline || 'Designing resilient infrastructure and sustainable engineering solutions for the modern age.'}
             </p>
             <div className="flex flex-wrap gap-4">
-              {[
-                { icon: <FaGithub size={20} />, link: profile?.socialLinks.github, color: 'hover:text-white' },
-                { icon: <FaLinkedin size={20} />, link: profile?.socialLinks.linkedin, color: 'hover:text-accent-cyan' },
-                { icon: <FaTwitter size={20} />, link: profile?.socialLinks.twitter, color: 'hover:text-accent-blue' },
-                { icon: <FaDiscord size={20} />, link: profile?.socialLinks.discord, color: 'hover:text-accent-pink' },
-                { icon: <FaFacebook size={20} />, link: profile?.socialLinks.facebook, color: 'hover:text-[#1877F2]' },
-                { icon: <FaInstagram size={20} />, link: profile?.socialLinks.instagram, color: 'hover:text-[#E4405F]' },
-                { icon: <FaYoutube size={20} />, link: profile?.socialLinks.youtube, color: 'hover:text-[#FF0000]' },
-                { icon: <FaGlobe size={20} />, link: profile?.socialLinks.website, color: 'hover:text-accent-emerald' },
-              ].map((social, i) => social.link && (
-                <a 
-                  key={i}
-                  href={social.link} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className={`w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-muted transition-all duration-300 ${social.color} hover:border-white/20`}
-                >
-                  {social.icon}
-                </a>
-              ))}
+              {profile?.socialLinks && Object.entries(profile.socialLinks).map(([platform, link]) => {
+                const config = socialConfig[platform];
+                if (!link || !config) return null;
+                return (
+                  <a 
+                    key={platform}
+                    href={link as string} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    className={`w-12 h-12 glass rounded-2xl flex items-center justify-center text-text-muted transition-all duration-300 ${config.color} hover:border-white/20`}
+                  >
+                    {config.icon}
+                  </a>
+                );
+              })}
             </div>
           </div>
 
