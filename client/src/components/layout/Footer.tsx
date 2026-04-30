@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGithub, FaLinkedin, FaTwitter, FaDiscord } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaTwitter, FaDiscord, FaFacebook, FaInstagram, FaYoutube, FaGlobe } from 'react-icons/fa';
 import { Heart, Cpu, ShieldCheck } from 'lucide-react';
 import type { IProfile } from '../../types';
 
@@ -43,12 +43,16 @@ const Footer: React.FC<FooterProps> = ({ profile }) => {
             <p className="text-text-secondary text-lg max-w-sm font-medium leading-relaxed mb-10 opacity-70">
               {profile?.tagline || 'Designing resilient infrastructure and sustainable engineering solutions for the modern age.'}
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               {[
                 { icon: <FaGithub size={20} />, link: profile?.socialLinks.github, color: 'hover:text-white' },
                 { icon: <FaLinkedin size={20} />, link: profile?.socialLinks.linkedin, color: 'hover:text-accent-cyan' },
                 { icon: <FaTwitter size={20} />, link: profile?.socialLinks.twitter, color: 'hover:text-accent-blue' },
                 { icon: <FaDiscord size={20} />, link: profile?.socialLinks.discord, color: 'hover:text-accent-pink' },
+                { icon: <FaFacebook size={20} />, link: profile?.socialLinks.facebook, color: 'hover:text-[#1877F2]' },
+                { icon: <FaInstagram size={20} />, link: profile?.socialLinks.instagram, color: 'hover:text-[#E4405F]' },
+                { icon: <FaYoutube size={20} />, link: profile?.socialLinks.youtube, color: 'hover:text-[#FF0000]' },
+                { icon: <FaGlobe size={20} />, link: profile?.socialLinks.website, color: 'hover:text-accent-emerald' },
               ].map((social, i) => social.link && (
                 <a 
                   key={i}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaTwitter, FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { ArrowRight, Download } from 'lucide-react';
 import type { IProfile } from '../../types';
 
@@ -104,6 +104,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ profile }) => {
               { icon: <FaGithub size={22} />, link: profile?.socialLinks.github, color: 'hover:text-white', glow: 'hover:shadow-glow-violet' },
               { icon: <FaLinkedin size={22} />, link: profile?.socialLinks.linkedin, color: 'hover:text-accent-cyan', glow: 'hover:shadow-glow-cyan' },
               { icon: <FaTwitter size={22} />, link: profile?.socialLinks.twitter, color: 'hover:text-accent-blue', glow: 'hover:shadow-glow-blue' },
+              { icon: <FaFacebook size={22} />, link: profile?.socialLinks.facebook, color: 'hover:text-[#1877F2]', glow: 'hover:shadow-glow-blue' },
+              { icon: <FaInstagram size={22} />, link: profile?.socialLinks.instagram, color: 'hover:text-[#E4405F]', glow: 'hover:shadow-glow-pink' },
+              { icon: <FaYoutube size={22} />, link: profile?.socialLinks.youtube, color: 'hover:text-[#FF0000]', glow: 'hover:shadow-glow-red' },
             ].map((social, i) => social.link && (
               <a
                 key={i}
