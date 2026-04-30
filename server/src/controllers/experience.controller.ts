@@ -15,8 +15,20 @@ export const createExperience = async (req: Request, res: Response) => {
   let uploadedPublicId: string | null = null;
   try {
     const data = { ...req.body };
-    if (typeof data.technologies === 'string') data.technologies = JSON.parse(data.technologies);
-    
+
+    // Safely parse JSON fields
+    if (typeof data.technologies === 'string' && data.technologies.trim() !== '') {
+      try { data.technologies = JSON.parse(data.technologies); } catch { data.technologies = []; }
+    }
+    if (typeof data.workSamples === 'string' && data.workSamples.trim() !== '') {
+      try { data.workSamples = JSON.parse(data.workSamples); } catch { data.workSamples = []; }
+    }
+    // Convert date strings to Date objects
+    if (data.startDate) data.startDate = new Date(data.startDate);
+    if (data.endDate) data.endDate = new Date(data.endDate);
+    // Convert isCurrent string to boolean
+    if (typeof data.isCurrent === 'string') data.isCurrent = data.isCurrent === 'true';
+
     if (req.file) {
       const result: any = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
@@ -34,11 +46,12 @@ export const createExperience = async (req: Request, res: Response) => {
     }
     const experience = await Experience.create(data);
     res.status(201).json(experience);
-  } catch (error) {
+  } catch (error: any) {
+    console.error('CREATE EXPERIENCE ERROR:', error);
     if (uploadedPublicId) {
-      await cloudinary.uploader.destroy(uploadedPublicId);
+      try { await cloudinary.uploader.destroy(uploadedPublicId); } catch {}
     }
-    res.status(500).json({ message: (error as Error).message });
+    res.status(500).json({ message: error.message || 'Internal Server Error' });
   }
 };
 
@@ -49,7 +62,19 @@ export const updateExperience = async (req: Request, res: Response) => {
     if (!existingExp) return res.status(404).json({ message: 'Experience not found' });
 
     const data = { ...req.body };
-    if (typeof data.technologies === 'string') data.technologies = JSON.parse(data.technologies);
+
+    // Safely parse JSON fields
+    if (typeof data.technologies === 'string' && data.technologies.trim() !== '') {
+      try { data.technologies = JSON.parse(data.technologies); } catch { data.technologies = []; }
+    }
+    if (typeof data.workSamples === 'string' && data.workSamples.trim() !== '') {
+      try { data.workSamples = JSON.parse(data.workSamples); } catch { data.workSamples = []; }
+    }
+    // Convert date strings to Date objects
+    if (data.startDate) data.startDate = new Date(data.startDate);
+    if (data.endDate) data.endDate = new Date(data.endDate);
+    // Convert isCurrent string to boolean
+    if (typeof data.isCurrent === 'string') data.isCurrent = data.isCurrent === 'true';
 
     if (req.file) {
       const result: any = await new Promise((resolve, reject) => {
@@ -66,19 +91,19 @@ export const updateExperience = async (req: Request, res: Response) => {
       data.logoPublicId = result.public_id;
       uploadedPublicId = result.public_id;
 
-      // Delete old logo
       if (existingExp.logoPublicId) {
-        await cloudinary.uploader.destroy(existingExp.logoPublicId);
+        try { await cloudinary.uploader.destroy(existingExp.logoPublicId); } catch {}
       }
     }
     
     const experience = await Experience.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(experience);
-  } catch (error) {
+  } catch (error: any) {
+    console.error('UPDATE EXPERIENCE ERROR:', error);
     if (uploadedPublicId) {
-      await cloudinary.uploader.destroy(uploadedPublicId);
+      try { await cloudinary.uploader.destroy(uploadedPublicId); } catch {}
     }
-    res.status(500).json({ message: (error as Error).message });
+    res.status(500).json({ message: error.message || 'Internal Server Error' });
   }
 };
 
