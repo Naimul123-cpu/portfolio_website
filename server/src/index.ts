@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db';
+import ensureSuperAdmin from './utils/seedAdmin';
 import { errorHandler, notFound } from './middleware/error.middleware';
 
 // Routes
@@ -15,7 +16,7 @@ import experienceRoutes from './routes/experience.routes';
 import projectRoutes from './routes/project.routes';
 
 dotenv.config();
-connectDB();
+connectDB().then(() => ensureSuperAdmin());
 
 const app = express();
 app.set('trust proxy', 1);

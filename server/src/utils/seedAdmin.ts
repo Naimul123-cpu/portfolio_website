@@ -1,37 +1,41 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import User from '../models/User.model';
-import connectDB from '../config/db';
 
-dotenv.config();
-
-const seedAdmin = async () => {
+/**
+ * Automatically checks if a superadmin or admin exists in the database.
+ * If not, creates a superadmin using ADMIN_EMAIL and ADMIN_PASSWORD from env.
+ * This runs on every server startup.
+ */
+const ensureSuperAdmin = async () => {
   try {
-    await connectDB();
-
-    const adminExists = await User.findOne({ role: 'superadmin' });
+    const adminExists = await User.findOne({
+      role: { $in: ['admin', 'superadmin'] }
+    });
 
     if (!adminExists) {
-      const admin = await User.create({
+      const email = process.env.ADMIN_EMAIL;
+      const password = process.env.ADMIN_PASSWORD;
+
+      if (!email || !password) {
+        console.warn('⚠️  ADMIN_EMAIL or ADMIN_PASSWORD not set in env. Skipping superadmin creation.');
+        return;
+      }
+
+      await User.create({
         name: 'Super Admin',
-        email: process.env.ADMIN_EMAIL ,
-        password: process.env.ADMIN_PASSWORD ,
+        email,
+        password,
         role: 'superadmin',
       });
 
-      console.log('--- DEFAULT ADMIN CREATED ---');
-      console.log(`Email: ${process.env.ADMIN_EMAIL}`);
-      console.log('Password: [HIDDEN IN ENV]');
-      console.log('-----------------------------');
+      console.log('✅ No admin found — Superadmin created automatically.');
+      console.log(`   Email: ${email}`);
+      console.log('   Password: [from ADMIN_PASSWORD env variable]');
     } else {
-      console.log('Super Admin already exists.');
+      console.log(`✅ Admin found (${adminExists.email}) — skipping auto-creation.`);
     }
-
-    process.exit();
   } catch (error) {
-    console.error(`Error: ${(error as Error).message}`);
-    process.exit(1);
+    console.error('❌ Error during superadmin check:', (error as Error).message);
   }
 };
 
-seedAdmin();
+export default ensureSuperAdmin;
