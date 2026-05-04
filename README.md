@@ -62,9 +62,7 @@ Run the seeder to create the initial superadmin account.
 ```bash
 npm run seed
 ```
-**Default Credentials:**
-- **Email**: `admin@portfolio.com`
-- **Password**: `Admin@123456`
+
 
 ### 4. Run Development Server
 From the root directory:
